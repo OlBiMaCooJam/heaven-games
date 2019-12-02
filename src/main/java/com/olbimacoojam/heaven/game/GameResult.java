@@ -8,12 +8,12 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.ManyToOne;
 
 /**
  * 게임 전적 저장을 위한 GameResult Class
- * TODO: Validation이 필요할까?
- * 만약 지뢰찾기 게임인데, result에 맞춘 문제수가 들어있다거나..
  */
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -21,17 +21,28 @@ import javax.persistence.ManyToOne;
 @Entity
 public class GameResult extends BaseEntity {
 
+    @Enumerated(EnumType.STRING)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @ManyToOne
-    private GameKinds gameKinds; // 지뢰, 마피아, 노래 맞추기 등등 게임 종류
+    private GameKind gameKind;
 
     @OnDelete(action = OnDeleteAction.CASCADE)
     @ManyToOne
-    private User player; // 해당 게임 결과의 주인
+    private User player;
 
-    private Result result; // 승, 패, 맞춘 문제 수
+    private Result result;
+
+    public GameResult(GameKind gameKind, User player, Result result) {
+        this.gameKind = gameKind;
+        this.player = player;
+        this.result = result;
+    }
 
     public Integer getTotalScore() {
-        return result.getTotalScore(gameKinds);
+        if (result.isScoreType(gameKind)) {
+            return result.getCount() * gameKind.getScorePerCount();
+        }
+
+        throw new InvalidGameTypeException();
     }
 }

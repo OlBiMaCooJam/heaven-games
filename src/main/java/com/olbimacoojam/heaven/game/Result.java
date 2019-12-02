@@ -3,16 +3,27 @@ package com.olbimacoojam.heaven.game;
 import lombok.Getter;
 
 @Getter
-public enum Result {
-    WIN(1), LOSE(0), COUNT(0);
-
+public class Result {
+    private WinLose winLose;
     private Integer count;
 
-    Result(Integer count) {
+    private Result(WinLose winLose) {
+        this.winLose = winLose;
+    }
+
+    private Result(Integer count) {
         this.count = count;
     }
 
-    public Integer getTotalScore(GameKinds gameKinds) {
-        return gameKinds.getScorePerCount() * count;
+    public static Result of(WinLose winLose) {
+        return new Result(winLose);
+    }
+
+    public static Result of(Integer count) {
+        return new Result(count);
+    }
+
+    public boolean isScoreType(GameKind gameKind) {
+        return gameKind.isScoreType();
     }
 }
