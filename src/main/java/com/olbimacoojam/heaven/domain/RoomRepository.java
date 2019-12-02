@@ -2,6 +2,8 @@ package com.olbimacoojam.heaven.domain;
 
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -23,5 +25,9 @@ public class RoomRepository {
 
     private boolean isRoomExist(Room room) {
         return rooms.containsKey(room.getId());
+    }
+
+    public List<Room> getAll() {
+        return new ArrayList(rooms.values());
     }
 }
