@@ -8,10 +8,16 @@ public class Result {
     private Integer count;
 
     private Result(WinLose winLose) {
+        if (winLose == null) {
+            throw new InvalidGameResultException();
+        }
         this.winLose = winLose;
     }
 
     private Result(Integer count) {
+        if (count == null) {
+            throw new InvalidGameResultException();
+        }
         this.count = count;
     }
 
