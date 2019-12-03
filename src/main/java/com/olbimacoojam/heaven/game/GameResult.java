@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -21,15 +22,15 @@ import javax.persistence.ManyToOne;
 @Entity
 public class GameResult extends BaseEntity {
 
-    @Enumerated(EnumType.STRING)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @ManyToOne
+    @Enumerated(EnumType.STRING)
     private GameKind gameKind;
 
     @OnDelete(action = OnDeleteAction.CASCADE)
     @ManyToOne
     private User player;
 
+    @Embedded
     private Result result;
 
     public GameResult(GameKind gameKind, User player, Result result) {
