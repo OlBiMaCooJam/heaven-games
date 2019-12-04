@@ -1,7 +1,10 @@
 <template>
     <v-app id="app">
         <div id="nav">
-            <router-link to="/">home</router-link>
+            <router-link id="home" to="/">
+                <img id="btn-home" src="./assets/Logo.jpg">
+            </router-link>
+            <span id="title">미 니 게 임 천 국</span>
         </div>
         <router-view/>
     </v-app>
@@ -14,25 +17,32 @@
     }
 
     #app {
-        font-family: 'Avenir', Helvetica, Arial, sans-serif, 'rose';
+        font-family: 'rose';
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
         text-align: center;
         color: #2c3e50;
         background-image: url('assets/Background.png');
-        height: 1024px;
+        height: 100%;
     }
 
     #nav {
         padding: 30px;
+    }
 
-        a {
-            font-weight: bold;
-            color: #2c3e50;
+    #btn-home {
+        width: 50px;
+    }
 
-            &.router-link-exact-active {
-                color: #42b983;
-            }
-        }
+    #home {
+        display: unset;
+        float: left;
+    }
+
+    #title {
+        font-size: 5em;
+        line-height: 1;
+        display: inline-block;
+        margin-left: -50px;
     }
 </style>

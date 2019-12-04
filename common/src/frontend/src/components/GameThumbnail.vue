@@ -1,6 +1,6 @@
 <template>
     <v-card
-            class="mx-auto ma-3 pa-6"
+            class="mx-auto ma-3"
             max-width="400"
             tile
     >
