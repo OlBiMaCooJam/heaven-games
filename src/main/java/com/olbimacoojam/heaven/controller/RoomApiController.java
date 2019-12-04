@@ -4,6 +4,7 @@ import com.olbimacoojam.heaven.domain.Room;
 import com.olbimacoojam.heaven.domain.RoomFactory;
 import com.olbimacoojam.heaven.domain.RoomRepository;
 import com.olbimacoojam.heaven.dto.RoomResponseDto;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,10 +20,12 @@ import java.util.stream.Collectors;
 public class RoomApiController {
     private final RoomRepository roomRepository;
     private final RoomFactory roomFactory;
+    private final ModelMapper modelMapper;
 
-    public RoomApiController(RoomRepository roomRepository, RoomFactory roomFactory) {
+    public RoomApiController(RoomRepository roomRepository, RoomFactory roomFactory, ModelMapper modelMapper) {
         this.roomRepository = roomRepository;
         this.roomFactory = roomFactory;
+        this.modelMapper = modelMapper;
     }
 
     @PostMapping
@@ -36,8 +39,7 @@ public class RoomApiController {
     public List<RoomResponseDto> list() {
         List<Room> rooms = roomRepository.findAll();
         return rooms.stream()
-                .mapToInt(Room::getId)
-                .mapToObj(RoomResponseDto::new)
+                .map(room -> modelMapper.map(room, RoomResponseDto.class))
                 .collect(Collectors.toList());
     }
 }
