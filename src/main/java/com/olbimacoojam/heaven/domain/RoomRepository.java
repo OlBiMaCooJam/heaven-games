@@ -3,6 +3,7 @@ package com.olbimacoojam.heaven.domain;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -27,7 +28,7 @@ public class RoomRepository {
         return rooms.containsKey(room.getId());
     }
 
-    public List<Room> getAll() {
-        return new ArrayList(rooms.values());
+    public List<Room> findAll() {
+        return Collections.unmodifiableList(new ArrayList<>(rooms.values()));
     }
 }
