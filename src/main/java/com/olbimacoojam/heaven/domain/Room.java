@@ -7,6 +7,7 @@ import lombok.Getter;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+//todo : input 유효성 체크하기
 @Getter
 public class Room {
     private final int id;
@@ -17,5 +18,9 @@ public class Room {
         this.players = new CopyOnWriteArrayList<>();
         this.id = id;
         this.game = game;
+    }
+
+    public void join(User player) {
+        players.add(player);
     }
 }

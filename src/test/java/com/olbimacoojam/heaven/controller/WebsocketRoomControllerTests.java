@@ -62,6 +62,7 @@ public class WebsocketRoomControllerTests {
 
         RoomResponseDto roomResponseDto = completableFuture.get(1, SECONDS);
         assertThat(roomResponseDto.getId()).isEqualTo(roomId);
+        assertThat(roomResponseDto.getPlayers()).hasSize(1);
     }
 
     private List<Transport> createTransportClient() {
