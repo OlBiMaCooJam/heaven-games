@@ -28,6 +28,6 @@ class RoomRepositoryTests {
         roomRepository.save(new Room(2));
         roomRepository.save(new Room(3));
 
-        assertThat(roomRepository.getAll().size()).isEqualTo(3);
+        assertThat(roomRepository.findAll().size()).isEqualTo(3);
     }
 }

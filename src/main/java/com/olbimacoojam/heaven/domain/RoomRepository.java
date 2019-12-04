@@ -31,4 +31,8 @@ public class RoomRepository {
     public List<Room> findAll() {
         return Collections.unmodifiableList(new ArrayList<>(rooms.values()));
     }
+
+    public Room findById(int roomId) {
+        return rooms.get(roomId);
+    }
 }
