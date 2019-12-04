@@ -20,12 +20,12 @@
         },
         data() {
             return {
-                games: [{title: '미니게임천국', src: 'https://cdn.vuetifyjs.com/images/cards/docks.jpg', link: '#'},
-                    {title: '윷놀이', src: 'https://cdn.vuetifyjs.com/images/cards/docks.jpg', link: '#'},
-                    {title: '지뢰찾기', src: 'https://cdn.vuetifyjs.com/images/cards/docks.jpg', link: '#'},
-                    {title: '노래맞추기', src: 'https://cdn.vuetifyjs.com/images/cards/docks.jpg', link: '#'},
-                    {title: '맞고', src: 'https://cdn.vuetifyjs.com/images/cards/docks.jpg', link: '#'},
-                    {title: '사다리타기', src: 'https://cdn.vuetifyjs.com/images/cards/docks.jpg', link: '#'}] //데이터 예시
+                games: [{title: '미니게임천국', src: 'https://cdn.vuetifyjs.com/images/cards/docks.jpg', id: '1'},
+                    {title: '윷놀이', src: 'https://cdn.vuetifyjs.com/images/cards/docks.jpg', id: '2'},
+                    {title: '지뢰찾기', src: 'https://cdn.vuetifyjs.com/images/cards/docks.jpg', id: '3'},
+                    {title: '노래맞추기', src: 'https://cdn.vuetifyjs.com/images/cards/docks.jpg', id: '4'},
+                    {title: '맞고', src: 'https://cdn.vuetifyjs.com/images/cards/docks.jpg', id: '5'},
+                    {title: '사다리타기', src: 'https://cdn.vuetifyjs.com/images/cards/docks.jpg', id: '6'}] //데이터 예시
             }
         }
     }

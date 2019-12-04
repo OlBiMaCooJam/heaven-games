@@ -1,5 +1,5 @@
 <template>
-    <router-link :to="game.link">
+    <router-link :to="'/games/' + game.id">
 
         <v-card
                 class="mx-auto ma-3"
