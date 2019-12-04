@@ -1,25 +1,31 @@
 <template>
-    <v-card
-            class="mx-auto ma-3"
-            max-width="400"
-            tile
-    >
-        <v-img
-                class="white--text align-end"
-                height="400px"
-                src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
+    <router-link :to="game.link">
+
+        <v-card
+                class="mx-auto ma-3"
+                max-width="400"
+                tile
         >
-            <v-card-title>{{title}}</v-card-title>
-        </v-img>
-    </v-card>
+            <v-img
+                    class="white--text align-end"
+                    height="400px"
+                    :src="game.src"
+            >
+                <v-card-title>{{game.title}}</v-card-title>
+            </v-img>
+        </v-card>
+    </router-link>
 </template>
 
 <script>
     export default {
         name: "GameThumbnail",
         props: {
-            title: String,
-            subtitle: String // 데이터 넣어주기
+            game: {
+                title: String,
+                src: String,
+                link: String
+            }
         }
     }
 </script>

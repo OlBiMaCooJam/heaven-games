@@ -3,7 +3,7 @@
         <v-row>
             <v-col cols="12">
                 <v-row align='center' justify='center'>
-                    <GameThumbnail class='thumb' v-for='title in titles' :key="title.text" :title='title'/>
+                    <GameThumbnail class='thumb' v-for='game in games' :key="game.title" :game="game"/>
                 </v-row>
             </v-col>
         </v-row>
@@ -20,7 +20,12 @@
         },
         data() {
             return {
-                titles: ['마피아게임', '윷놀이', '지뢰찾기', '숫자야구', '사다리타기', '맞고'] //데이터 예시
+                games: [{title: '미니게임천국', src: 'https://cdn.vuetifyjs.com/images/cards/docks.jpg', link: '#'},
+                    {title: '윷놀이', src: 'https://cdn.vuetifyjs.com/images/cards/docks.jpg', link: '#'},
+                    {title: '지뢰찾기', src: 'https://cdn.vuetifyjs.com/images/cards/docks.jpg', link: '#'},
+                    {title: '노래맞추기', src: 'https://cdn.vuetifyjs.com/images/cards/docks.jpg', link: '#'},
+                    {title: '맞고', src: 'https://cdn.vuetifyjs.com/images/cards/docks.jpg', link: '#'},
+                    {title: '사다리타기', src: 'https://cdn.vuetifyjs.com/images/cards/docks.jpg', link: '#'}] //데이터 예시
             }
         }
     }
