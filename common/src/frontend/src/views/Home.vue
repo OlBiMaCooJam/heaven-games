@@ -34,6 +34,7 @@
 <style scoped>
   .thumb {
     margin-bottom: 50px;
-    margin-right: 50px;
+    margin-right: 5%;
+    margin-left: 5%;
   }
 </style>
