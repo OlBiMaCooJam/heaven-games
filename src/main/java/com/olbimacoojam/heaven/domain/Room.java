@@ -1,15 +1,21 @@
 package com.olbimacoojam.heaven.domain;
 
-import java.util.concurrent.atomic.AtomicInteger;
+import com.olbimacoojam.heaven.game.Game;
+import com.olbimacoojam.heaven.game.User;
+import lombok.Getter;
 
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
+
+@Getter
 public class Room {
     private final int id;
+    private final List<User> players;
+    private final Game game;
 
-    public Room(int id) {
+    public Room(int id, Game game) {
+        this.players = new CopyOnWriteArrayList<>();
         this.id = id;
-    }
-
-    public Integer getId() {
-        return id;
+        this.game = game;
     }
 }

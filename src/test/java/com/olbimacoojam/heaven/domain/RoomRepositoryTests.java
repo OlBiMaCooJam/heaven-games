@@ -1,5 +1,6 @@
 package com.olbimacoojam.heaven.domain;
 
+import com.olbimacoojam.heaven.game.Game;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -11,23 +12,32 @@ class RoomRepositoryTests {
     @Test
     void save_test() {
         RoomRepository roomRepository = new RoomRepository();
-        assertDoesNotThrow(() -> roomRepository.save(new Room(1)));
+        assertDoesNotThrow(() -> roomRepository.save(new Room(1, createGame())));
     }
 
     @Test
     void fail_save_test() {
         RoomRepository roomRepository = new RoomRepository();
-        roomRepository.save(new Room(1));
-        assertThrows(RoomSaveFailException.class, () -> roomRepository.save(new Room(1)));
+        roomRepository.save(new Room(1, createGame()));
+        assertThrows(RoomSaveFailException.class, () -> roomRepository.save(new Room(1, createGame())));
     }
 
     @Test
     void list_test() {
         RoomRepository roomRepository = new RoomRepository();
-        roomRepository.save(new Room(1));
-        roomRepository.save(new Room(2));
-        roomRepository.save(new Room(3));
+        roomRepository.save(new Room(1, createGame()));
+        roomRepository.save(new Room(2, createGame()));
+        roomRepository.save(new Room(3, createGame()));
 
         assertThat(roomRepository.findAll().size()).isEqualTo(3);
+    }
+
+    private Game createGame() {
+        return new Game() {
+            @Override
+            public void initialize() {
+
+            }
+        };
     }
 }
