@@ -20,7 +20,7 @@
         },
         data() {
             return {
-                games: [{title: '미니게임천국', src: 'https://cdn.vuetifyjs.com/images/cards/docks.jpg', id: '1'},
+                games: [{title: '마피아게임', src: 'https://cdn.vuetifyjs.com/images/cards/docks.jpg', id: '1'},
                     {title: '윷놀이', src: 'https://cdn.vuetifyjs.com/images/cards/docks.jpg', id: '2'},
                     {title: '지뢰찾기', src: 'https://cdn.vuetifyjs.com/images/cards/docks.jpg', id: '3'},
                     {title: '노래맞추기', src: 'https://cdn.vuetifyjs.com/images/cards/docks.jpg', id: '4'},
