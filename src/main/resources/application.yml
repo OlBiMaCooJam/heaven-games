@@ -1,0 +1,43 @@
+spring:
+  profiles:
+    active: default
+  datasource:
+    driverClassName: com.mysql.cj.jdbc.Driver
+    password: heaven99
+    url: jdbc:mysql://localhost:3306/heaven?serverTimezone=UTC&allowPublicKeyRetrieval=true&useSSL=false
+    username: heaven
+  devtools:
+    livereload:
+      enabled: true
+  freemarker:
+    cache: false
+  jpa:
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQL5Dialect
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5Dialect
+        format_sql: true
+    show-sql: true
+
+---
+
+spring:
+  profiles: deploy
+  datasource:
+    driverClassName: com.mysql.cj.jdbc.Driver
+    password: heaven99
+    url: jdbc:mysql://heavenDB:3306/heaven?serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true&useSSL=false
+    username: heaven
+  jpa:
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQL5Dialect
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5Dialect
+        format_sql: true
+    show-sql: true
