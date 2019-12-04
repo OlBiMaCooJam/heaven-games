@@ -1,11 +1,15 @@
 <template>
     <v-app id="app">
-        <div id="nav">
-            <router-link id="home" to="/">
-                <img id="btn-home" src="./assets/Logo.jpg">
-            </router-link>
-            <span id="title">미 니 게 임 천 국</span>
-        </div>
+        <v-row id="nav">
+            <v-col id="home" cols="1">
+                <router-link to="/">
+                    <img id="btn-home" src="./assets/Logo.jpg">
+                </router-link>
+            </v-col>
+            <v-col cols="12">
+                <span id="title">미 니 게 임 천 국</span>
+            </v-col>
+        </v-row>
         <router-view/>
     </v-app>
 </template>
@@ -28,6 +32,7 @@
 
     #nav {
         padding: 30px;
+        max-height: 30%;
     }
 
     #btn-home {
@@ -37,6 +42,7 @@
     #home {
         display: unset;
         float: left;
+        position: fixed;
     }
 
     #title {

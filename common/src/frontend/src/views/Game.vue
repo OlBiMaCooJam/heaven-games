@@ -1,15 +1,13 @@
 <template>
-    <div>
+    <v-container>
         <span>Game Id : {{$route.params.id}}</span>
-    </div>
+    </v-container>
 </template>
 
 <script>
     export default {
         name: "Game"
     }
-
-
 </script>
 
 <style scoped>
