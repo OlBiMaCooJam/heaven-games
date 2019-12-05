@@ -30,3 +30,6 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### 인증 정보 ###
+/src/main/resources/kakao.yml
