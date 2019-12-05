@@ -2,9 +2,17 @@ package com.olbimacoojam.heaven.game;
 
 import lombok.Getter;
 
+import javax.persistence.Embeddable;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+
 @Getter
+@Embeddable
 public class Result {
+
+    @Enumerated(EnumType.STRING)
     private WinLose winLose;
+
     private Integer count;
 
     private Result(WinLose winLose) {

@@ -1,0 +1,13 @@
+version: '3'
+
+networks:
+  default:
+    external:
+      name: mydb
+services:
+  nginx:
+    image: nginx
+    ports:
+      - "80:80"
+    volumes:
+      - /home/ubuntu/jenkins_home/workspace/heaven/nginx.conf:/etc/nginx/nginx.conf
