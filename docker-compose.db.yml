@@ -1,0 +1,18 @@
+version: '3'
+
+networks:
+  default:
+    external:
+      name: mydb
+services:
+  mydb:
+    image: mysql:5.7
+    volumes:
+      - /home/ubuntu/sql/:/docker-entrypoint-initdb.d
+    environment:
+      - MYSQL_DATABASE=heaven
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+      - MYSQL_ROOT_PASSWORD=root
+      - TZ=UTC
+    command:
+      ['mysqld', '--character-set-server=utf8mb4', '--collation-server=utf8mb4_unicode_ci']
