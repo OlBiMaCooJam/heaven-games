@@ -1,6 +1,6 @@
-package common.game;
+package com.olbimacoojam.heaven.game;
 
-import common.BaseEntity;
+import com.olbimacoojam.heaven.BaseEntity;
 import lombok.Getter;
 
 import javax.persistence.Entity;

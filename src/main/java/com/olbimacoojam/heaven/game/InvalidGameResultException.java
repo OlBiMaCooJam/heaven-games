@@ -1,4 +1,4 @@
-package common.game;
+package com.olbimacoojam.heaven.game;
 
 public class InvalidGameResultException extends RuntimeException {
     private static final String MESSAGE = "게임 결과가 잘못 되었습니다.";
