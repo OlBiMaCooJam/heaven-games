@@ -16,17 +16,11 @@ import java.util.List;
 @RequestMapping("/rooms")
 @RestController
 public class RoomApiController {
-//    private final RoomRepository roomRepository;
-//    private final RoomFactory roomFactory;
     private final RoomService roomService;
-//    private final ModelMapper modelMapper;
 
     @Autowired
     public RoomApiController(RoomService roomService) {
         this.roomService = roomService;
-//        this.roomRepository = roomRepository;
-//        this.roomFactory = roomFactory;
-//        this.modelMapper = modelMapper;
     }
 
     @PostMapping
