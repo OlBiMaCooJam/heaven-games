@@ -2,6 +2,7 @@ package com.olbimacoojam.heaven.game;
 
 import com.olbimacoojam.heaven.BaseEntity;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import javax.persistence.*;
@@ -13,6 +14,7 @@ import javax.persistence.*;
 @Getter
 @Entity
 @ToString
+@NoArgsConstructor
 public class User extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
