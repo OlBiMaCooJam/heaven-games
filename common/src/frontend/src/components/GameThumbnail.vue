@@ -1,16 +1,16 @@
 <template>
-  <router-link :to="'/games/' + game.id">
+    <router-link :to="'/games/' + common.game.id">
     <v-card
         class="mx-auto ma-3"
         max-width="400"
         tile
     >
       <v-img
-          :src="game.src"
-          class="white--text align-end"
-          height="400px"
+              :src="common.game.src"
+              class="white--text align-end"
+              height="400px"
       >
-        <v-card-title>{{game.title}}</v-card-title>
+          <v-card-title>{{aa.game.title}}</v-card-title>
       </v-img>
     </v-card>
   </router-link>
@@ -20,7 +20,9 @@
   export default {
     name: "GameThumbnail",
     props: {
-      game: {
+        aa.game
+  :
+  {
         title: String,
         src: String,
         link: String

@@ -1,4 +1,4 @@
-package com.olbimacoojam.heaven.game;
+package common.game;
 
 import lombok.Getter;
 
