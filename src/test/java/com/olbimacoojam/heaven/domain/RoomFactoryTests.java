@@ -1,7 +1,5 @@
 package com.olbimacoojam.heaven.domain;
 
-import com.olbimacoojam.heaven.domain.Room;
-import com.olbimacoojam.heaven.domain.RoomFactory;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

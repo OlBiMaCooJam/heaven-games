@@ -81,7 +81,7 @@ public class WebsocketRoomControllerTests {
 
         CompletableFuture<RoomResponseDto> completableFuture2 = new CompletableFuture<>();
         stompSession.subscribe(SUBSCRIBE_ENTER_ROOM_ENDPOINT + roomId, getStompFrameHandler(completableFuture2));
-        stompSession.send(SEND_ENTER_ROOM_ENDPOINT + roomId +"/leave", null);
+        stompSession.send(SEND_ENTER_ROOM_ENDPOINT + roomId + "/leave", null);
         RoomResponseDto roomResponseDto2 = completableFuture2.get(10, SECONDS);
         assertThat(roomResponseDto2.getId()).isEqualTo(roomId);
         assertThat(roomResponseDto2.getPlayers()).hasSize(0);

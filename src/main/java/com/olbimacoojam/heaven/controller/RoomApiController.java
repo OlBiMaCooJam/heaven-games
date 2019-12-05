@@ -1,14 +1,13 @@
 package com.olbimacoojam.heaven.controller;
 
-import com.olbimacoojam.heaven.domain.Room;
 import com.olbimacoojam.heaven.dto.RoomResponseDto;
+import com.olbimacoojam.heaven.service.RoomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import com.olbimacoojam.heaven.service.RoomService;
 
 import java.net.URI;
 import java.util.List;
