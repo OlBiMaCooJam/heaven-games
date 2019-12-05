@@ -1,6 +1,6 @@
-package com.olbimacoojam.heaven.game;
+package common.game;
 
-import com.olbimacoojam.heaven.BaseEntity;
+import common.BaseEntity;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

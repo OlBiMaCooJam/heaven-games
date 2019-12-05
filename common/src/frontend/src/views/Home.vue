@@ -3,7 +3,7 @@
     <v-row>
       <v-col cols="12">
         <v-row align='center' justify='center'>
-          <GameThumbnail :game="game" :key="game.title" class='thumb' v-for='game in games'/>
+            <GameThumbnail :aa.game="common.game" :key="common.game.title" class='thumb' v-for='common.game in games'/>
         </v-row>
       </v-col>
     </v-row>
@@ -11,9 +11,9 @@
 </template>
 
 <script>
-  import GameThumbnail from "../components/GameThumbnail";
+    import GameThumbnail from "../components/GameThumbnail";
 
-  export default {
+    export default {
     name: 'home',
     components: {
       GameThumbnail
