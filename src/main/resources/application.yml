@@ -29,7 +29,7 @@ spring:
   datasource:
     driverClassName: com.mysql.cj.jdbc.Driver
     password: heaven99
-    url: jdbc:mysql://heavenDB:3306/heaven?serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true&useSSL=false
+    url: jdbc:mysql://mydb:3306/heaven?serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true&useSSL=false
     username: heaven
   jpa:
     database: mysql
