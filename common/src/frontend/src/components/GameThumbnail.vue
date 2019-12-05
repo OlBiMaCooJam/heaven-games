@@ -1,6 +1,8 @@
 <template>
-  <router-link :to="'/games/' + game.id">
-    <v-card
+  <router-link :to="'/rooms'">
+      <!--  <router-link :to="'/games/' + game.id">-->
+
+      <v-card
         class="mx-auto ma-3"
         max-width="400"
         tile
