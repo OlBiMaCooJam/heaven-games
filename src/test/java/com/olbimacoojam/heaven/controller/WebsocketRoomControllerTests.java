@@ -24,6 +24,8 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeoutException;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -57,12 +59,32 @@ public class WebsocketRoomControllerTests {
         int roomId = createRoom();
         StompSession stompSession = stompClient.connect(URL, new WebSocketHttpHeaders(), new StompSessionHandlerAdapter() {
         }).get(5, SECONDS);
-        stompSession.subscribe(SUBSCRIBE_ENTER_ROOM_ENDPOINT + roomId, getStompFrameHandler());
+        stompSession.subscribe(SUBSCRIBE_ENTER_ROOM_ENDPOINT + roomId, getStompFrameHandler(completableFuture));
         stompSession.send(SEND_ENTER_ROOM_ENDPOINT + roomId, null);
 
         RoomResponseDto roomResponseDto = completableFuture.get(1, SECONDS);
         assertThat(roomResponseDto.getId()).isEqualTo(roomId);
         assertThat(roomResponseDto.getPlayers()).hasSize(1);
+    }
+
+    @Test
+    void leave_room_test() throws InterruptedException, ExecutionException, TimeoutException {
+        int roomId = createRoom();
+        StompSession stompSession = stompClient.connect(URL, new WebSocketHttpHeaders(), new StompSessionHandlerAdapter() {
+        }).get(5, SECONDS);
+        stompSession.subscribe(SUBSCRIBE_ENTER_ROOM_ENDPOINT + roomId, getStompFrameHandler(completableFuture));
+        stompSession.send(SEND_ENTER_ROOM_ENDPOINT + roomId, null);
+
+        RoomResponseDto roomResponseDto = completableFuture.get(1, SECONDS);
+        assertThat(roomResponseDto.getId()).isEqualTo(roomId);
+        assertThat(roomResponseDto.getPlayers()).hasSize(1);
+
+        CompletableFuture<RoomResponseDto> completableFuture2 = new CompletableFuture<>();
+        stompSession.subscribe(SUBSCRIBE_ENTER_ROOM_ENDPOINT + roomId, getStompFrameHandler(completableFuture2));
+        stompSession.send(SEND_ENTER_ROOM_ENDPOINT + roomId +"/leave", null);
+        RoomResponseDto roomResponseDto2 = completableFuture2.get(10, SECONDS);
+        assertThat(roomResponseDto2.getId()).isEqualTo(roomId);
+        assertThat(roomResponseDto2.getPlayers()).hasSize(0);
     }
 
     private List<Transport> createTransportClient() {
@@ -83,7 +105,7 @@ public class WebsocketRoomControllerTests {
         return Integer.parseInt(location.substring(ROOMS_URL.length()));
     }
 
-    private StompFrameHandler getStompFrameHandler() {
+    private StompFrameHandler getStompFrameHandler(CompletableFuture<RoomResponseDto> completableFuture) {
         return new StompFrameHandler() {
             @Override
             public Type getPayloadType(StompHeaders headers) {

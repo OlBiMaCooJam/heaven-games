@@ -23,4 +23,8 @@ public class Room {
     public void join(User player) {
         players.add(player);
     }
+
+    public void leave() {
+        players.remove(0);
+    }
 }

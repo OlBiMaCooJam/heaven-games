@@ -25,7 +25,15 @@ public class WebsocketRoomController {
     public RoomResponseDto enterRoom(@DestinationVariable int roomId) {
         Room room = roomRepository.findById(roomId);
         room.join(new User());
+        System.out.println("here!!");
+        return modelMapper.map(room, RoomResponseDto.class);
+    }
 
+    @MessageMapping("/rooms/{roomId}/leave")
+    @SendTo("/topic/rooms/{roomId}")
+    public RoomResponseDto leaveRoom(@DestinationVariable int roomId) {
+        Room room = roomRepository.findById(roomId);
+        room.leave();
         return modelMapper.map(room, RoomResponseDto.class);
     }
 }
