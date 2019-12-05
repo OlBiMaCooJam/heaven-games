@@ -1,4 +1,4 @@
-package common.game;
+package com.olbimacoojam.heaven.game;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

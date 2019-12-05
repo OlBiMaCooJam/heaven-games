@@ -1,4 +1,4 @@
-package common;
+package com.olbimacoojam.heaven;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;

@@ -1,4 +1,3 @@
 rootProject.name = 'heaven'
 include 'common'
-include 'baseball'
 
