@@ -1,4 +1,4 @@
-package com.olbimacoojam.heaven.util;
+package com.olbimacoojam.heaven.kakao;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -15,11 +15,11 @@ import java.util.Map;
 @Getter
 @Setter
 public class KakaoConfig {
-    private Map<String, String> client;
+    private Map<String, String> auth;
     private Map<String, String> resource;
 
     public KakaoConfig() {
-        this.client = new HashMap<>();
+        this.auth = new HashMap<>();
         this.resource = new HashMap<>();
     }
 }
