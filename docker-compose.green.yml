@@ -1,0 +1,13 @@
+version: '3'
+
+services:
+  heavenApp:
+    image: heaven
+    volumes:
+      - /home/ubuntu/jenkins_home/workspace/heaven/build/libs:/usr/src/app
+    ports:
+      - "8082:8080"
+networks:
+  default:
+    external:
+      name: mydb
