@@ -2,9 +2,7 @@ package com.olbimacoojam.heaven.game;
 
 import lombok.Getter;
 
-import static com.olbimacoojam.heaven.game.GameType.NONE;
-import static com.olbimacoojam.heaven.game.GameType.SCORE;
-import static com.olbimacoojam.heaven.game.GameType.WIN_LOSE;
+import static com.olbimacoojam.heaven.game.GameType.*;
 
 @Getter
 public enum GameKind {
