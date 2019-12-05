@@ -51,10 +51,6 @@ subprojects {
 	test {
 		useJUnitPlatform()
 	}
-}
-
-project(':baseball') {
-	dependencies {
-		compile project(':common')
-	}
+	bootJar { enabled = false }
+	jar { enabled = true }
 }
