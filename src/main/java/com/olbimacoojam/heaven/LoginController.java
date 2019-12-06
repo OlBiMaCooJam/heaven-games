@@ -20,8 +20,8 @@ public class LoginController {
         this.kakaoApiService = kakaoApiService;
     }
 
-    @GetMapping("/login")
-    public void login(HttpServletResponse httpServletResponse) {
+    @GetMapping("/login/kakao")
+    public void loginKakao(HttpServletResponse httpServletResponse) {
         String loginRequestUri = kakaoApiService.getLoginRequestUri();
 
         LOGGER.info("loginRequestUri: {}", loginRequestUri);

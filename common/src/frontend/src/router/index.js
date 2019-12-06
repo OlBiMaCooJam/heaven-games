@@ -13,7 +13,13 @@ const routes = [
     path: '/games/:id',
     name: 'game',
     component: () => import('../views/Game.vue')
-  }
+  },
+  {
+    path: '/login',
+    name: 'login',
+    component: () => import('../views/Login.vue')
+  },
+
 ]
 
 const router = new VueRouter({
