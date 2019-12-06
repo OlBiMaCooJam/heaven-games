@@ -1,6 +1,6 @@
 <template>
   <div class="middle">
-    <a href="/login/kakao">
+    <a :href="'http://' + host + '/login/kakao'">
       <img alt="kakao_login" class="logo" src="../assets/kakao_account_login_btn_large_narrow.png">
     </a>
   </div>
@@ -8,7 +8,12 @@
 
 <script>
   export default {
-    name: "Login"
+    name: "Login",
+    data() {
+      return {
+        host: location.host
+      }
+    }
   }
 </script>
 

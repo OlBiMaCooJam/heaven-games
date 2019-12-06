@@ -9,6 +9,9 @@
       <v-col cols="12">
         <span id="title">미 니 게 임 천 국</span>
       </v-col>
+      <v-col cols="12">
+        <router-link to="/login">로그인</router-link>
+      </v-col>
     </v-row>
     <router-view/>
   </v-app>
