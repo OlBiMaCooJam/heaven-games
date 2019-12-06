@@ -60,6 +60,7 @@
     font-size: 5em;
     line-height: 1;
     display: inline-block;
-    margin-left: -50px;
+    margin-left: 100px;
+
   }
 </style>
