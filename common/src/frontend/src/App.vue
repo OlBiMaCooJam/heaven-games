@@ -6,8 +6,13 @@
           <img id="btn-home" src="./assets/Logo.jpg">
         </router-link>
       </v-col>
-      <v-col cols="12">
+      <v-col cols="11">
         <span id="title">미 니 게 임 천 국</span>
+      </v-col>
+      <v-col cols="1">
+        <router-link to="/login">
+          <v-btn text large>로그인</v-btn>
+        </router-link>
       </v-col>
     </v-row>
     <router-view/>
@@ -15,9 +20,8 @@
 </template>
 
 <script>
-
   export default {
-    name: 'App'
+    name: 'App',
   }
 </script>
 
@@ -56,6 +60,7 @@
     font-size: 5em;
     line-height: 1;
     display: inline-block;
-    margin-left: -50px;
+    margin-left: 100px;
+
   }
 </style>

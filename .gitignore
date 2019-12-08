@@ -33,3 +33,6 @@ out/
 
 ### 인증 정보 ###
 /src/main/resources/kakao.yml
+
+### static files ###
+/src/main/resources/static/**

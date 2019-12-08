@@ -14,7 +14,7 @@ class LoginControllerTest {
     void login() {
         webTestClient
                 .get()
-                .uri("/login")
+                .uri("/login/kakao")
                 .exchange()
                 .expectStatus().isFound();
     }
