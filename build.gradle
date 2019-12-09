@@ -1,5 +1,6 @@
 plugins {
     id 'org.springframework.boot' version '2.2.1.RELEASE'
+    id 'org.asciidoctor.convert' version '1.5.9.2'
     id 'io.spring.dependency-management' version '1.0.8.RELEASE'
     id 'java'
 }
@@ -22,7 +23,16 @@ repositories {
     mavenCentral()
 }
 
+ext {
+    snippetsDir = file('build/generated-snippets')
+}
+
+ext['spring-restdocs.version'] = '2.0.3.RELEASE'
+
 dependencies {
+    asciidoctor "org.springframework.restdocs:spring-restdocs-asciidoctor:${project.ext['spring-restdocs.version']}"
+    testImplementation "org.springframework.restdocs:spring-restdocs-webtestclient:${project.ext['spring-restdocs.version']}"
+
     testImplementation 'org.junit.jupiter:junit-jupiter-params:5.4.2'
     testImplementation 'org.junit.jupiter:junit-jupiter-api'
     testImplementation 'org.junit.jupiter:junit-jupiter-api'
@@ -40,10 +50,10 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-websocket'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
-
+    
+    implementation 'org.webjars:stomp-websocket:2.3.3'
     implementation 'org.webjars:sockjs-client:1.1.2'
     implementation 'org.modelmapper:modelmapper:0.7.8'
-    implementation 'org.webjars:stomp-websocket:2.3.3'
     implementation 'com.google.code.gson:gson:2.7'
 
     annotationProcessor 'org.projectlombok:lombok'
@@ -54,6 +64,19 @@ dependencies {
 
 test {
     useJUnitPlatform()
+    outputs.dir snippetsDir
+}
+
+asciidoctor {
+    inputs.dir snippetsDir
+    dependsOn test
+}
+
+jar {
+    dependsOn asciidoctor
+    from ("${asciidoctor.outputDir}/html5") {
+        into 'static/docs'
+    }
 }
 
 processResources.dependsOn ':common:buildFrontEnd'

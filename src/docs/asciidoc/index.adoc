@@ -1,0 +1,77 @@
+= MiniGame Paradise REST API Guide Document
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 3
+:sectlinks:
+
+[[introduction]]
+== 소개
+
+미니게임천국 서비스의 REST API 명세. +
+API 요청/응답의 형식과 예시. +
+
+[[common]]
+== 공통 사항
+
+모든 API에 적용되는 사항
+
+=== Cookie
+
+|===
+| name | 설명
+
+| `JSESSIONID`
+| 세션키
+|===
+
+== Room API
+
+=== CREATE
+
+방 생성 API
+
+- *HTTP Request*
+include::{snippets}/room-api/create-room/http-request.adoc[]
+
+- *HTTP Response*
+include::{snippets}/room-api/create-room/http-response.adoc[]
+
+- *Response Header Fields*
+include::{snippets}/room-api/create-room/response-headers.adoc[]
+
+- *CURL Request*
+include::{snippets}/room-api/create-room/curl-request.adoc[]
+
+=== READ
+
+방 목록 조회 API
+
+- HTTP Request
+include::{snippets}/room-api/list-room/http-request.adoc[]
+
+- HTTP Response
+include::{snippets}/room-api/list-room/http-response.adoc[]
+
+- Response Body
+include::{snippets}/room-api/list-room/response-body.adoc[]
+
+- Response Body Fields
+include::{snippets}/room-api/list-room/response-fields.adoc[]
+
+- CURL Request
+include::{snippets}/room-api/list-room/curl-request.adoc[]
+
+
+== Login API
+
+로그인 API
+
+=== Login
+
+- HTTP Request
+include::{snippets}/login-api/login/http-request.adoc[]
+
+- HTTP Response
+include::{snippets}/login-api/login/http-response.adoc[]
