@@ -7,11 +7,11 @@
                 </v-list-item-avatar>
 
                 <v-list-item-avatar class="room-number">
-                    <v-icon v-text="room.playerCnt+'/10'"></v-icon>
+                    <v-icon v-text="room.players.length+'/10'"></v-icon>
                 </v-list-item-avatar>
 
                 <v-list-item-content class="text-align-center">
-                    <v-list-item-title v-text="room.title"></v-list-item-title>
+                    <v-list-item-title v-text="room.id + '번 방'"></v-list-item-title>
                 </v-list-item-content>
             </v-list-item>
         </router-link>
@@ -25,6 +25,7 @@
             room: {
                 id: Number,
                 title: String,
+                players: Array
             },
             gameLogo: String
         }
