@@ -54,7 +54,7 @@ public class RoomApiControllerTests {
                 .expectHeader()
                 .exists("location")
                 .expectBody()
-                .consumeWith(document("/room-api/create-room",
+                .consumeWith(document("room-api/create-room",
                         responseHeaders(
                                 headerWithName("Location").description("created room uri")
                         )));
@@ -73,7 +73,7 @@ public class RoomApiControllerTests {
                 .jsonPath("$.length()").isEqualTo(2)
                 .jsonPath("$[0].id").isEqualTo(roomId1)
                 .jsonPath("$[1].id").isEqualTo(roomId2)
-                .consumeWith(document("/room-api/list-room",
+                .consumeWith(document("room-api/list-room",
                         responseFields(fieldWithPath("[]").description("room 목록"))
                                 .andWithPrefix("[].", roomResponseFields)
                 ));

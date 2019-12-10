@@ -36,6 +36,6 @@ class LoginControllerTest {
                 .exchange()
                 .expectStatus().isFound()
                 .expectBody()
-                .consumeWith(document("/login-api/login"));
+                .consumeWith(document("login-api/login"));
     }
 }
