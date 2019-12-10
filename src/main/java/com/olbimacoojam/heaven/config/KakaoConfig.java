@@ -1,4 +1,4 @@
-package com.olbimacoojam.heaven.kakao;
+package com.olbimacoojam.heaven.config;
 
 import lombok.Getter;
 import lombok.Setter;
