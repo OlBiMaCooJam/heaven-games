@@ -1,4 +1,4 @@
-package com.olbimacoojam.heaven.game;
+package com.olbimacoojam.heaven.domain;
 
 import com.olbimacoojam.heaven.BaseEntity;
 import lombok.Getter;
@@ -26,8 +26,12 @@ public class User extends BaseEntity {
     @Column
     private String name;
 
-    public User(Long kakaoId, String name) {
+    @Column
+    private String refreshToken;
+
+    public User(Long kakaoId, String name, String refreshToken) {
         this.kakaoId = kakaoId;
         this.name = name;
+        this.refreshToken = refreshToken;
     }
 }
