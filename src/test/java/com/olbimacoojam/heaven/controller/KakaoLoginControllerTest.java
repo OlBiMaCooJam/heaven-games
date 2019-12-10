@@ -1,4 +1,4 @@
-package com.olbimacoojam.heaven;
+package com.olbimacoojam.heaven.controller;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,7 +15,7 @@ import static org.springframework.restdocs.webtestclient.WebTestClientRestDocume
 
 @ExtendWith({RestDocumentationExtension.class, SpringExtension.class})
 @SpringBootTest(properties = "spring.config.location=classpath:kakao.yml", webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class LoginControllerTest {
+class KakaoLoginControllerTest {
     private WebTestClient webTestClient;
     @LocalServerPort
     private String port;

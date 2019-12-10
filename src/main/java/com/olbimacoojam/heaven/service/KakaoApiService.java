@@ -1,8 +1,9 @@
-package com.olbimacoojam.heaven.kakao;
+package com.olbimacoojam.heaven.service;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.olbimacoojam.heaven.game.User;
+import com.olbimacoojam.heaven.config.KakaoConfig;
+import com.olbimacoojam.heaven.domain.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -14,9 +15,9 @@ public class KakaoApiService {
     private static final String ACCESS_TOKEN = "access_token";
     private static final String REFRESH_TOKEN = "refresh_token";
 
-    private KakaoConfig kakaoConfig;
+    private final KakaoConfig kakaoConfig;
 
-    public KakaoApiService(KakaoConfig kakaoConfig) {
+    public KakaoApiService(final KakaoConfig kakaoConfig) {
         this.kakaoConfig = kakaoConfig;
     }
 
@@ -52,11 +53,12 @@ public class KakaoApiService {
                 .bodyToMono(String.class)
                 .block();
 
+        LOGGER.info(body);
+
         return new JsonParser().parse(body).getAsJsonObject().get(tokenType).getAsString();
     }
 
-
-    public User getUser(String accessToken) {
+    public User getUser(String accessToken, String refreshToken) {
         String body = WebClient.create(kakaoConfig.getResource().get("host"))
                 .post()
                 .uri(kakaoConfig.getResource().get("userInfoPath"))
@@ -70,6 +72,7 @@ public class KakaoApiService {
         JsonObject properties = new JsonParser().parse(body).getAsJsonObject().get("properties").getAsJsonObject();
         String name = properties.getAsJsonObject().get("nickname").getAsString();
 
-        return new User(kakaoId, name);
+        return new User(kakaoId, name, refreshToken);
     }
+
 }

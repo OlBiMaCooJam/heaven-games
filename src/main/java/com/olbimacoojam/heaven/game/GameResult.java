@@ -1,6 +1,7 @@
 package com.olbimacoojam.heaven.game;
 
 import com.olbimacoojam.heaven.BaseEntity;
+import com.olbimacoojam.heaven.domain.User;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

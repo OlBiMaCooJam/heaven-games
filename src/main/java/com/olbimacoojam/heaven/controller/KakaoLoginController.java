@@ -1,7 +1,8 @@
-package com.olbimacoojam.heaven;
+package com.olbimacoojam.heaven.controller;
 
-import com.olbimacoojam.heaven.game.User;
-import com.olbimacoojam.heaven.kakao.KakaoApiService;
+import com.olbimacoojam.heaven.domain.User;
+import com.olbimacoojam.heaven.domain.UserSession;
+import com.olbimacoojam.heaven.service.KakaoApiService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -9,14 +10,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 @Controller
-public class LoginController {
-    private static final Logger LOGGER = LoggerFactory.getLogger(LoginController.class);
+public class KakaoLoginController {
+    private static final Logger LOGGER = LoggerFactory.getLogger(KakaoLoginController.class);
 
-    private KakaoApiService kakaoApiService;
+    private final KakaoApiService kakaoApiService;
 
-    public LoginController(KakaoApiService kakaoApiService) {
+    public KakaoLoginController(final KakaoApiService kakaoApiService) {
         this.kakaoApiService = kakaoApiService;
     }
 
@@ -31,14 +33,20 @@ public class LoginController {
     }
 
     @GetMapping("/oauth")
-    public String oauth(@RequestParam("code") String code) {
+    public String oauth(HttpSession httpSession, @RequestParam("code") String code) {
         LOGGER.info("code: {}", code);
 
         String accessToken = kakaoApiService.getAccessToken(code);
         LOGGER.info("accessToken: {}", accessToken);
 
-        User user = kakaoApiService.getUser(accessToken);
+        String refreshToken = kakaoApiService.getRefreshToken(code);
+        LOGGER.info("refreshToken: {}", refreshToken);
+
+        User user = kakaoApiService.getUser(accessToken, refreshToken);
         LOGGER.info("user: {}", user);
+
+        UserSession userSession = new UserSession(user.getId(), user.getName(), accessToken);
+        httpSession.setAttribute(UserSession.USER_SESSION, userSession);
 
         return "redirect:/";
     }
