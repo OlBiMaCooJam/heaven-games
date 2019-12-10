@@ -1,6 +1,5 @@
-package com.olbimacoojam.heaven.util;
+package com.olbimacoojam.heaven.config;
 
-import com.olbimacoojam.heaven.kakao.KakaoConfig;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

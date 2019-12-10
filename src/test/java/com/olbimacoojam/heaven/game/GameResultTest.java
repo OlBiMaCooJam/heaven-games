@@ -1,5 +1,6 @@
 package com.olbimacoojam.heaven.game;
 
+import com.olbimacoojam.heaven.domain.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
