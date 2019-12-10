@@ -11,9 +11,9 @@
 </template>
 
 <script>
-  import GameThumbnail from "../components/GameThumbnail";
+    import GameThumbnail from "../components/GameThumbnail";
 
-  export default {
+    export default {
     name: 'home',
     components: {
       GameThumbnail
