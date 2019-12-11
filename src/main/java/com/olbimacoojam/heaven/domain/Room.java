@@ -26,4 +26,8 @@ public class Room {
     public void leave() {
         players.remove(0);
     }
+
+    public void startGame() {
+        game.initialize(players);
+    }
 }

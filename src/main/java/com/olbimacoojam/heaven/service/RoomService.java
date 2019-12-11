@@ -3,8 +3,9 @@ package com.olbimacoojam.heaven.service;
 import com.olbimacoojam.heaven.domain.Room;
 import com.olbimacoojam.heaven.domain.RoomFactory;
 import com.olbimacoojam.heaven.domain.RoomRepository;
-import com.olbimacoojam.heaven.dto.RoomResponseDto;
 import com.olbimacoojam.heaven.domain.User;
+import com.olbimacoojam.heaven.dto.RoomResponseDto;
+import com.olbimacoojam.heaven.game.Game;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -41,7 +42,6 @@ public class RoomService {
     public RoomResponseDto subscribe(int roomId) {
         Room room = roomRepository.findById(roomId);
         room.join(new User());
-        System.out.println("here!!");
         return modelMapper.map(room, RoomResponseDto.class);
     }
 
@@ -49,5 +49,19 @@ public class RoomService {
         Room room = roomRepository.findById(roomId);
         room.leave();
         return modelMapper.map(room, RoomResponseDto.class);
+    }
+
+    public Room findById(int roomId) {
+        return roomRepository.findById(roomId);
+    }
+
+    public int startGame(int roomId) {
+        Room room = roomRepository.findById(roomId);
+        room.startGame();
+        List<User> players = room.getPlayers();
+        Game game = room.getGame();
+        game.initialize(players);
+
+        return players.size();
     }
 }
