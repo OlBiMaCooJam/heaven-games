@@ -40,7 +40,7 @@
         data() {
             return {
                 rooms: [],
-                gameLogo: 'https://cdn.vuetifyjs.com/images/lists/3.jpg'
+                gameLogo: require('../assets/Logo.jpg')
             }
         },
 
