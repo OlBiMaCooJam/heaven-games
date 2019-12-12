@@ -5,28 +5,26 @@ import java.util.Map;
 import java.util.Set;
 
 public class BoardGenerator {
-    private final Integer rows;
-    private final Integer columns;
+    private final BoardSpecification boardSpecification;
     private final MinePositionGenerator minePositionGenerator;
 
-    public BoardGenerator(final Integer rows, final Integer columns, final MinePositionGenerator minePositionGenerator) {
-        this.rows = rows;
-        this.columns = columns;
+    public BoardGenerator(final BoardSpecification boardSpecification, final MinePositionGenerator minePositionGenerator) {
+        this.boardSpecification = boardSpecification;
         this.minePositionGenerator = minePositionGenerator;
     }
 
     public Board generate() {
         Map<Position, Block> board = new HashMap<>();
-        Set<Position> minePositions = minePositionGenerator.generate();
+        Set<Position> minePositions = minePositionGenerator.generate(boardSpecification.getRows(), boardSpecification.getColumns(), boardSpecification.getMines());
 
-        for (int y = 0; y < rows; y++) {
-            board.putAll(generateRow(y, minePositions));
+        for (int y = 0; y < boardSpecification.getColumns(); y++) {
+            board.putAll(generateRow(y, boardSpecification.getColumns(), minePositions));
         }
 
         return Board.of(board);
     }
 
-    private Map<Position, Block> generateRow(Integer y, Set<Position> minePositions) {
+    private Map<Position, Block> generateRow(Integer y, Integer columns, Set<Position> minePositions) {
         Map<Position, Block> row = new HashMap<>();
 
         for (int x = 0; x < columns; x++) {

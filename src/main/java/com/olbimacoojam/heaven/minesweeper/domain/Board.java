@@ -1,7 +1,10 @@
 package com.olbimacoojam.heaven.minesweeper.domain;
 
+import lombok.Getter;
+
 import java.util.Map;
 
+@Getter
 public class Board {
     private final Map<Position, Block> board;
 

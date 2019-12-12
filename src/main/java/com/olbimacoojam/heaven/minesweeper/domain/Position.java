@@ -1,7 +1,10 @@
 package com.olbimacoojam.heaven.minesweeper.domain;
 
+import lombok.Getter;
+
 import java.util.Objects;
 
+@Getter
 public class Position {
     private final Integer x;
     private final Integer y;

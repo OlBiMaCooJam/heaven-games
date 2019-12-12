@@ -38,7 +38,7 @@ public class Minesweeper implements Game {
     }
 
     private void checkSameUser(List<User> players) {
-        if (players.contains(user)) {
+        if (!players.contains(user)) {
             throw new UserNotMatchException();
         }
     }

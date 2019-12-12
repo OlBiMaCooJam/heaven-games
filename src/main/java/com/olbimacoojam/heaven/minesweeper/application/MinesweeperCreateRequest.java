@@ -1,12 +1,12 @@
 package com.olbimacoojam.heaven.minesweeper.application;
 
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 
 @Getter
-@RequiredArgsConstructor
+@NoArgsConstructor
 public class MinesweeperCreateRequest {
-    private final Integer columns;
-    private final Integer rows;
-    private final Integer mines;
+    private Integer columns;
+    private Integer rows;
+    private Integer mines;
 }
