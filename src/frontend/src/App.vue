@@ -63,4 +63,20 @@
     margin-left: 100px;
 
   }
+
+  #mafia-app {
+    background: url('assets/mafia-bg.jpg') no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+
+    /*-webkit-font-smoothing: antialiased;*/
+    /*-moz-osx-font-smoothing: grayscale;*/
+    /*text-align: center;*/
+    /*color: #2c3e50;*/
+    /*background-image: url('');*/
+    height: 100%;
+  }
+
 </style>

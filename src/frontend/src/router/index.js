@@ -29,7 +29,12 @@ const routes = [
     name: 'login',
     component: () => import('../views/Login.vue')
   },
-
+  {
+    path: '/game/mafia',
+    name: 'mafia',
+    component: () => import('../views/Mafia.vue')
+  },
+//    경로 수정 필요
 ]
 
 const router = new VueRouter({
