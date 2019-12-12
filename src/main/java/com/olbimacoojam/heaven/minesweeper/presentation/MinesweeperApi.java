@@ -4,9 +4,9 @@ import com.olbimacoojam.heaven.domain.User;
 import com.olbimacoojam.heaven.domain.UserSession;
 import com.olbimacoojam.heaven.minesweeper.application.MinesweeperCreateRequest;
 import com.olbimacoojam.heaven.minesweeper.application.MinesweeperService;
-import com.olbimacoojam.heaven.minesweeper.domain.Board;
 import com.olbimacoojam.heaven.service.RoomService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,9 +24,9 @@ public class MinesweeperApi {
     public ResponseEntity newGame(HttpSession httpSession, @PathVariable Integer roomId, @RequestBody MinesweeperCreateRequest minesweeperCreateRequest) {
         User user = (User) httpSession.getAttribute(UserSession.USER_SESSION);
 //        Room room = roomService.findById(roomId);
-        System.out.println(minesweeperCreateRequest);
-        Board board = minesweeperService.createGame(Collections.singletonList(user), user, minesweeperCreateRequest);
+        minesweeperService.createGame(Collections.singletonList(user), user, minesweeperCreateRequest);
 
-        return ResponseEntity.ok(board.getBoard());
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .build();
     }
 }
