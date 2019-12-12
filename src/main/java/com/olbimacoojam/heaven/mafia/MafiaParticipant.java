@@ -6,10 +6,10 @@ import lombok.Getter;
 
 @Getter
 public class MafiaParticipant {
-    private User player;
-    private Occupation occupation;
+    private final User player;
+    private final Occupation occupation;
 
-    public MafiaParticipant(User player, Occupation occupation) {
+    public MafiaParticipant(final User player, final Occupation occupation) {
         this.player = player;
         this.occupation = occupation;
     }
