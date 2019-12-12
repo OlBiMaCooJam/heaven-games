@@ -19,7 +19,7 @@ public class BoardGenerator {
         Map<Position, Block> board = new HashMap<>();
         Set<Position> minePositions = minePositionGenerator.generate();
 
-        for (Integer y = 0; y < rows; y++) {
+        for (int y = 0; y < rows; y++) {
             board.putAll(generateRow(y, minePositions));
         }
 
@@ -29,7 +29,7 @@ public class BoardGenerator {
     private Map<Position, Block> generateRow(Integer y, Set<Position> minePositions) {
         Map<Position, Block> row = new HashMap<>();
 
-        for (Integer x = 0; x < columns; x++) {
+        for (int x = 0; x < columns; x++) {
             Position position = Position.of(x, y);
             Block block = generateBlock(position, minePositions);
             row.put(position, block);
