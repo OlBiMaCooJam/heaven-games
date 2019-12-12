@@ -3,10 +3,8 @@ package com.olbimacoojam.heaven.minesweeper.domain;
 import com.olbimacoojam.heaven.minesweeper.domain.exception.InvalidBoardSizeException;
 import com.olbimacoojam.heaven.minesweeper.domain.exception.InvalidNumberOfMinesException;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor
 public class BoardSpecification {
     private static final Integer MAX_NUMBER_OF_ROWS = 30;
     private static final Integer MAX_NUMBER_OF_COLUMNS = 30;
