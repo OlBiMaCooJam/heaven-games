@@ -3,6 +3,8 @@ package com.olbimacoojam.heaven.domain;
 import com.olbimacoojam.heaven.game.Game;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -35,8 +37,7 @@ class RoomRepositoryTests {
     private Game createGame() {
         return new Game() {
             @Override
-            public void initialize() {
-
+            public void initialize(List<User> players) {
             }
         };
     }
