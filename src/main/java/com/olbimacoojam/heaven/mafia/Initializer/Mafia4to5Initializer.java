@@ -1,7 +1,7 @@
 package com.olbimacoojam.heaven.mafia.Initializer;
 
 import com.olbimacoojam.heaven.domain.User;
-import com.olbimacoojam.heaven.mafia.*;
+import com.olbimacoojam.heaven.mafia.MafiaParticipant;
 import com.olbimacoojam.heaven.mafia.Occupation.Citizen;
 import com.olbimacoojam.heaven.mafia.Occupation.Doctor;
 import com.olbimacoojam.heaven.mafia.Occupation.Mafia;

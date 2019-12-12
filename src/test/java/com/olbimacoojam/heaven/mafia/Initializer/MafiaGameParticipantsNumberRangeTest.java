@@ -23,14 +23,14 @@ class MafiaGameParticipantsNumberRangeTest {
         int numberOfDoctor = 0;
         int numberOfCitizen = 0;
 
-        for(int i=0;i<mafiaParticipants.size();i++){
-            if(mafiaParticipants.get(i).getOccupation() instanceof Mafia){
+        for (int i = 0; i < mafiaParticipants.size(); i++) {
+            if (mafiaParticipants.get(i).getOccupation() instanceof Mafia) {
                 numberOfMafia++;
             }
-            if(mafiaParticipants.get(i).getOccupation() instanceof Doctor){
+            if (mafiaParticipants.get(i).getOccupation() instanceof Doctor) {
                 numberOfDoctor++;
             }
-            if(mafiaParticipants.get(i).getOccupation() instanceof Citizen){
+            if (mafiaParticipants.get(i).getOccupation() instanceof Citizen) {
                 numberOfCitizen++;
             }
         }
@@ -50,14 +50,14 @@ class MafiaGameParticipantsNumberRangeTest {
         int numberOfDoctor = 0;
         int numberOfCitizen = 0;
 
-        for(int i=0;i<mafiaParticipants.size();i++){
-            if(mafiaParticipants.get(i).getOccupation() instanceof Mafia){
+        for (int i = 0; i < mafiaParticipants.size(); i++) {
+            if (mafiaParticipants.get(i).getOccupation() instanceof Mafia) {
                 numberOfMafia++;
             }
-            if(mafiaParticipants.get(i).getOccupation() instanceof Doctor){
+            if (mafiaParticipants.get(i).getOccupation() instanceof Doctor) {
                 numberOfDoctor++;
             }
-            if(mafiaParticipants.get(i).getOccupation() instanceof Citizen){
+            if (mafiaParticipants.get(i).getOccupation() instanceof Citizen) {
                 numberOfCitizen++;
             }
         }
@@ -78,17 +78,17 @@ class MafiaGameParticipantsNumberRangeTest {
         int numberOfPolice = 0;
         int numberOfCitizen = 0;
 
-        for(int i=0;i<mafiaParticipants.size();i++){
-            if(mafiaParticipants.get(i).getOccupation() instanceof Mafia){
+        for (int i = 0; i < mafiaParticipants.size(); i++) {
+            if (mafiaParticipants.get(i).getOccupation() instanceof Mafia) {
                 numberOfMafia++;
             }
-            if(mafiaParticipants.get(i).getOccupation() instanceof Doctor){
+            if (mafiaParticipants.get(i).getOccupation() instanceof Doctor) {
                 numberOfDoctor++;
             }
-            if(mafiaParticipants.get(i).getOccupation() instanceof Police){
+            if (mafiaParticipants.get(i).getOccupation() instanceof Police) {
                 numberOfPolice++;
             }
-            if(mafiaParticipants.get(i).getOccupation() instanceof Citizen){
+            if (mafiaParticipants.get(i).getOccupation() instanceof Citizen) {
                 numberOfCitizen++;
             }
         }
@@ -110,17 +110,17 @@ class MafiaGameParticipantsNumberRangeTest {
         int numberOfPolice = 0;
         int numberOfCitizen = 0;
 
-        for(int i=0;i<mafiaParticipants.size();i++){
-            if(mafiaParticipants.get(i).getOccupation() instanceof Mafia){
+        for (int i = 0; i < mafiaParticipants.size(); i++) {
+            if (mafiaParticipants.get(i).getOccupation() instanceof Mafia) {
                 numberOfMafia++;
             }
-            if(mafiaParticipants.get(i).getOccupation() instanceof Doctor){
+            if (mafiaParticipants.get(i).getOccupation() instanceof Doctor) {
                 numberOfDoctor++;
             }
-            if(mafiaParticipants.get(i).getOccupation() instanceof Police){
+            if (mafiaParticipants.get(i).getOccupation() instanceof Police) {
                 numberOfPolice++;
             }
-            if(mafiaParticipants.get(i).getOccupation() instanceof Citizen){
+            if (mafiaParticipants.get(i).getOccupation() instanceof Citizen) {
                 numberOfCitizen++;
             }
         }
@@ -142,17 +142,17 @@ class MafiaGameParticipantsNumberRangeTest {
         int numberOfPolice = 0;
         int numberOfCitizen = 0;
 
-        for(int i=0;i<mafiaParticipants.size();i++){
-            if(mafiaParticipants.get(i).getOccupation() instanceof Mafia){
+        for (int i = 0; i < mafiaParticipants.size(); i++) {
+            if (mafiaParticipants.get(i).getOccupation() instanceof Mafia) {
                 numberOfMafia++;
             }
-            if(mafiaParticipants.get(i).getOccupation() instanceof Doctor){
+            if (mafiaParticipants.get(i).getOccupation() instanceof Doctor) {
                 numberOfDoctor++;
             }
-            if(mafiaParticipants.get(i).getOccupation() instanceof Police){
+            if (mafiaParticipants.get(i).getOccupation() instanceof Police) {
                 numberOfPolice++;
             }
-            if(mafiaParticipants.get(i).getOccupation() instanceof Citizen){
+            if (mafiaParticipants.get(i).getOccupation() instanceof Citizen) {
                 numberOfCitizen++;
             }
         }
@@ -176,23 +176,23 @@ class MafiaGameParticipantsNumberRangeTest {
         int numberOfSoldier = 0;
         int numberOfDetective = 0;
 
-        for(int i=0;i<mafiaParticipants.size();i++){
-            if(mafiaParticipants.get(i).getOccupation() instanceof Mafia){
+        for (int i = 0; i < mafiaParticipants.size(); i++) {
+            if (mafiaParticipants.get(i).getOccupation() instanceof Mafia) {
                 numberOfMafia++;
             }
-            if(mafiaParticipants.get(i).getOccupation() instanceof Doctor){
+            if (mafiaParticipants.get(i).getOccupation() instanceof Doctor) {
                 numberOfDoctor++;
             }
-            if(mafiaParticipants.get(i).getOccupation() instanceof Police){
+            if (mafiaParticipants.get(i).getOccupation() instanceof Police) {
                 numberOfPolice++;
             }
-            if(mafiaParticipants.get(i).getOccupation() instanceof Citizen){
+            if (mafiaParticipants.get(i).getOccupation() instanceof Citizen) {
                 numberOfCitizen++;
             }
-            if(mafiaParticipants.get(i).getOccupation() instanceof Soldier){
+            if (mafiaParticipants.get(i).getOccupation() instanceof Soldier) {
                 numberOfSoldier++;
             }
-            if(mafiaParticipants.get(i).getOccupation() instanceof Detective){
+            if (mafiaParticipants.get(i).getOccupation() instanceof Detective) {
                 numberOfDetective++;
             }
         }
@@ -218,23 +218,23 @@ class MafiaGameParticipantsNumberRangeTest {
         int numberOfSoldier = 0;
         int numberOfDetective = 0;
 
-        for(int i=0;i<mafiaParticipants.size();i++){
-            if(mafiaParticipants.get(i).getOccupation() instanceof Mafia){
+        for (int i = 0; i < mafiaParticipants.size(); i++) {
+            if (mafiaParticipants.get(i).getOccupation() instanceof Mafia) {
                 numberOfMafia++;
             }
-            if(mafiaParticipants.get(i).getOccupation() instanceof Doctor){
+            if (mafiaParticipants.get(i).getOccupation() instanceof Doctor) {
                 numberOfDoctor++;
             }
-            if(mafiaParticipants.get(i).getOccupation() instanceof Police){
+            if (mafiaParticipants.get(i).getOccupation() instanceof Police) {
                 numberOfPolice++;
             }
-            if(mafiaParticipants.get(i).getOccupation() instanceof Citizen){
+            if (mafiaParticipants.get(i).getOccupation() instanceof Citizen) {
                 numberOfCitizen++;
             }
-            if(mafiaParticipants.get(i).getOccupation() instanceof Soldier){
+            if (mafiaParticipants.get(i).getOccupation() instanceof Soldier) {
                 numberOfSoldier++;
             }
-            if(mafiaParticipants.get(i).getOccupation() instanceof Detective){
+            if (mafiaParticipants.get(i).getOccupation() instanceof Detective) {
                 numberOfDetective++;
             }
         }
