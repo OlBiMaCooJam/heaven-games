@@ -6,9 +6,9 @@ import com.olbimacoojam.heaven.mafia.MafiaParticipant;
 import java.util.List;
 
 public enum MafiaGameParticipantsNumberRange {
-    FOUR_TO_FIVE(new Mafia4to5Initializer()),
-    SIX_TO_EIGHT(new Mafia6to8Initializer()),
-    NINE_TO_TEN(new Mafia9to10Initializer());
+    FOUR_TO_FIVE(new MafiaMinimumInitializer()),
+    SIX_TO_EIGHT(new MafiaMiddleInitializer()),
+    NINE_TO_TEN(new MafiaMaximumInitializer());
 
     private MafiaInitializer initializer;
 

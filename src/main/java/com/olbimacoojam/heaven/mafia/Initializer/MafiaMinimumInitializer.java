@@ -11,7 +11,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.IntStream;
 
-public class Mafia4to5Initializer implements MafiaInitializer {
+public class MafiaMinimumInitializer implements MafiaInitializer {
     @Override
     public List<MafiaParticipant> initialize(List<User> users) {
         Collections.shuffle(users);
