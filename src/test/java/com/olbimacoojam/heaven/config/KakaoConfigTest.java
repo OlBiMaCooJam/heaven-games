@@ -21,9 +21,4 @@ class KakaoConfigTest {
     void KakaoConfig_yml파일_매핑테스트_resource() {
         assertThat(kakaoConfig.getResource().get("userInfoPath")).isNotNull();
     }
-
-    @Test
-    void name() {
-        WebClient webClient = WebClient.create();
-    }
 }

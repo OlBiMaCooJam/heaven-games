@@ -11,7 +11,12 @@ public class UserService {
     public UserService(final UserRepository userRepository){
         this.userRepository = userRepository;
     }
+
     public User save(User user){
         return userRepository.save(user);
+    }
+
+    public User findById(Long userId) {
+        return userRepository.findById(userId).orElseThrow(NotFoundUserException::new);
     }
 }

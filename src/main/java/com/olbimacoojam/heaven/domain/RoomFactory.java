@@ -3,6 +3,7 @@ package com.olbimacoojam.heaven.domain;
 import com.olbimacoojam.heaven.game.Game;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Component
@@ -13,7 +14,8 @@ public class RoomFactory {
     public Room makeNextRoom() {
         return new Room(id.getAndIncrement(), new Game() {
             @Override
-            public void initialize() {
+            public void initialize(List<User> players) {
+
             }
         });
     }
