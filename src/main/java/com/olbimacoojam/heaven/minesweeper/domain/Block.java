@@ -1,5 +1,8 @@
 package com.olbimacoojam.heaven.minesweeper.domain;
 
+import lombok.Getter;
+
+@Getter
 public class Block {
     private final BlockType blockType;
     private final BlockStatus blockStatus;
