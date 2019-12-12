@@ -1,4 +1,4 @@
-package com.olbimacoojam.heaven.mafia;
+package com.olbimacoojam.heaven.mafia.Occupation;
 
 public class Doctor implements Occupation {
     @Override
