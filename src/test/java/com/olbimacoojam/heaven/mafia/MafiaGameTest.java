@@ -1,8 +1,7 @@
-package com.olbimacoojam.heaven.mafia.Initializer;
+package com.olbimacoojam.heaven.mafia;
 
 import com.olbimacoojam.heaven.domain.User;
-import com.olbimacoojam.heaven.mafia.MafiaParticipant;
-import com.olbimacoojam.heaven.mafia.Occupation.*;
+import com.olbimacoojam.heaven.mafia.Occupation.OccupationType;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -10,27 +9,25 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class MafiaGameParticipantsNumberRangeTest {
+class MafiaGameTest {
+    private MafiaGame mafiaGame = new MafiaGame();
 
     @Test
     void 마피아게임_4명_초기세팅_테스트() {
-        List<User> users = new ArrayList<>();
-        for (int i = 0; i < 4; i++) {
-            users.add(new User());
-        }
-        List<MafiaParticipant> mafiaParticipants = MafiaGameParticipantsNumberRange.initialize(users);
+        List<MafiaParticipant> mafiaParticipants = createMafiaParticipants(4);
+
         int numberOfMafia = 0;
         int numberOfDoctor = 0;
         int numberOfCitizen = 0;
 
         for (int i = 0; i < mafiaParticipants.size(); i++) {
-            if (mafiaParticipants.get(i).getOccupation() instanceof Mafia) {
+            if (mafiaParticipants.get(i).getOccupationType().equals(OccupationType.MAFIA)) {
                 numberOfMafia++;
             }
-            if (mafiaParticipants.get(i).getOccupation() instanceof Doctor) {
+            if (mafiaParticipants.get(i).getOccupationType().equals(OccupationType.DOCTOR)) {
                 numberOfDoctor++;
             }
-            if (mafiaParticipants.get(i).getOccupation() instanceof Citizen) {
+            if (mafiaParticipants.get(i).getOccupationType().equals(OccupationType.CITIZEN)) {
                 numberOfCitizen++;
             }
         }
@@ -41,23 +38,20 @@ class MafiaGameParticipantsNumberRangeTest {
 
     @Test
     void 마피아게임_5명_초기세팅_테스트() {
-        List<User> users = new ArrayList<>();
-        for (int i = 0; i < 5; i++) {
-            users.add(new User());
-        }
-        List<MafiaParticipant> mafiaParticipants = MafiaGameParticipantsNumberRange.initialize(users);
+        List<MafiaParticipant> mafiaParticipants = createMafiaParticipants(5);
+
         int numberOfMafia = 0;
         int numberOfDoctor = 0;
         int numberOfCitizen = 0;
 
         for (int i = 0; i < mafiaParticipants.size(); i++) {
-            if (mafiaParticipants.get(i).getOccupation() instanceof Mafia) {
+            if (mafiaParticipants.get(i).getOccupationType().equals(OccupationType.MAFIA)) {
                 numberOfMafia++;
             }
-            if (mafiaParticipants.get(i).getOccupation() instanceof Doctor) {
+            if (mafiaParticipants.get(i).getOccupationType().equals(OccupationType.DOCTOR)) {
                 numberOfDoctor++;
             }
-            if (mafiaParticipants.get(i).getOccupation() instanceof Citizen) {
+            if (mafiaParticipants.get(i).getOccupationType().equals(OccupationType.CITIZEN)) {
                 numberOfCitizen++;
             }
         }
@@ -68,27 +62,24 @@ class MafiaGameParticipantsNumberRangeTest {
 
     @Test
     void 마피아게임_6명_초기세팅_테스트() {
-        List<User> users = new ArrayList<>();
-        for (int i = 0; i < 6; i++) {
-            users.add(new User());
-        }
-        List<MafiaParticipant> mafiaParticipants = MafiaGameParticipantsNumberRange.initialize(users);
+        List<MafiaParticipant> mafiaParticipants = createMafiaParticipants(6);
+
         int numberOfMafia = 0;
         int numberOfDoctor = 0;
         int numberOfPolice = 0;
         int numberOfCitizen = 0;
 
         for (int i = 0; i < mafiaParticipants.size(); i++) {
-            if (mafiaParticipants.get(i).getOccupation() instanceof Mafia) {
+            if (mafiaParticipants.get(i).getOccupationType().equals(OccupationType.MAFIA)) {
                 numberOfMafia++;
             }
-            if (mafiaParticipants.get(i).getOccupation() instanceof Doctor) {
+            if (mafiaParticipants.get(i).getOccupationType().equals(OccupationType.DOCTOR)) {
                 numberOfDoctor++;
             }
-            if (mafiaParticipants.get(i).getOccupation() instanceof Police) {
+            if (mafiaParticipants.get(i).getOccupationType().equals(OccupationType.POLICE)) {
                 numberOfPolice++;
             }
-            if (mafiaParticipants.get(i).getOccupation() instanceof Citizen) {
+            if (mafiaParticipants.get(i).getOccupationType().equals(OccupationType.CITIZEN)) {
                 numberOfCitizen++;
             }
         }
@@ -100,27 +91,24 @@ class MafiaGameParticipantsNumberRangeTest {
 
     @Test
     void 마피아게임_7명_초기세팅_테스트() {
-        List<User> users = new ArrayList<>();
-        for (int i = 0; i < 7; i++) {
-            users.add(new User());
-        }
-        List<MafiaParticipant> mafiaParticipants = MafiaGameParticipantsNumberRange.initialize(users);
+        List<MafiaParticipant> mafiaParticipants = createMafiaParticipants(7);
+
         int numberOfMafia = 0;
         int numberOfDoctor = 0;
         int numberOfPolice = 0;
         int numberOfCitizen = 0;
 
         for (int i = 0; i < mafiaParticipants.size(); i++) {
-            if (mafiaParticipants.get(i).getOccupation() instanceof Mafia) {
+            if (mafiaParticipants.get(i).getOccupationType().equals(OccupationType.MAFIA)) {
                 numberOfMafia++;
             }
-            if (mafiaParticipants.get(i).getOccupation() instanceof Doctor) {
+            if (mafiaParticipants.get(i).getOccupationType().equals(OccupationType.DOCTOR)) {
                 numberOfDoctor++;
             }
-            if (mafiaParticipants.get(i).getOccupation() instanceof Police) {
+            if (mafiaParticipants.get(i).getOccupationType().equals(OccupationType.POLICE)) {
                 numberOfPolice++;
             }
-            if (mafiaParticipants.get(i).getOccupation() instanceof Citizen) {
+            if (mafiaParticipants.get(i).getOccupationType().equals(OccupationType.CITIZEN)) {
                 numberOfCitizen++;
             }
         }
@@ -132,27 +120,23 @@ class MafiaGameParticipantsNumberRangeTest {
 
     @Test
     void 마피아게임_8명_초기세팅_테스트() {
-        List<User> users = new ArrayList<>();
-        for (int i = 0; i < 8; i++) {
-            users.add(new User());
-        }
-        List<MafiaParticipant> mafiaParticipants = MafiaGameParticipantsNumberRange.initialize(users);
+        List<MafiaParticipant> mafiaParticipants = createMafiaParticipants(8);
         int numberOfMafia = 0;
         int numberOfDoctor = 0;
         int numberOfPolice = 0;
         int numberOfCitizen = 0;
 
         for (int i = 0; i < mafiaParticipants.size(); i++) {
-            if (mafiaParticipants.get(i).getOccupation() instanceof Mafia) {
+            if (mafiaParticipants.get(i).getOccupationType().equals(OccupationType.MAFIA)) {
                 numberOfMafia++;
             }
-            if (mafiaParticipants.get(i).getOccupation() instanceof Doctor) {
+            if (mafiaParticipants.get(i).getOccupationType().equals(OccupationType.DOCTOR)) {
                 numberOfDoctor++;
             }
-            if (mafiaParticipants.get(i).getOccupation() instanceof Police) {
+            if (mafiaParticipants.get(i).getOccupationType().equals(OccupationType.POLICE)) {
                 numberOfPolice++;
             }
-            if (mafiaParticipants.get(i).getOccupation() instanceof Citizen) {
+            if (mafiaParticipants.get(i).getOccupationType().equals(OccupationType.CITIZEN)) {
                 numberOfCitizen++;
             }
         }
@@ -164,11 +148,7 @@ class MafiaGameParticipantsNumberRangeTest {
 
     @Test
     void 마피아게임_9명_초기세팅_테스트() {
-        List<User> users = new ArrayList<>();
-        for (int i = 0; i < 9; i++) {
-            users.add(new User());
-        }
-        List<MafiaParticipant> mafiaParticipants = MafiaGameParticipantsNumberRange.initialize(users);
+        List<MafiaParticipant> mafiaParticipants = createMafiaParticipants(9);
         int numberOfMafia = 0;
         int numberOfDoctor = 0;
         int numberOfPolice = 0;
@@ -177,22 +157,22 @@ class MafiaGameParticipantsNumberRangeTest {
         int numberOfDetective = 0;
 
         for (int i = 0; i < mafiaParticipants.size(); i++) {
-            if (mafiaParticipants.get(i).getOccupation() instanceof Mafia) {
+            if (mafiaParticipants.get(i).getOccupationType().equals(OccupationType.MAFIA)) {
                 numberOfMafia++;
             }
-            if (mafiaParticipants.get(i).getOccupation() instanceof Doctor) {
+            if (mafiaParticipants.get(i).getOccupationType().equals(OccupationType.DOCTOR)) {
                 numberOfDoctor++;
             }
-            if (mafiaParticipants.get(i).getOccupation() instanceof Police) {
+            if (mafiaParticipants.get(i).getOccupationType().equals(OccupationType.POLICE)) {
                 numberOfPolice++;
             }
-            if (mafiaParticipants.get(i).getOccupation() instanceof Citizen) {
+            if (mafiaParticipants.get(i).getOccupationType().equals(OccupationType.CITIZEN)) {
                 numberOfCitizen++;
             }
-            if (mafiaParticipants.get(i).getOccupation() instanceof Soldier) {
+            if (mafiaParticipants.get(i).getOccupationType().equals(OccupationType.SOLDIER)) {
                 numberOfSoldier++;
             }
-            if (mafiaParticipants.get(i).getOccupation() instanceof Detective) {
+            if (mafiaParticipants.get(i).getOccupationType().equals(OccupationType.DETECTIVE)) {
                 numberOfDetective++;
             }
         }
@@ -206,11 +186,7 @@ class MafiaGameParticipantsNumberRangeTest {
 
     @Test
     void 마피아게임_10명_초기세팅_테스트() {
-        List<User> users = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            users.add(new User());
-        }
-        List<MafiaParticipant> mafiaParticipants = MafiaGameParticipantsNumberRange.initialize(users);
+        List<MafiaParticipant> mafiaParticipants = createMafiaParticipants(10);
         int numberOfMafia = 0;
         int numberOfDoctor = 0;
         int numberOfPolice = 0;
@@ -219,22 +195,22 @@ class MafiaGameParticipantsNumberRangeTest {
         int numberOfDetective = 0;
 
         for (int i = 0; i < mafiaParticipants.size(); i++) {
-            if (mafiaParticipants.get(i).getOccupation() instanceof Mafia) {
+            if (mafiaParticipants.get(i).getOccupationType().equals(OccupationType.MAFIA)) {
                 numberOfMafia++;
             }
-            if (mafiaParticipants.get(i).getOccupation() instanceof Doctor) {
+            if (mafiaParticipants.get(i).getOccupationType().equals(OccupationType.DOCTOR)) {
                 numberOfDoctor++;
             }
-            if (mafiaParticipants.get(i).getOccupation() instanceof Police) {
+            if (mafiaParticipants.get(i).getOccupationType().equals(OccupationType.POLICE)) {
                 numberOfPolice++;
             }
-            if (mafiaParticipants.get(i).getOccupation() instanceof Citizen) {
+            if (mafiaParticipants.get(i).getOccupationType().equals(OccupationType.CITIZEN)) {
                 numberOfCitizen++;
             }
-            if (mafiaParticipants.get(i).getOccupation() instanceof Soldier) {
+            if (mafiaParticipants.get(i).getOccupationType().equals(OccupationType.SOLDIER)) {
                 numberOfSoldier++;
             }
-            if (mafiaParticipants.get(i).getOccupation() instanceof Detective) {
+            if (mafiaParticipants.get(i).getOccupationType().equals(OccupationType.DETECTIVE)) {
                 numberOfDetective++;
             }
         }
@@ -244,5 +220,16 @@ class MafiaGameParticipantsNumberRangeTest {
         assertThat(numberOfCitizen).isEqualTo(3);
         assertThat(numberOfDetective).isEqualTo(1);
         assertThat(numberOfSoldier).isEqualTo(1);
+    }
+
+    private List<MafiaParticipant> createMafiaParticipants(int number) {
+        List<User> users = new ArrayList<>();
+
+        for (int i = 0; i < number; i++) {
+            users.add(new User());
+        }
+
+        mafiaGame.initialize(users);
+        return mafiaGame.getMafiaParticipants();
     }
 }
