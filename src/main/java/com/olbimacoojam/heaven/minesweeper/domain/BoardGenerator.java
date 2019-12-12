@@ -31,18 +31,18 @@ public class BoardGenerator {
 
         for (int x = 0; x < columns; x++) {
             Position position = Position.of(x, y);
-            Block block = getBlock(position, minePositions);
+            Block block = generateBlock(position, minePositions);
             row.put(position, block);
         }
 
         return row;
     }
 
-    private Block getBlock(Position position, Set<Position> minePositions) {
+    private Block generateBlock(Position position, Set<Position> minePositions) {
         if (minePositions.contains(position)) {
-            return Block.of(BlockType.MINE);
+            return Block.of(BlockType.MINE, BlockStatus.UNCLICKED);
         }
 
-        return Block.of(BlockType.BLOCK);
+        return Block.of(BlockType.BLOCK, BlockStatus.UNCLICKED);
     }
 }

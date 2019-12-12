@@ -2,13 +2,14 @@ package com.olbimacoojam.heaven.minesweeper.domain;
 
 public class Block {
     private final BlockType blockType;
-    private final BlockStatus blockStatus = BlockStatus.UNCLICKED;
+    private final BlockStatus blockStatus;
 
-    private Block(BlockType blockType) {
+    private Block(BlockType blockType, BlockStatus blockStatus) {
         this.blockType = blockType;
+        this.blockStatus = blockStatus;
     }
 
-    public static Block of(BlockType blockType) {
-        return new Block(blockType);
+    public static Block of(BlockType blockType, BlockStatus blockStatus) {
+        return new Block(blockType, blockStatus);
     }
 }
