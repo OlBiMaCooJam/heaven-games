@@ -12,13 +12,13 @@ public class RandomMinePositionGenerator implements MinePositionGenerator {
     private final Random random = new Random();
 
     @Override
-    public Set<Position> generate(final Integer rows, final Integer columns, final Integer numMines) {
+    public MinePositions generate(final Integer rows, final Integer columns, final Integer numMines) {
         Set<Position> minePositions = new HashSet<>();
 
         while (minePositions.size() < numMines) {
             minePositions.add(generatePosition(rows, columns));
         }
-        return Collections.unmodifiableSet(minePositions);
+        return new MinePositions(Collections.unmodifiableSet(minePositions));
     }
 
     private Position generatePosition(final Integer rows, final Integer columns) {
