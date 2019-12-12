@@ -16,8 +16,10 @@ public class RandomMinePositionGenerator implements MinePositionGenerator {
         Set<Position> minePositions = new HashSet<>();
 
         while (minePositions.size() < numMines) {
-            minePositions.add(generatePosition(rows, columns));
+            Position position = generatePosition(rows, columns);
+            minePositions.add(position);
         }
+
         return new MinePositions(Collections.unmodifiableSet(minePositions));
     }
 
