@@ -9,7 +9,7 @@ public class BoardGenerator {
     private final Integer columns;
     private final MinePositionGenerator minePositionGenerator;
 
-    public BoardGenerator(final Integer rows, final Integer columns, MinePositionGenerator minePositionGenerator) {
+    public BoardGenerator(final Integer rows, final Integer columns, final MinePositionGenerator minePositionGenerator) {
         this.rows = rows;
         this.columns = columns;
         this.minePositionGenerator = minePositionGenerator;
