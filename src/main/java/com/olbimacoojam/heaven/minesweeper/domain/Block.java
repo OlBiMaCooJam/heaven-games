@@ -4,15 +4,17 @@ import lombok.Getter;
 
 @Getter
 public class Block {
-    private final BlockType blockType;
     private final BlockStatus blockStatus;
+    private final Integer numberOfAroundMines;
+    private final boolean isMine;
 
-    private Block(BlockType blockType, BlockStatus blockStatus) {
-        this.blockType = blockType;
+    private Block(BlockStatus blockStatus, Integer numberOfAroundMines, boolean isMine) {
+        this.numberOfAroundMines = numberOfAroundMines;
         this.blockStatus = blockStatus;
+        this.isMine = isMine;
     }
 
-    public static Block of(BlockType blockType, BlockStatus blockStatus) {
-        return new Block(blockType, blockStatus);
+    public static Block of(BlockStatus blockStatus, Integer numberOfAroundMines, boolean isMine) {
+        return new Block(blockStatus, numberOfAroundMines, isMine);
     }
 }
