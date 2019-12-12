@@ -2,7 +2,7 @@ package com.olbimacoojam.heaven.minesweeper.domain;
 
 import com.olbimacoojam.heaven.domain.User;
 import com.olbimacoojam.heaven.game.Game;
-import com.olbimacoojam.heaven.minesweeper.domain.exception.InvalidNumberOfUserException;
+import com.olbimacoojam.heaven.minesweeper.domain.exception.InvalidNumberOfUsersException;
 import com.olbimacoojam.heaven.minesweeper.domain.exception.UserNotMatchException;
 
 import java.util.List;
@@ -33,7 +33,7 @@ public class Minesweeper implements Game {
 
     private void checkNumberOfPlayers(List<User> players) {
         if (players.size() != MINESWEEPER_PLAYER_NUMBER) {
-            throw new InvalidNumberOfUserException(MINESWEEPER_PLAYER_NUMBER, players.size());
+            throw new InvalidNumberOfUsersException(MINESWEEPER_PLAYER_NUMBER, players.size());
         }
     }
 

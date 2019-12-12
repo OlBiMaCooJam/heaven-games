@@ -1,8 +1,8 @@
 package com.olbimacoojam.heaven.minesweeper.domain.exception;
 
-public class InvalidNumberOfUserException extends RuntimeException {
+public class InvalidNumberOfUsersException extends RuntimeException {
 
-    public InvalidNumberOfUserException(Integer expected, Integer actual) {
+    public InvalidNumberOfUsersException(Integer expected, Integer actual) {
         super(buildMessage("잘못된 플레이어 수 입니다. expected : %d, actual : %d", expected, actual));
     }
 
