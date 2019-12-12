@@ -7,11 +7,11 @@ import java.util.Set;
 
 public class RandomMinePositionGenerator implements MinePositionGenerator {
     private final Random random = new Random();
-    private final int rows;
-    private final int columns;
-    private final int numMines;
+    private final Integer rows;
+    private final Integer columns;
+    private final Integer numMines;
 
-    public RandomMinePositionGenerator(int rows, int columns, int numMines) {
+    public RandomMinePositionGenerator(Integer rows, Integer columns, Integer numMines) {
         this.rows = rows;
         this.columns = columns;
         this.numMines = numMines;
@@ -28,8 +28,8 @@ public class RandomMinePositionGenerator implements MinePositionGenerator {
     }
 
     private Position generatePosition() {
-        int x = random.nextInt(columns);
-        int y = random.nextInt(rows);
+        Integer x = random.nextInt(columns);
+        Integer y = random.nextInt(rows);
 
         return Position.of(x, y);
     }
