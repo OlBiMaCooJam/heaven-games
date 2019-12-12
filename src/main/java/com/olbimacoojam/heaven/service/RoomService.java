@@ -50,4 +50,8 @@ public class RoomService {
         room.leave();
         return modelMapper.map(room, RoomResponseDto.class);
     }
+
+    public Room findById(int roomId) {
+        return roomRepository.findById(roomId);
+    }
 }
