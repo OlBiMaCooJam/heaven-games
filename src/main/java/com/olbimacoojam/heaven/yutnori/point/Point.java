@@ -17,13 +17,30 @@ public interface Point {
         }
     }
 
+    default void addInflectPoint(Point inflectionPoint) {
+        throw new UnsupportedOperationException();
+    }
+
     Point findNextDestination(Route route, int moving);
 
     Point getPreviousPoint();
+
+    PointName getPointName();
 
     int getPosition();
 
     default boolean isRightDiagonal() {
         return false;
     }
+
+    void makeConnection(Point previousPoint, Point nextPoint);
+
+    Point getNextPoint();
+
+    default Point getInflectPoint() {
+        throw new UnsupportedOperationException();
+    }
+
+    ;
 }
+

@@ -3,6 +3,7 @@ package com.olbimacoojam.heaven.yutnori;
 import com.olbimacoojam.heaven.yutnori.point.EdgePoint;
 import com.olbimacoojam.heaven.yutnori.point.NormalPoint;
 import com.olbimacoojam.heaven.yutnori.point.Point;
+import com.olbimacoojam.heaven.yutnori.point.PointName;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
@@ -14,32 +15,44 @@ class BoardTest {
     @Test
     void move_test() {
         Board board = new Board();
-        Point point5 = new EdgePoint(5, null, null, null);
-        Point point4 = new NormalPoint(4, point5, null);
-        Point point3 = new NormalPoint(3, point4, null);
-        Point point2 = new NormalPoint(2, point3, null);
-        Route route = board.findRoute(point2, 3);
+        Point destination = new EdgePoint(PointName.MO);
+        Point passingPoint = new NormalPoint(PointName.YUT);
+        Point passingPoint1 = new NormalPoint(PointName.GUL);
+        Point origin = new NormalPoint(PointName.GAE);
 
-        assertThat(route.getRoute()).isEqualTo(Arrays.asList(point2, point3, point4, point5));
+        origin.makeConnection(null, passingPoint1);
+        passingPoint1.makeConnection(passingPoint1, passingPoint);
+        passingPoint.makeConnection(passingPoint1, destination);
+        destination.makeConnection(passingPoint, null);
+
+        Route route = board.findRoute(origin, 3);
+        assertThat(route.getRoute()).isEqualTo(Arrays.asList(origin, passingPoint1, passingPoint, destination));
     }
 
     @Test
     void move_test2() {
         Board board = new Board();
-        Point point23 = new NormalPoint(23, null, null);
-        Point point5 = new EdgePoint(5, null, null, point23);
-        Route route = board.findRoute(point5, 1);
+        Point destination = new NormalPoint(PointName.MO);
+        Point origin = new EdgePoint(PointName.MODO);
 
-        assertThat(route.getRoute()).isEqualTo(Arrays.asList(point5, point23));
+        origin.makeConnection(null, null);
+        origin.addInflectPoint(destination);
+        destination.makeConnection(origin, null);
+
+        Route route = board.findRoute(origin, 1);
+        assertThat(route.getRoute()).isEqualTo(Arrays.asList(origin, destination));
     }
 
     @Test
     void move_test3() {
         Board board = new Board();
-        Point point5 = new EdgePoint(5, null, null, null);
-        Point point23 = new NormalPoint(23, null, point5);
-        Route route = board.findRoute(point23, -1);
+        Point destination = new EdgePoint(PointName.MO);
+        Point origin = new NormalPoint(PointName.MODO);
 
-        assertThat(route.getRoute()).isEqualTo(Arrays.asList(point23, point5));
+        origin.makeConnection(destination, null);
+        destination.makeConnection(null, null);
+        Route route = board.findRoute(origin, -1);
+
+        assertThat(route.getRoute()).isEqualTo(Arrays.asList(origin, destination));
     }
 }

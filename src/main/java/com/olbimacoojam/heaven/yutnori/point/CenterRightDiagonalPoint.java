@@ -1,5 +1,4 @@
 package com.olbimacoojam.heaven.yutnori.point;
-
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
@@ -7,8 +6,8 @@ import lombok.Getter;
 @Getter
 public class CenterRightDiagonalPoint extends NormalPoint {
 
-    public CenterRightDiagonalPoint(int position, Point nextPoint, Point previousPoint) {
-        super(position, nextPoint, previousPoint);
+    public CenterRightDiagonalPoint(PointName pointName) {
+        super(pointName);
     }
 
     @Override

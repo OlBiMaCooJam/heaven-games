@@ -4,20 +4,16 @@ import com.olbimacoojam.heaven.yutnori.Route;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
-
 @EqualsAndHashCode
 @Getter
 public class CenterPoint implements Point {
-    private final int position;
-    private final Point leftNextPoint;
-    private final Point rightNextPoint;
-    private final Point previousPoint;
+    private final PointName pointName;
+    private Point leftNextPoint;
+    private Point rightNextPoint;
+    private Point previousPoint;
 
-    public CenterPoint(int position, Point leftNextPoint, Point rightNextPoint, Point previousPoint) {
-        this.position = position;
-        this.leftNextPoint = leftNextPoint;
-        this.rightNextPoint = rightNextPoint;
-        this.previousPoint = previousPoint;
+    public CenterPoint(PointName pointName) {
+        this.pointName = pointName;
     }
 
     @Override
@@ -27,4 +23,31 @@ public class CenterPoint implements Point {
         }
         return rightNextPoint;
     }
+
+    @Override
+    public int getPosition() {
+        return 0;
+    }
+
+    @Override
+    public void makeConnection(Point previousPoint, Point nextPoint) {
+        this.previousPoint = previousPoint;
+        this.rightNextPoint = nextPoint;
+    }
+
+    @Override
+    public Point getNextPoint() {
+        return rightNextPoint;
+    }
+
+    @Override
+    public void addInflectPoint(Point inflectPoint) {
+        this.leftNextPoint = inflectPoint;
+    }
+
+    @Override
+    public Point getInflectPoint() {
+        return leftNextPoint;
+    }
+
 }

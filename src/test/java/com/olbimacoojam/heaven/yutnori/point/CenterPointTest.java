@@ -13,10 +13,15 @@ class CenterPointTest {
     @Test
     @DisplayName("moving에 따른 다음 도착지 point 가져오기")
     void findNextPoint() {
-        Point point27 = new NormalPoint(27, null, null);
-        Point point21 = new NormalPoint(21, null, null);
-        Point point29 = new CenterPoint(29, point27, point21, null);
-        Point point24 = new CenterRightDiagonalPoint(24, point29, null);
+        Point point27 = new NormalPoint(PointName.SOKYUT);
+        Point point21 = new NormalPoint(PointName.BANGSUGI);
+        Point point29 = new CenterPoint(PointName.BANG);
+        Point point24 = new CenterRightDiagonalPoint(PointName.MOGAE);
+
+        point29.makeConnection(point24, point21);
+        point29.addInflectPoint(point27);
+        point24.makeConnection(null, point29);
+
         Route route = new Route();
         point24.findRoute(route, 2);
 
@@ -27,28 +32,39 @@ class CenterPointTest {
     @Test
     @DisplayName("moving에 따른 다음 도착지 point 가져오기")
     void findNextPoint2() {
-        Point point27 = new NormalPoint(27, null, null);
-        Point point21 = new NormalPoint(21, null, null);
-        Point point29 = new CenterPoint(6, point27, point21, null);
-        Point point26 = new NormalPoint(26, point29, null);
-        Route route = new Route();
-        point26.findRoute(route, 2);
+        Point noGoPoint = new NormalPoint(PointName.SOKYUT);
+        Point destination = new NormalPoint(PointName.BANGSUGI);
+        Point passingPoint1 = new CenterPoint(PointName.BANG);
+        Point origin = new NormalPoint(PointName.DUITMOGAE);
 
-        Route expectedRoute = new Route(Arrays.asList(point26, point29, point21));
+        noGoPoint.makeConnection(passingPoint1, null);
+        origin.makeConnection(null, passingPoint1);
+        passingPoint1.makeConnection(origin, destination);
+        passingPoint1.addInflectPoint(noGoPoint);
+
+        Route route = new Route();
+        origin.findRoute(route, 2);
+
+        Route expectedRoute = new Route(Arrays.asList(origin, passingPoint1, destination));
         assertThat(route).isEqualTo(expectedRoute);
     }
 
     @Test
     @DisplayName("moving에 따른 다음 도착지 point 가져오기")
     void findNextPoint3() {
-        Point point27 = new NormalPoint(27, null, null);
-        Point point22 = new NormalPoint(22, null, null);
-        Point point21 = new NormalPoint(21, point22, null);
-        Point point29 = new CenterPoint(6, point27, point21, null);
-        Route route = new Route();
-        point29.findRoute(route, 2);
+        Point noGoPoint = new NormalPoint(PointName.SOKYUT);
+        Point destination = new NormalPoint(PointName.ANZZI);
+        Point passingPoint = new NormalPoint(PointName.BANGSUGI);
+        Point origin = new CenterPoint(PointName.BANG);
 
-        Route expectedRoute = new Route(Arrays.asList(point29, point21, point22));
+        origin.makeConnection(null, passingPoint);
+        origin.addInflectPoint(noGoPoint);
+        passingPoint.makeConnection(origin, destination);
+        destination.makeConnection(passingPoint, null);
+        Route route = new Route();
+        origin.findRoute(route, 2);
+
+        Route expectedRoute = new Route(Arrays.asList(origin, passingPoint, destination));
         assertThat(route).isEqualTo(expectedRoute);
     }
 }

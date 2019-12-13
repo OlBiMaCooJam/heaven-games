@@ -1,22 +1,29 @@
 package com.olbimacoojam.heaven.yutnori.point;
 
 import com.olbimacoojam.heaven.yutnori.Route;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
 
-import java.util.List;
-
-@EqualsAndHashCode
-@Getter
 public class NormalPoint implements Point {
-    private final int position;
-    private final Point nextPoint;
-    private final Point previousPoint;
+    private PointName pointName;
+    private Point nextPoint;
+    private Point previousPoint;
 
-    public NormalPoint(int position, Point nextPoint, Point previousPoint) {
-        this.position = position;
-        this.nextPoint = nextPoint;
-        this.previousPoint = previousPoint;
+    public NormalPoint(PointName pointName) {
+        this.pointName = pointName;
+    }
+
+    @Override
+    public PointName getPointName() {
+        return pointName;
+    }
+
+    @Override
+    public Point getNextPoint() {
+        return nextPoint;
+    }
+
+    @Override
+    public Point getPreviousPoint() {
+        return previousPoint;
     }
 
     public Point findNextDestination(Route route, int moving) {
@@ -24,9 +31,21 @@ public class NormalPoint implements Point {
     }
 
     @Override
+    public int getPosition() {
+        return 0;
+    }
+
+    @Override
+    public void makeConnection(Point previousPoint, Point nextPoint) {
+        this.previousPoint = previousPoint;
+        this.nextPoint = nextPoint;
+    }
+
+
+    @Override
     public String toString() {
         return "NormalPoint{" +
-                "position=" + position +
+                "pointName=" + pointName +
                 ", nextPoint=" + nextPoint.getPosition() +
                 '}';
     }

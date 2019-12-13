@@ -1,5 +1,4 @@
 package com.olbimacoojam.heaven.yutnori;
-
 import com.olbimacoojam.heaven.yutnori.point.Point;
 import lombok.EqualsAndHashCode;
 
