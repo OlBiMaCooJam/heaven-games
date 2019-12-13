@@ -1,6 +1,7 @@
 <template>
     <v-container class="pa-0">
-        <router-link :to="'/rooms/' + room.id">
+        <router-link :to="'/rooms/' + room.id + '/yutnori'">
+<!--        <router-link :to="'/rooms/' + room.id">-->
             <v-list-item class="room">
                 <v-list-item-avatar class="game-logo">
                     <v-img :src="gameLogo"/>
