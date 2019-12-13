@@ -2,6 +2,7 @@ package com.olbimacoojam.heaven.yutnori.point;
 
 import com.olbimacoojam.heaven.yutnori.Route;
 import com.olbimacoojam.heaven.yutnori.point.exception.NonPlayingPointException;
+import com.olbimacoojam.heaven.yutnori.yut.Yut;
 import lombok.Getter;
 
 @Getter
@@ -14,7 +15,7 @@ public class CompletePoint implements Point {
     }
 
     @Override
-    public Point findNextDestination(Route route, int moving) {
+    public Point findNextDestination(Route route, Yut yut) {
         return this;
     }
 

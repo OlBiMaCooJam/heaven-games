@@ -34,4 +34,8 @@ public class Route {
         return route.stream()
                 .anyMatch(Point::isRightDiagonal);
     }
+
+    public int size() {
+        return route.size();
+    }
 }

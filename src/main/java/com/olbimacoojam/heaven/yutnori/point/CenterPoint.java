@@ -1,6 +1,7 @@
 package com.olbimacoojam.heaven.yutnori.point;
 
 import com.olbimacoojam.heaven.yutnori.Route;
+import com.olbimacoojam.heaven.yutnori.yut.Yut;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
@@ -17,7 +18,7 @@ public class CenterPoint implements Point {
     }
 
     @Override
-    public Point findNextDestination(Route route, int moving) {
+    public Point findNextDestination(Route route, Yut yut) {
         if (route.hasRightDiagonal()) {
             return leftNextPoint;
         }

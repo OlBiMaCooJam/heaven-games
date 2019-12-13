@@ -1,19 +1,20 @@
 package com.olbimacoojam.heaven.yutnori.point;
 
 import com.olbimacoojam.heaven.yutnori.Route;
+import com.olbimacoojam.heaven.yutnori.yut.Yut;
 
 public interface Point {
 
-    default void findRoute(Route route, int moveUnit) {
+    default void findRoute(Route route, Yut yut) {
         route.add(this);
 
-        if (moveUnit == -1) {
+        if (yut.isBackDo()) {
             route.add(getPreviousPoint());
         }
 
-        if (moveUnit > 0) {
-            Point nextPoint = findNextDestination(route, moveUnit);
-            nextPoint.findRoute(route, --moveUnit);
+        if (yut.canMove(route)) {
+            Point nextPoint = findNextDestination(route, yut);
+            nextPoint.findRoute(route, yut);
         }
     }
 
@@ -21,7 +22,7 @@ public interface Point {
         throw new UnsupportedOperationException();
     }
 
-    Point findNextDestination(Route route, int moving);
+    Point findNextDestination(Route route, Yut yut);
 
     Point getPreviousPoint();
 

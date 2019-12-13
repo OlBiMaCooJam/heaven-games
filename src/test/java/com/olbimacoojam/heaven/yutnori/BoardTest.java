@@ -4,6 +4,7 @@ import com.olbimacoojam.heaven.yutnori.point.EdgePoint;
 import com.olbimacoojam.heaven.yutnori.point.NormalPoint;
 import com.olbimacoojam.heaven.yutnori.point.Point;
 import com.olbimacoojam.heaven.yutnori.point.PointName;
+import com.olbimacoojam.heaven.yutnori.yut.Yut;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
@@ -25,7 +26,7 @@ class BoardTest {
         passingPoint.makeConnection(passingPoint1, destination);
         destination.makeConnection(passingPoint, null);
 
-        Route route = board.findRoute(origin, 3);
+        Route route = board.findRoute(origin, Yut.GUL);
         assertThat(route.getRoute()).isEqualTo(Arrays.asList(origin, passingPoint1, passingPoint, destination));
     }
 
@@ -39,7 +40,7 @@ class BoardTest {
         origin.addInflectPoint(destination);
         destination.makeConnection(origin, null);
 
-        Route route = board.findRoute(origin, 1);
+        Route route = board.findRoute(origin, Yut.DO);
         assertThat(route.getRoute()).isEqualTo(Arrays.asList(origin, destination));
     }
 
@@ -51,7 +52,7 @@ class BoardTest {
 
         origin.makeConnection(destination, null);
         destination.makeConnection(null, null);
-        Route route = board.findRoute(origin, -1);
+        Route route = board.findRoute(origin, Yut.BACKDO);
 
         assertThat(route.getRoute()).isEqualTo(Arrays.asList(origin, destination));
     }

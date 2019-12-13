@@ -1,6 +1,7 @@
 package com.olbimacoojam.heaven.yutnori.point;
 
 import com.olbimacoojam.heaven.yutnori.Route;
+import com.olbimacoojam.heaven.yutnori.yut.Yut;
 import lombok.Getter;
 
 @Getter
@@ -15,7 +16,7 @@ public class EdgePoint implements Point {
     }
 
     @Override
-    public Point findNextDestination(Route route, int moving) {
+    public Point findNextDestination(Route route, Yut yut) {
         if (route.isStartingPoint()) {
             return inflectPoint;
         }

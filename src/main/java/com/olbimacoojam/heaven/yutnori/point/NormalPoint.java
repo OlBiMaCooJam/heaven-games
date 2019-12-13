@@ -1,6 +1,7 @@
 package com.olbimacoojam.heaven.yutnori.point;
 
 import com.olbimacoojam.heaven.yutnori.Route;
+import com.olbimacoojam.heaven.yutnori.yut.Yut;
 
 public class NormalPoint implements Point {
     private PointName pointName;
@@ -26,7 +27,7 @@ public class NormalPoint implements Point {
         return previousPoint;
     }
 
-    public Point findNextDestination(Route route, int moving) {
+    public Point findNextDestination(Route route, Yut yut) {
         return nextPoint;
     }
 

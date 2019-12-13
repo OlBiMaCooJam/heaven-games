@@ -1,6 +1,7 @@
 package com.olbimacoojam.heaven.yutnori.point;
 
 import com.olbimacoojam.heaven.yutnori.Route;
+import com.olbimacoojam.heaven.yutnori.yut.Yut;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -24,7 +25,7 @@ class EdgePointTest {
         destination.makeConnection(passingPoint, null);
 
         Route route = new Route();
-        origin.findRoute(route, 2);
+        origin.findRoute(route, Yut.GAE);
 
         Route expectedRoute = new Route(Arrays.asList(origin, passingPoint, destination));
         assertThat(route).isEqualTo(expectedRoute);
@@ -44,7 +45,7 @@ class EdgePointTest {
         destination.makeConnection(passingPoint, null);
 
         Route route = new Route();
-        origin.findRoute(route, 2);
+        origin.findRoute(route, Yut.GAE);
 
         Route expectedRoute = new Route(Arrays.asList(origin, passingPoint, destination));
         assertThat(route).isEqualTo(expectedRoute);
