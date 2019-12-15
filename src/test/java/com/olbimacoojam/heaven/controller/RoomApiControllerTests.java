@@ -24,16 +24,13 @@ import static org.springframework.restdocs.webtestclient.WebTestClientRestDocume
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class RoomApiControllerTests {
     public static final String ROOMS_URL = "/rooms";
-
-    private WebTestClient webTestClient;
-
-    @LocalServerPort
-    private String port;
-
     private final FieldDescriptor[] roomResponseFields = {
             fieldWithPath("id").description("room 고유 식별자"),
             fieldWithPath("players").description("room에 참여하고 있는 user 목록")
     };
+    private WebTestClient webTestClient;
+    @LocalServerPort
+    private String port;
 
     @BeforeEach
     void setUp(RestDocumentationContextProvider restDocumentation) {

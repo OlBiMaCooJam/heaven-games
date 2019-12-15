@@ -1,6 +1,5 @@
 package com.olbimacoojam.heaven.yutnori;
 
-import com.olbimacoojam.heaven.game.Game;
 import com.olbimacoojam.heaven.yutnori.point.PointName;
 import com.olbimacoojam.heaven.yutnori.point.Points;
 import com.olbimacoojam.heaven.yutnori.yut.Yut;
@@ -48,6 +47,5 @@ class BoardTest {
         MoveResult moveResult3 = new MoveResult(piece4, new Route(Arrays.asList(Points.get(PointName.MO), Points.getStandByPoint())));
         MoveResults checkMoveResults = new MoveResults(Arrays.asList(moveResult1, moveResult2, moveResult3));
         assertThat(finalMoveResults).isEqualTo(checkMoveResults);
-
     }
 }
