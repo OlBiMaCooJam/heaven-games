@@ -16,7 +16,7 @@ public class Points {
         standByPoint = points.get(STANDBY);
     }
 
-    private static Map<PointName, Point> initializePoints() {
+    public static Map<PointName, Point> initializePoints() {
         Map<PointName, Point> map = Arrays.stream(PointName.values())
                 .collect(Collectors.toMap(p -> p, PointName::createPoint));
 

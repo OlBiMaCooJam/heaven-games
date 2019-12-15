@@ -25,7 +25,7 @@ public enum PointName {
     NALGUL(NormalPoint::new, "NALGAE", "NALYUT"),
     NALYUT(NormalPoint::new, "NALGUL", "CHAMMUGI"),
     CHAMMUGI(NormalPoint::new, "NALYUT", "COMPLETE"),
-    MODO(NormalPoint::new, "MOGAE", "MO"),
+    MODO(NormalPoint::new, "MO", "MOGAE"),
     MOGAE(CenterRightDiagonalPoint::new, "BANG", "MODO"),
     BANG(CenterPoint::new, "MOGAE", "BANGSUGI"),
     DUITMODO(NormalPoint::new, "DUITMO", "DUITMOGAE"),

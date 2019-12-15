@@ -38,4 +38,8 @@ public class Route {
     public int size() {
         return route.size();
     }
+
+    public Point getDestination() {
+        return route.get(route.size() - 1);
+    }
 }
