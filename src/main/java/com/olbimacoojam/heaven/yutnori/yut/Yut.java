@@ -8,7 +8,8 @@ public enum Yut {
     GUL(3),
     YUT(4),
     MO(5),
-    BACKDO(-1);
+    BACKDO(-1),
+    NOT_THROWN(0);
 
     private final int moveUnit;
 

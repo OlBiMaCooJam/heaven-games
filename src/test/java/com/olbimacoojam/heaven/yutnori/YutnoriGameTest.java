@@ -21,6 +21,8 @@ class YutnoriGameTest {
         yutnoriGame.initialize(Arrays.asList(user1, user2));
 
         assertThat(yutnoriGame.throwYut(user1)).isEqualTo(Yut.DO);
+        assertThrows(IncorrectTurnException.class, () -> yutnoriGame.throwYut(user2));
+        assertThrows(IncorrectTurnException.class, () -> yutnoriGame.throwYut(user1));
     }
 
     @Test

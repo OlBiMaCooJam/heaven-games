@@ -38,9 +38,10 @@ public class YutnoriGame implements Game {
 
     public Yut throwYut(User thrower) {
         if (turn.isRightTurn(thrower)) {
-            return yutThrowStrategy.throwYut();
+            Yut yut = yutThrowStrategy.throwYut();
+            turn = turn.processOneThrow(yut);
+            return yut;
         }
-
         throw new IncorrectTurnException();
     }
 }
