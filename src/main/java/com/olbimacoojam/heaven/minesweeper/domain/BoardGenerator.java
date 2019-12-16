@@ -38,7 +38,7 @@ public class BoardGenerator {
 
     private Long getNumberOfAroundMinesOf(Position position, MinePositions minePositions) {
         return position.getAroundPositions().stream()
-                .filter(pos -> minePositions.isMine(position))
+                .filter(minePositions::isMine)
                 .count();
     }
 }
