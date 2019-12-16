@@ -2,7 +2,9 @@ package com.olbimacoojam.heaven.yutnori;
 
 import com.olbimacoojam.heaven.domain.User;
 import com.olbimacoojam.heaven.yutnori.yut.Yut;
+import lombok.EqualsAndHashCode;
 
+@EqualsAndHashCode
 public class Turn {
     private final YutnoriParticipant yutnoriParticipant;
     private final Yut yut;
