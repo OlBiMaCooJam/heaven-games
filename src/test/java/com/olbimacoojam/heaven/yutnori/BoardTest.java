@@ -14,13 +14,14 @@ class BoardTest {
     @Test
     @DisplayName("board 움직임 테스트(잡기)")
     void move_test() {
-        Piece piece1 = new Piece(Color.BLACK, Points.get(PointName.DO));
-        Piece piece2 = new Piece(Color.RED, Points.get(PointName.GAE));
-        Piece piece3 = new Piece(Color.BLACK, Points.get(PointName.GUL));
-        Piece piece4 = new Piece(Color.RED, Points.get(PointName.MO));
+        Piece piece1 = Piece.of(Color.BLACK, PointName.DO);
+        Piece piece2 = Piece.of(Color.RED, PointName.GAE);
+        Piece piece3 = Piece.of(Color.BLACK, PointName.GUL);
+        Piece piece4 = Piece.of(Color.RED, PointName.MO);
 
         Board board = new Board(Arrays.asList(piece1, piece2, piece3, piece4));
-        MoveResults moveResults = board.move(Points.get(PointName.DO), Yut.DO);
+        MoveVerifier moveVerifier = new MoveVerifier(Color.BLACK, Points.get(PointName.DO));
+        MoveResults moveResults = board.move(moveVerifier, Yut.DO);
 
         MoveResult moveResult1 = new MoveResult(piece1, new Route(Arrays.asList(Points.get(PointName.DO), Points.get(PointName.GAE))));
         MoveResult moveResult2 = new MoveResult(piece2, new Route(Arrays.asList(Points.get(PointName.GAE), Points.get(PointName.STANDBY))));
@@ -31,16 +32,18 @@ class BoardTest {
     @Test
     @DisplayName("board 움직임 테스트(엎기, 잡기)")
     void move_test2() {
-        Piece piece1 = new Piece(Color.BLACK, Points.get(PointName.DO));
-        Piece piece2 = new Piece(Color.RED, Points.get(PointName.GAE));
-        Piece piece3 = new Piece(Color.BLACK, Points.get(PointName.GUL));
-        Piece piece4 = new Piece(Color.RED, Points.get(PointName.MO));
+        Piece piece1 = Piece.of(Color.BLACK, PointName.DO);
+        Piece piece2 = Piece.of(Color.RED, PointName.GAE);
+        Piece piece3 = Piece.of(Color.BLACK, PointName.GUL);
+        Piece piece4 = Piece.of(Color.RED, PointName.MO);
 
         Board board = new Board(Arrays.asList(piece1, piece2, piece3, piece4));
-        board.move(Points.get(PointName.DO), Yut.DO);
-        board.move(Points.get(PointName.GAE), Yut.DO);
-        MoveResults finalMoveResults = board.move(Points.get(PointName.GUL), Yut.GAE);
-
+        MoveVerifier moveVerifier1 = new MoveVerifier(Color.BLACK, Points.get(PointName.DO));
+        board.move(moveVerifier1, Yut.DO);
+        MoveVerifier moveVerifier2 = new MoveVerifier(Color.BLACK, Points.get(PointName.GAE));
+        board.move(moveVerifier2, Yut.DO);
+        MoveVerifier moveVerifier3 = new MoveVerifier(Color.BLACK, Points.get(PointName.GUL));
+        MoveResults finalMoveResults = board.move(moveVerifier3, Yut.GAE);
 
         MoveResult moveResult1 = new MoveResult(piece1, new Route(Arrays.asList(Points.get(PointName.GUL), Points.get(PointName.YUT), Points.get(PointName.MO))));
         MoveResult moveResult2 = new MoveResult(piece3, new Route(Arrays.asList(Points.get(PointName.GUL), Points.get(PointName.YUT), Points.get(PointName.MO))));

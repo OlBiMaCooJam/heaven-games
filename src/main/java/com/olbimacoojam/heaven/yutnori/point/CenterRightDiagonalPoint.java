@@ -7,7 +7,7 @@ import lombok.Getter;
 @Getter
 public class CenterRightDiagonalPoint extends NormalPoint {
 
-    public CenterRightDiagonalPoint(PointName pointName) {
+    CenterRightDiagonalPoint(PointName pointName) {
         super(pointName);
     }
 

@@ -1,20 +1,18 @@
 package com.olbimacoojam.heaven.yutnori;
 
-import com.olbimacoojam.heaven.yutnori.point.Point;
-
 import java.util.Objects;
 
 public class MoveResult {
     private final Piece piece;
-    private Route route;
+    private final Route route;
 
     public MoveResult(Piece piece, Route route) {
         this.piece = piece;
         this.route = route;
     }
 
-    public Point findDestination() {
-        return route.getDestination();
+    public boolean canCatch(Piece piece) {
+        return this.piece.canCatch(piece);
     }
 
     @Override

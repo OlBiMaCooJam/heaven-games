@@ -13,7 +13,7 @@ public class CenterPoint implements Point {
     private Point rightNextPoint;
     private Point previousPoint;
 
-    public CenterPoint(PointName pointName) {
+    CenterPoint(PointName pointName) {
         this.pointName = pointName;
     }
 

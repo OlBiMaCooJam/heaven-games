@@ -14,7 +14,7 @@ class PieceTest {
     @Test
     @DisplayName("말 움직임 테스트 (대기에서 => 도)")
     void move_test() {
-        Piece piece = new Piece(Color.BLACK, Points.get(PointName.STANDBY));
+        Piece piece = Piece.of(Color.BLACK, PointName.STANDBY);
         MoveResult moveResult = piece.move(Yut.DO);
 
         Route checkRoute = new Route(Arrays.asList(Points.getStandByPoint(), Points.get(PointName.DO)));
@@ -27,7 +27,7 @@ class PieceTest {
     @DisplayName("말 움직임 테스트 (대기에서 => 모)")
     void move_test2() {
         Points.initializePoints();
-        Piece piece = new Piece(Color.BLACK, Points.get(PointName.STANDBY));
+        Piece piece = Piece.of(Color.BLACK, PointName.STANDBY);
         MoveResult moveResult = piece.move(Yut.MO);
 
         Route checkRoute = new Route(Arrays.asList(Points.getStandByPoint(), Points.get(PointName.DO), Points.get(PointName.GAE), Points.get(PointName.GUL), Points.get(PointName.YUT), Points.get(PointName.MO)));
@@ -39,7 +39,7 @@ class PieceTest {
     @Test
     @DisplayName("말 움직임 테스트 (대기에서 => 모)")
     void move_test3() {
-        Piece piece = new Piece(Color.BLACK, Points.get(PointName.MO));
+        Piece piece = Piece.of(Color.BLACK, PointName.MO);
         MoveResult moveResult = piece.move(Yut.GAE );
 
         Route checkRoute = new Route(Arrays.asList(Points.get(PointName.MO), Points.get(PointName.MODO), Points.get(PointName.MOGAE)));

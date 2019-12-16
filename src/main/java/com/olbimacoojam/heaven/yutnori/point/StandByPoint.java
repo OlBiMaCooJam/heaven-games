@@ -32,4 +32,9 @@ public class StandByPoint implements Point {
     public void makeConnection(Point previousPoint, Point nextPoint) {
         this.nextPoint = nextPoint;
     }
+
+    @Override
+    public boolean isStandByPoint() {
+        return true;
+    }
 }

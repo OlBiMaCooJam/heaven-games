@@ -42,6 +42,8 @@ public interface Point {
         throw new UnsupportedOperationException();
     }
 
-    ;
+    default boolean isStandByPoint() {
+        return false;
+    }
 }
 

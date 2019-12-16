@@ -14,6 +14,9 @@ public class Piece {
         this.point = point;
     }
 
+    public static Piece of(Color color, PointName pointName) {
+        return new Piece(color, Points.get(pointName));
+    }
 
     public MoveResult move(Yut yut) {
         Route route = new Route();
@@ -22,7 +25,7 @@ public class Piece {
         return new MoveResult(this, route);
     }
 
-    public MoveResult goBackToStart() {
+    public MoveResult goBackToStandBy() {
         Route route = new Route();
         route.add(this.point);
         route.add(Points.get(PointName.STANDBY));
@@ -34,17 +37,11 @@ public class Piece {
         return point;
     }
 
-
-    public boolean canMove(Point request) {
-        return request == this.point;
+    public boolean isMovable(Color color, Point point) {
+        return this.color == color && this.point == point;
     }
 
-    public Color getColor() {
-        return this.color;
+    public boolean canCatch(Piece piece) {
+        return this.color != piece.color && this.point == piece.point;
     }
-
-    public boolean isCaught(Color currentTeamColor, Point destination) {
-        return (currentTeamColor != this.color) && (this.point == destination);
-    }
-
 }

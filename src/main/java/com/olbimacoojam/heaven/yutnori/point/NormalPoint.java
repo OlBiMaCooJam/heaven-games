@@ -8,7 +8,7 @@ public class NormalPoint implements Point {
     private Point nextPoint;
     private Point previousPoint;
 
-    public NormalPoint(PointName pointName) {
+    NormalPoint(PointName pointName) {
         this.pointName = pointName;
     }
 

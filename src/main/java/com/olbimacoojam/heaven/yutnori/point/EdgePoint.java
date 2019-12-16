@@ -11,7 +11,7 @@ public class EdgePoint implements Point {
     private Point previousPoint;
     private Point inflectPoint;
 
-    public EdgePoint(PointName pointName) {
+    EdgePoint(PointName pointName) {
         this.pointName = pointName;
     }
 

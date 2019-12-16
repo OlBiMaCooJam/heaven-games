@@ -9,8 +9,7 @@ import lombok.Getter;
 public class CompletePoint implements Point {
     private final PointName pointName;
 
-
-    public CompletePoint(PointName pointName) {
+    CompletePoint(PointName pointName) {
         this.pointName = pointName;
     }
 

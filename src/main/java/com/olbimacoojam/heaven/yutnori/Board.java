@@ -1,6 +1,5 @@
 package com.olbimacoojam.heaven.yutnori;
 
-import com.olbimacoojam.heaven.yutnori.point.Point;
 import com.olbimacoojam.heaven.yutnori.yut.Yut;
 
 import java.util.List;
@@ -13,28 +12,33 @@ public class Board {
         this.pieces = pieces;
     }
 
-    public MoveResults move(Point request, Yut yut) {
-        List<Piece> movablePieces = pieces.stream()
-                .filter(piece -> piece.canMove(request))
-                .collect(Collectors.toList());
+    public MoveResults move(MoveVerifier moveVerifier, Yut yut) {
+        List<Piece> movablePieces = moveVerifier.findMovablePieces(pieces);
+        MoveResults moveResults = movePieces(movablePieces, yut);
 
+        List<Piece> caughtPieces = findCaughtPieces(moveResults);
+        MoveResults caughtMoveResults = moveCaughtPieces(caughtPieces);
+
+        return moveResults.add(caughtMoveResults);
+    }
+
+    private MoveResults moveCaughtPieces(List<Piece> caughtPieces) {
+        return new MoveResults(caughtPieces.stream()
+                .map(Piece::goBackToStandBy)
+                .collect(Collectors.toList()));
+    }
+
+    private List<Piece> findCaughtPieces(MoveResults moveResults) {
+        return pieces.stream()
+                .filter(moveResults::isCaught)
+                .collect(Collectors.toList());
+    }
+
+    private MoveResults movePieces(List<Piece> movablePieces, Yut yut) {
         List<MoveResult> moveResults = movablePieces.stream()
                 .map(piece -> piece.move(yut))
                 .collect(Collectors.toList());
 
-        //잡았는지 체크
-        Color currentTeamColor = movablePieces.get(0).getColor();
-        Point destination = moveResults.get(0).findDestination();
-
-        List<Piece> caughtPieces = pieces.stream()
-                .filter(piece -> piece.isCaught(currentTeamColor, destination))
-                .collect(Collectors.toList());
-
-        List<MoveResult> caughtMoveResults = caughtPieces.stream()
-                .map(piece -> piece.goBackToStart())
-                .collect(Collectors.toList());
-
-        moveResults.addAll(caughtMoveResults);
         return new MoveResults(moveResults);
     }
 }

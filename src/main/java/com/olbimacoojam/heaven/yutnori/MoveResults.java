@@ -1,7 +1,6 @@
 package com.olbimacoojam.heaven.yutnori;
 
-import com.olbimacoojam.heaven.yutnori.point.Point;
-
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -10,10 +9,6 @@ public class MoveResults {
 
     public MoveResults(List<MoveResult> moveResults) {
         this.moveResults = moveResults;
-    }
-
-    public Point findDestination() {
-        return moveResults.get(0).findDestination();
     }
 
     @Override
@@ -27,5 +22,17 @@ public class MoveResults {
     @Override
     public int hashCode() {
         return Objects.hash(moveResults);
+    }
+
+    public boolean isCaught(Piece piece) {
+        return moveResults.stream()
+                .anyMatch(moveResult -> moveResult.canCatch(piece));
+    }
+
+    public MoveResults add(MoveResults moveResults) {
+        List<MoveResult> results = new ArrayList<>();
+        results.addAll(this.moveResults);
+        results.addAll(moveResults.moveResults);
+        return new MoveResults(results);
     }
 }
