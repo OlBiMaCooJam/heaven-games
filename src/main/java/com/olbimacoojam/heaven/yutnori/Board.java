@@ -22,6 +22,14 @@ public class Board {
         return moveResults.add(caughtMoveResults);
     }
 
+    private MoveResults movePieces(List<Piece> movablePieces, Yut yut) {
+        List<MoveResult> moveResults = movablePieces.stream()
+                .map(piece -> piece.move(yut))
+                .collect(Collectors.toList());
+
+        return new MoveResults(moveResults);
+    }
+
     private MoveResults moveCaughtPieces(List<Piece> caughtPieces) {
         return new MoveResults(caughtPieces.stream()
                 .map(Piece::goBackToStandBy)
@@ -32,13 +40,5 @@ public class Board {
         return pieces.stream()
                 .filter(moveResults::isCaught)
                 .collect(Collectors.toList());
-    }
-
-    private MoveResults movePieces(List<Piece> movablePieces, Yut yut) {
-        List<MoveResult> moveResults = movablePieces.stream()
-                .map(piece -> piece.move(yut))
-                .collect(Collectors.toList());
-
-        return new MoveResults(moveResults);
     }
 }

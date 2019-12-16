@@ -2,7 +2,6 @@ package com.olbimacoojam.heaven.yutnori;
 
 import com.olbimacoojam.heaven.yutnori.point.Point;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -16,10 +15,6 @@ public class MoveVerifier {
         this.point = point;
     }
 
-    public boolean isMovable(Piece piece) {
-        return piece.isMovable(color, point);
-    }
-
     public List<Piece> findMovablePieces(List<Piece> pieces) {
         List<Piece> movablePieces = pieces.stream()
                 .filter(this::isMovable)
@@ -29,5 +24,9 @@ public class MoveVerifier {
             return Collections.singletonList(movablePieces.get(0));
         }
         return movablePieces;
+    }
+
+    private boolean isMovable(Piece piece) {
+        return piece.isMovable(color, point);
     }
 }

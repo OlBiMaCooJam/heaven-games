@@ -9,7 +9,7 @@ public class Piece {
     private final Color color;
     private Point point;
 
-    public Piece(Color color, Point point) {
+    private Piece(Color color, Point point) {
         this.color = color;
         this.point = point;
     }
@@ -33,15 +33,15 @@ public class Piece {
         return new MoveResult(this, route);
     }
 
-    public Point getPoint() {
-        return point;
-    }
-
     public boolean isMovable(Color color, Point point) {
         return this.color == color && this.point == point;
     }
 
     public boolean canCatch(Piece piece) {
         return this.color != piece.color && this.point == piece.point;
+    }
+
+    public Point getPoint() {
+        return point;
     }
 }
