@@ -1,6 +1,5 @@
-package com.olbimacoojam.heaven.util;
+package com.olbimacoojam.heaven.config;
 
-import com.olbimacoojam.heaven.kakao.KakaoConfig;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -21,10 +20,5 @@ class KakaoConfigTest {
     @Test
     void KakaoConfig_yml파일_매핑테스트_resource() {
         assertThat(kakaoConfig.getResource().get("userInfoPath")).isNotNull();
-    }
-
-    @Test
-    void name() {
-        WebClient webClient = WebClient.create();
     }
 }

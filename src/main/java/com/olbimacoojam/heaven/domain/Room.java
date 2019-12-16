@@ -1,7 +1,6 @@
 package com.olbimacoojam.heaven.domain;
 
 import com.olbimacoojam.heaven.game.Game;
-import com.olbimacoojam.heaven.game.User;
 import lombok.Getter;
 
 import java.util.List;
@@ -26,5 +25,9 @@ public class Room {
 
     public void leave() {
         players.remove(0);
+    }
+
+    public void startGame() {
+        game.initialize(players);
     }
 }
