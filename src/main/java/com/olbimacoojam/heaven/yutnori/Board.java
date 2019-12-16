@@ -8,8 +8,8 @@ import java.util.stream.Collectors;
 public class Board {
     private final List<Piece> pieces;
 
-    public Board(List<Piece> pieces) {
-        this.pieces = pieces;
+    public Board(PieceSetStrategy pieceSetStrategy) {
+        pieces = pieceSetStrategy.setPieces();
     }
 
     public MoveResults move(MoveVerifier moveVerifier, Yut yut) {
