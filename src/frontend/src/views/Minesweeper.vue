@@ -83,10 +83,10 @@
                   style="height: 64px; background-color: lightgoldenrodyellow; border: 1px solid #E7B547"
                   outlined
                   tile
-                  @click.left="clickLeft(x, y, $event)"
-                  @click.right="clickRight(x, y, $event)"
+                  @click.left="clickLeft(x-1, y-1)"
+                  @click.right="clickRight(x-1, y-1, $event)"
               >
-                <v-icon :itemref="board.blocks[y-1][x-1]">{{board.blocks[y-1][x-1]}}</v-icon>
+                <v-icon>{{board.blocks[y-1][x-1].status}}</v-icon>
               </v-btn>
             </v-col>
           </template>
@@ -112,14 +112,15 @@
           rows: 10,
           columns: 10,
           mines: 1,
-          maxMines: 99
+          maxMines: 99,
+
         },
         icons: {
-          default: '',
-          mine: 'mdi-mine',
-          flag: 'mdi-flag-variant',
-          questionMark: 'mdi-map-marker-question-outline',
-          numbers: ['mdi-numeric-0', 'mdi-numeric-1', 'mdi-numeric-2',
+          UNCLICKED: '',
+          MINE: 'mdi-mine',
+          FLAG: 'mdi-flag-variant',
+          QUESTION_MARK: 'mdi-map-marker-question-outline',
+          CLICKED: ['mdi-numeric-0', 'mdi-numeric-1', 'mdi-numeric-2',
             'mdi-numeric-3', 'mdi-numeric-4', 'mdi-numeric-5',
             'mdi-numeric-6', 'mdi-numeric-7', 'mdi-numeric-8']
         },
@@ -132,28 +133,50 @@
         for (let i = 0; i < this.board.rows; i++) {
           this.board.blocks.push([]);
           for (let j = 0; j < this.board.columns; j++) {
-            this.board.blocks[i].push(this.icons.default);
+            this.board.blocks[i].push({status: this.icons.UNCLICKED, clicked: false});
           }
         }
       },
-      clickLeft(x, y, event) {
-        x, y, event;
+      async clickLeft(x, y) {
+        const response = await this.click(x, y, "LEFT");
+        const blockStatus = response.data.blockStatus;
+        const numberOfAroundMines = response.data.numberOfAroundMines;
+
+        if (response.status === 200) {
+          this.board.blocks = this.changeStatus(x, y, blockStatus, numberOfAroundMines);
+          this.board.blocks[y][x].clicked = true;
+          if (blockStatus === "CLICKED" && numberOfAroundMines === 0) {
+            this.propagateBlanks(x, y);
+          }
+        }
       },
-      clickRight(x, y, event) {
-        event.preventDefault()
-        const nextStatus = this.getNextStatus(this.board.blocks[y - 1][x - 1]);
+      async clickRight(x, y, event) {
+        event.preventDefault();
+        const response = await this.click(x, y, "RIGHT");
+        if (response.status === 200) {
+          this.board.blocks = this.changeStatus(x, y, response.data.blockStatus);
+        }
+      },
+      changeStatus(x, y, blockStatus, numberOfAroundMines) {
+        const nextStatus = this.getNextStatus(blockStatus, numberOfAroundMines);
         let newBoard = [...this.board.blocks];
-        newBoard[y - 1].splice(x - 1, 1, nextStatus);
-        this.board.blocks = newBoard;
+        newBoard[y].splice(x, 1, {status: nextStatus, clicked: this.board.blocks[y][x].clicked});
+        return newBoard;
       },
-      getNextStatus(status) {
-        if (status === this.icons.default) {
-          return this.icons.flag;
+      getNextStatus(status, numberOfAroundMines) {
+        if (status === "CLICKED") {
+          return this.icons.CLICKED[numberOfAroundMines];
         }
-        if (status === this.icons.flag) {
-          return this.icons.questionMark;
+        return this.icons[status]
+      },
+      async propagateBlanks(x, y) {
+        for (let i = y - 1; i <= y + 1; i++) {
+          for (let j = x - 1; j <= x + 1; j++) {
+            if (i >= 0 && j >= 0 && i < this.board.columns && j < this.board.rows && this.board.blocks[j][i].clicked === false) {
+              this.clickLeft(j, i)
+            }
+          }
         }
-        return this.icons.default;
       },
       checkNumMines() {
         const maxMines = this.board.rows * this.board.columns - 1;
@@ -180,7 +203,20 @@
         } catch (error) {
           alert(error)
         }
-      }
+      },
+      click(x, y, clickType) {
+        try {
+          return axios.put('/rooms/1/minesweeper', {
+            position: {
+              x: x,
+              y: y
+            },
+            clickType: clickType
+          });
+        } catch (error) {
+          alert(error)
+        }
+      },
     }
   }
 </script>

@@ -1,6 +1,7 @@
 package com.olbimacoojam.heaven.minesweeper.domain;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.Collections;
 import java.util.List;
@@ -9,11 +10,12 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 @Getter
+@NoArgsConstructor
 public class Position {
     private static final Integer MAX_Y = 30;
     private static final Integer MAX_X = 30;
-    private final Integer x;
-    private final Integer y;
+    private Integer x;
+    private Integer y;
 
     private Position(Integer x, Integer y) {
         this.x = x;

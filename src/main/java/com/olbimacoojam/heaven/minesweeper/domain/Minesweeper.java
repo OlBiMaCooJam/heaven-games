@@ -2,13 +2,16 @@ package com.olbimacoojam.heaven.minesweeper.domain;
 
 import com.olbimacoojam.heaven.domain.User;
 import com.olbimacoojam.heaven.game.Game;
+import com.olbimacoojam.heaven.minesweeper.domain.exception.GameOverException;
 import com.olbimacoojam.heaven.minesweeper.domain.exception.InvalidNumberOfUsersException;
 import com.olbimacoojam.heaven.minesweeper.domain.exception.UserNotMatchException;
 
+import java.util.Collections;
 import java.util.List;
 
 public class Minesweeper implements Game {
     private static final int MINESWEEPER_PLAYER_NUMBER = 1;
+    private boolean isGameOver = false;
     private final Board board;
     private final User user;
 
@@ -45,5 +48,23 @@ public class Minesweeper implements Game {
 
     public Board getBoard() {
         return this.board;
+    }
+
+    public Block click(User user, Click click) {
+        checkUser(Collections.singletonList(user));
+        checkGameOver();
+        Block clickedBlock = board.click(click);
+
+        if (clickedBlock.isClickedMine()) {
+            isGameOver = true;
+        }
+
+        return clickedBlock;
+    }
+
+    private void checkGameOver() {
+        if (isGameOver) {
+            throw new GameOverException();
+        }
     }
 }

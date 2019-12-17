@@ -7,7 +7,9 @@ import lombok.Getter;
 @Getter
 public class BoardSpecification {
     private static final Integer MAX_NUMBER_OF_ROWS = 30;
+    private static final Integer MIN_NUMBER_OF_ROWS = 10;
     private static final Integer MAX_NUMBER_OF_COLUMNS = 30;
+    private static final Integer MIN_NUMBER_OF_COLUMNS = 10;
 
     private Integer rows;
     private Integer columns;
@@ -36,13 +38,13 @@ public class BoardSpecification {
     }
 
     private void checkRows(Integer rows) {
-        if (rows > MAX_NUMBER_OF_ROWS) {
+        if (rows > MAX_NUMBER_OF_ROWS || rows < MIN_NUMBER_OF_ROWS) {
             throw new InvalidBoardSizeException();
         }
     }
 
     private void checkColumns(Integer columns) {
-        if (columns > MAX_NUMBER_OF_COLUMNS) {
+        if (columns > MAX_NUMBER_OF_COLUMNS || columns < MIN_NUMBER_OF_COLUMNS) {
             throw new InvalidBoardSizeException();
         }
     }
