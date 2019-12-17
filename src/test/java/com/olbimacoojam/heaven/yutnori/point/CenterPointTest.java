@@ -1,6 +1,6 @@
 package com.olbimacoojam.heaven.yutnori.point;
 
-import com.olbimacoojam.heaven.yutnori.Route;
+import com.olbimacoojam.heaven.yutnori.piece.moveresult.Route;
 import com.olbimacoojam.heaven.yutnori.yut.Yut;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

@@ -1,4 +1,4 @@
-package com.olbimacoojam.heaven.yutnori;
+package com.olbimacoojam.heaven.yutnori.piece;
 
 import java.util.List;
 

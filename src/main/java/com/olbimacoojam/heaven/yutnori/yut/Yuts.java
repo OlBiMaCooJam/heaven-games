@@ -1,6 +1,5 @@
-package com.olbimacoojam.heaven.yutnori;
+package com.olbimacoojam.heaven.yutnori.yut;
 
-import com.olbimacoojam.heaven.yutnori.yut.Yut;
 import lombok.EqualsAndHashCode;
 
 import java.util.ArrayList;

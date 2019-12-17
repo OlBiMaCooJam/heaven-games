@@ -1,4 +1,6 @@
-package com.olbimacoojam.heaven.yutnori;
+package com.olbimacoojam.heaven.yutnori.piece.moveresult;
+
+import com.olbimacoojam.heaven.yutnori.piece.Piece;
 
 import java.util.Objects;
 

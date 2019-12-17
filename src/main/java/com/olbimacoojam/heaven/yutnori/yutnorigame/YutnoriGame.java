@@ -1,7 +1,9 @@
-package com.olbimacoojam.heaven.yutnori;
+package com.olbimacoojam.heaven.yutnori.yutnorigame;
 
 import com.olbimacoojam.heaven.domain.User;
 import com.olbimacoojam.heaven.game.Game;
+import com.olbimacoojam.heaven.yutnori.piece.OneOnOneStrategy;
+import com.olbimacoojam.heaven.yutnori.piece.moveresult.MoveResults;
 import com.olbimacoojam.heaven.yutnori.point.PointName;
 import com.olbimacoojam.heaven.yutnori.point.Points;
 import com.olbimacoojam.heaven.yutnori.yut.Yut;

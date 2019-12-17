@@ -1,9 +1,11 @@
-package com.olbimacoojam.heaven.yutnori;
+package com.olbimacoojam.heaven.yutnori.yutnorigame;
 
 import com.olbimacoojam.heaven.domain.User;
 import com.olbimacoojam.heaven.yutnori.exception.IncorrectTurnException;
 import com.olbimacoojam.heaven.yutnori.exception.NotExistYutException;
+import com.olbimacoojam.heaven.yutnori.piece.moveresult.MoveResults;
 import com.olbimacoojam.heaven.yutnori.yut.Yut;
+import com.olbimacoojam.heaven.yutnori.yut.Yuts;
 import lombok.EqualsAndHashCode;
 
 @EqualsAndHashCode

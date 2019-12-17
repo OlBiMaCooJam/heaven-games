@@ -1,8 +1,6 @@
 package com.olbimacoojam.heaven.yutnori;
 
-import com.olbimacoojam.heaven.yutnori.point.CenterRightDiagonalPoint;
-import com.olbimacoojam.heaven.yutnori.point.NormalPoint;
-import com.olbimacoojam.heaven.yutnori.point.PointName;
+import com.olbimacoojam.heaven.yutnori.piece.moveresult.Route;
 import com.olbimacoojam.heaven.yutnori.point.Points;
 import org.junit.jupiter.api.Test;
 

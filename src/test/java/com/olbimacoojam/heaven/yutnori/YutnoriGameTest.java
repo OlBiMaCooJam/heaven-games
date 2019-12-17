@@ -3,6 +3,7 @@ package com.olbimacoojam.heaven.yutnori;
 import com.olbimacoojam.heaven.domain.User;
 import com.olbimacoojam.heaven.yutnori.exception.IncorrectTurnException;
 import com.olbimacoojam.heaven.yutnori.yut.Yut;
+import com.olbimacoojam.heaven.yutnori.yutnorigame.YutnoriGame;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;

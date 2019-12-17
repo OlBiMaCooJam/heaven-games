@@ -1,8 +1,12 @@
 package com.olbimacoojam.heaven.yutnori;
 
+import com.olbimacoojam.heaven.yutnori.piece.Piece;
+import com.olbimacoojam.heaven.yutnori.piece.moveresult.MoveResult;
+import com.olbimacoojam.heaven.yutnori.piece.moveresult.Route;
 import com.olbimacoojam.heaven.yutnori.point.PointName;
 import com.olbimacoojam.heaven.yutnori.point.Points;
 import com.olbimacoojam.heaven.yutnori.yut.Yut;
+import com.olbimacoojam.heaven.yutnori.yutnorigame.Color;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

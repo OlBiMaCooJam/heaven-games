@@ -1,5 +1,9 @@
-package com.olbimacoojam.heaven.yutnori;
+package com.olbimacoojam.heaven.yutnori.yutnorigame;
 
+import com.olbimacoojam.heaven.yutnori.piece.Piece;
+import com.olbimacoojam.heaven.yutnori.piece.PieceSetStrategy;
+import com.olbimacoojam.heaven.yutnori.piece.moveresult.MoveResult;
+import com.olbimacoojam.heaven.yutnori.piece.moveresult.MoveResults;
 import com.olbimacoojam.heaven.yutnori.yut.Yut;
 
 import java.util.List;

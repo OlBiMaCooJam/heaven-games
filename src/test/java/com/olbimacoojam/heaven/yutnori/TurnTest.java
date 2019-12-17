@@ -4,6 +4,9 @@ import com.olbimacoojam.heaven.domain.User;
 import com.olbimacoojam.heaven.yutnori.exception.IncorrectTurnException;
 import com.olbimacoojam.heaven.yutnori.exception.NotExistYutException;
 import com.olbimacoojam.heaven.yutnori.yut.Yut;
+import com.olbimacoojam.heaven.yutnori.yutnorigame.Color;
+import com.olbimacoojam.heaven.yutnori.yutnorigame.Turn;
+import com.olbimacoojam.heaven.yutnori.yutnorigame.YutnoriParticipant;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
