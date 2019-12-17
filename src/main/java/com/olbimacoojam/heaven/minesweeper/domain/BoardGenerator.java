@@ -16,7 +16,7 @@ public class BoardGenerator {
         Map<Position, Block> board = new HashMap<>();
         MinePositions minePositions = minePositionGenerator.generate(boardSpecification.getRows(), boardSpecification.getColumns(), boardSpecification.getMines());
 
-        for (int y = 0; y < boardSpecification.getColumns(); y++) {
+        for (int y = 0; y < boardSpecification.getRows(); y++) {
             board.putAll(generateRow(y, boardSpecification.getColumns(), minePositions));
         }
 
