@@ -8,7 +8,7 @@
             </v-col>
             <v-col cols="6">
                 <v-row align='center' justify='center'>
-                    <Timer :date=date></Timer>
+                    <Timer :date=date :roomId=id></Timer>
                 </v-row>
             </v-col>
         </v-row>

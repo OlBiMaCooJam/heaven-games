@@ -7,6 +7,9 @@
 </template>
 
 <script>
+    import SockJS from "sockjs-client"
+    import Stomp from "webstomp-client"
+
     export default {
         name: "Timer",
         mounted: function () {
@@ -15,7 +18,8 @@
             }, 1000);
         },
         props: {
-            date: Number
+            date: Number,
+            roomId: Number
         },
 
         data() {
@@ -28,6 +32,10 @@
         computed: {
             seconds() {
                 const time = this.limit - this.now;
+                if (time < 0) {
+                    const client = Stomp.over(new SockJS('/websocket'));
+                    client.send('/app/mafia/' + this.roomId + '/vote');
+                }
                 return time > 0 ? time : 0;
             },
         },
