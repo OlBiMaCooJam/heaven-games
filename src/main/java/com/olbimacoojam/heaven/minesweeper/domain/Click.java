@@ -9,8 +9,10 @@ public class Click {
     private ClickType clickType;
     private Position position;
 
-    public Click(ClickType clickType, Position position) {
-        this.clickType = clickType;
-        this.position = position;
+    public static Click leftClickOn(Position position) {
+        Click click = new Click();
+        click.clickType = ClickType.LEFT;
+        click.position = position;
+        return click;
     }
 }

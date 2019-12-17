@@ -5,9 +5,9 @@ import lombok.Getter;
 
 @Getter
 public class Block {
+    public static final int BLANK = 0;
     @Getter(AccessLevel.NONE)
     private final boolean isMine;
-
     private final BlockStatus blockStatus;
     private final Integer numberOfAroundMines;
 
@@ -28,5 +28,13 @@ public class Block {
 
     public boolean isClickedMine() {
         return isMine && blockStatus.isClicked();
+    }
+
+    public boolean isBlankBlock() {
+        return !isMine && numberOfAroundMines == BLANK && blockStatus.isClicked();
+    }
+
+    public boolean isClicked() {
+        return blockStatus.isClicked();
     }
 }

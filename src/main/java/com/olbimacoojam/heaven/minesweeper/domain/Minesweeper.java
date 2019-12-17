@@ -46,7 +46,7 @@ public class Minesweeper implements Game {
         }
     }
 
-    public Block click(User user, Click click) {
+    public ClickedBlocks click(User user, Click click) {
         checkUser(Collections.singletonList(user));
         checkGameOver();
         Block clickedBlock = board.click(click);
@@ -55,7 +55,24 @@ public class Minesweeper implements Game {
             isGameOver = true;
         }
 
-        return clickedBlock;
+        ClickedBlocks clickedBlocks = ClickedBlocks.of(click.getPosition(), clickedBlock);
+        if (clickedBlock.isBlankBlock()) {
+            clickedBlocks.putAll(propagateBlanks(click));
+        }
+
+        return clickedBlocks;
+    }
+
+    private ClickedBlocks propagateBlanks(Click click) {
+        Position position = click.getPosition();
+
+        ClickedBlocks clickedBlocks = ClickedBlocks.newClickedBlocks();
+        position.getAroundPositions().stream()
+                .filter(pos -> board.contains(pos) && !board.isClicked(pos))
+                .map(pos -> click(user, Click.leftClickOn(pos)))
+                .forEach(clickedBlocks::putAll);
+
+        return clickedBlocks;
     }
 
     private void checkGameOver() {

@@ -28,4 +28,12 @@ public class Board {
         board.put(position, block);
         return block;
     }
+
+    public boolean isClicked(Position position) {
+        return board.get(position).isClicked();
+    }
+
+    public boolean contains(Position position) {
+        return board.containsKey(position);
+    }
 }

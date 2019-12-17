@@ -23,10 +23,7 @@ public class MinesweeperService {
         return minesweeper;
     }
 
-    public Block click(User user, Integer roomId, Click click, Minesweeper minesweeper) {
-//        Room room = roomService.findById(roomId);
-//        Minesweeper minesweeper = (Minesweeper) room.getGame();
-
+    public ClickedBlocks click(User user, Integer roomId, Click click, Minesweeper minesweeper) {
         return minesweeper.click(user, click);
     }
 }
