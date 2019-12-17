@@ -14,10 +14,14 @@ public class Turn {
     private final Yuts thrownYuts;
     private boolean canThrow;
 
-    public Turn(YutnoriParticipant yutnoriParticipant) {
+    private Turn(YutnoriParticipant yutnoriParticipant, Yuts thrownYuts, boolean canThrow) {
         this.yutnoriParticipant = yutnoriParticipant;
-        this.thrownYuts = new Yuts();
-        this.canThrow = true;
+        this.thrownYuts = thrownYuts;
+        this.canThrow = canThrow;
+    }
+
+    public Turn(YutnoriParticipant yutnoriParticipant) {
+        this(yutnoriParticipant, new Yuts(), true);
     }
 
     public Yut saveOneThrow(User thrower, Yut yut) {
@@ -52,7 +56,23 @@ public class Turn {
         return yutnoriParticipant.getColor();
     }
 
-    public Turn next(MoveResults moveResults) {
-        return null;
+    public Turn next(MoveResults moveResults, YutnoriParticipants yutnoriParticipants) {
+        if (moveResults.hasCaught()) {
+            return new Turn(yutnoriParticipant, thrownYuts, true);
+        }
+
+        if (thrownYuts.isRemaining()) {
+            return new Turn(yutnoriParticipant, thrownYuts, false);
+        }
+
+        return new Turn(yutnoriParticipants.next(yutnoriParticipant));
+    }
+
+    public boolean canThrow() {
+        return canThrow;
+    }
+
+    public User getUser() {
+        return yutnoriParticipant.getParticipant();
     }
 }

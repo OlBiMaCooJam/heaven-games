@@ -13,7 +13,7 @@ public class Yuts {
         this(new ArrayList<>());
     }
 
-    public Yuts(List<Yut> yuts) {
+    private Yuts(List<Yut> yuts) {
         this.yuts = yuts;
     }
 
@@ -36,5 +36,9 @@ public class Yuts {
 
     public boolean remove(Yut yut) {
         return yuts.remove(yut);
+    }
+
+    public boolean isRemaining() {
+        return !yuts.isEmpty();
     }
 }

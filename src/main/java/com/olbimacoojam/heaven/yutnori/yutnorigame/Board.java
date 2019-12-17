@@ -1,7 +1,6 @@
 package com.olbimacoojam.heaven.yutnori.yutnorigame;
 
 import com.olbimacoojam.heaven.yutnori.piece.Piece;
-import com.olbimacoojam.heaven.yutnori.piece.PieceSetStrategy;
 import com.olbimacoojam.heaven.yutnori.piece.moveresult.MoveResult;
 import com.olbimacoojam.heaven.yutnori.piece.moveresult.MoveResults;
 import com.olbimacoojam.heaven.yutnori.yut.Yut;
@@ -12,8 +11,8 @@ import java.util.stream.Collectors;
 public class Board {
     private final List<Piece> pieces;
 
-    public Board(PieceSetStrategy pieceSetStrategy) {
-        pieces = pieceSetStrategy.setPieces();
+    public Board(List<Piece> pieces) {
+        this.pieces = pieces;
     }
 
     public MoveResults move(MoveVerifier moveVerifier, Yut yut) {

@@ -26,7 +26,7 @@ class BoardTest {
         Piece piece3 = Piece.of(Color.BLACK, PointName.GUL);
         Piece piece4 = Piece.of(Color.RED, PointName.MO);
 
-        Board board = new Board(() -> Arrays.asList(piece1, piece2, piece3, piece4));
+        Board board = new Board(Arrays.asList(piece1, piece2, piece3, piece4));
         MoveVerifier moveVerifier = new MoveVerifier(Color.BLACK, Points.get(PointName.DO));
         MoveResults moveResults = board.move(moveVerifier, Yut.DO);
 
@@ -44,7 +44,7 @@ class BoardTest {
         Piece piece3 = Piece.of(Color.BLACK, PointName.GUL);
         Piece piece4 = Piece.of(Color.RED, PointName.MO);
 
-        Board board = new Board(() -> Arrays.asList(piece1, piece2, piece3, piece4));
+        Board board = new Board(Arrays.asList(piece1, piece2, piece3, piece4));
         MoveVerifier moveVerifier1 = new MoveVerifier(Color.BLACK, Points.get(PointName.DO));
         board.move(moveVerifier1, Yut.DO);
         MoveVerifier moveVerifier2 = new MoveVerifier(Color.BLACK, Points.get(PointName.GAE));

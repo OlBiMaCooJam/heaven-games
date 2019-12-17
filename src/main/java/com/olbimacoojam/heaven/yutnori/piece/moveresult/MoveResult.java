@@ -1,6 +1,7 @@
 package com.olbimacoojam.heaven.yutnori.piece.moveresult;
 
 import com.olbimacoojam.heaven.yutnori.piece.Piece;
+import com.olbimacoojam.heaven.yutnori.point.PointName;
 
 import java.util.Objects;
 
@@ -15,6 +16,10 @@ public class MoveResult {
 
     public boolean canCatch(Piece piece) {
         return this.piece.canCatch(piece);
+    }
+
+    public boolean areYouCaught() {
+        return route.isDestination(PointName.STANDBY);
     }
 
     @Override

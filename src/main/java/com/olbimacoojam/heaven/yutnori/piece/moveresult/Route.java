@@ -1,6 +1,7 @@
 package com.olbimacoojam.heaven.yutnori.piece.moveresult;
 
 import com.olbimacoojam.heaven.yutnori.point.Point;
+import com.olbimacoojam.heaven.yutnori.point.PointName;
 import lombok.EqualsAndHashCode;
 
 import java.util.ArrayList;
@@ -42,5 +43,10 @@ public class Route {
 
     public Point getDestination() {
         return route.get(route.size() - 1);
+    }
+
+    public boolean isDestination(PointName pointName) {
+        Point destination = getDestination();
+        return destination.isName(pointName);
     }
 }

@@ -18,4 +18,8 @@ public class YutnoriParticipant {
     public boolean isRightThrower(User thrower) {
         return participant.equals(thrower);
     }
+
+    public String getName() {
+        return participant.getName();
+    }
 }

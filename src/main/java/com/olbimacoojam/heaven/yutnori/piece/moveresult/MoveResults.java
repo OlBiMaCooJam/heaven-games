@@ -25,6 +25,11 @@ public class MoveResults {
         return new MoveResults(results);
     }
 
+    public boolean hasCaught() {
+        return moveResults.stream()
+                .anyMatch(MoveResult::areYouCaught);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

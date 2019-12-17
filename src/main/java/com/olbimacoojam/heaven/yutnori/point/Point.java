@@ -45,5 +45,9 @@ public interface Point {
     default boolean isStandByPoint() {
         return false;
     }
+
+    default boolean isName(PointName pointName) {
+        return getPointName() == pointName;
+    }
 }
 
