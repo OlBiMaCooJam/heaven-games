@@ -46,10 +46,6 @@ public class Minesweeper implements Game {
         }
     }
 
-    public Board getBoard() {
-        return this.board;
-    }
-
     public Block click(User user, Click click) {
         checkUser(Collections.singletonList(user));
         checkGameOver();
