@@ -2,7 +2,8 @@ package com.olbimacoojam.heaven.yutnori;
 
 import com.olbimacoojam.heaven.domain.User;
 import com.olbimacoojam.heaven.game.Game;
-import com.olbimacoojam.heaven.yutnori.exception.IncorrectTurnException;
+import com.olbimacoojam.heaven.yutnori.point.PointName;
+import com.olbimacoojam.heaven.yutnori.point.Points;
 import com.olbimacoojam.heaven.yutnori.yut.Yut;
 import com.olbimacoojam.heaven.yutnori.yut.YutThrowStrategy;
 
@@ -12,11 +13,10 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class YutnoriGame implements Game {
-
     private final YutThrowStrategy yutThrowStrategy;
+    private List<YutnoriParticipant> yutnoriParticipants;
     private Board board;
     private Turn turn;
-    private List<YutnoriParticipant> yutnoriParticipants;
 
     public YutnoriGame(YutThrowStrategy yutThrowStrategy) {
         this.yutThrowStrategy = yutThrowStrategy;
@@ -37,11 +37,15 @@ public class YutnoriGame implements Game {
     }
 
     public Yut throwYut(User thrower) {
-        if (turn.isRightTurn(thrower)) {
-            Yut yut = yutThrowStrategy.throwYut();
-            turn = turn.processOneThrow(yut);
-            return yut;
-        }
-        throw new IncorrectTurnException();
+        Yut yut = yutThrowStrategy.throwYut();
+        return turn.saveOneThrow(thrower, yut);
+    }
+
+    public MoveResults move(User user, PointName pointName, Yut yut) {
+        turn.consumeYut(user, yut);
+        MoveVerifier moveVerifier = new MoveVerifier(turn.getTeamColor(), Points.get(pointName));
+        MoveResults moveResults = board.move(moveVerifier, yut);
+        turn = turn.next(moveResults);
+        return moveResults;
     }
 }

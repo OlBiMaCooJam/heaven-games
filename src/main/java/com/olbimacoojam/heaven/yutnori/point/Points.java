@@ -8,12 +8,10 @@ import java.util.stream.Collectors;
 import static com.olbimacoojam.heaven.yutnori.point.PointName.*;
 
 public class Points {
-    private final static Point standByPoint;
     private static Map<PointName, Point> points;
 
     static {
         points = initializePoints();
-        standByPoint = points.get(STANDBY);
     }
 
     public static Map<PointName, Point> initializePoints() {
@@ -49,7 +47,7 @@ public class Points {
     }
 
     public static Point getStandByPoint() {
-        return standByPoint;
+        return points.get(STANDBY);
     }
 
     public static int getTotalPointQuantities() {

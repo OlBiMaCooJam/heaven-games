@@ -11,6 +11,18 @@ public class MoveResults {
         this.moveResults = moveResults;
     }
 
+    public boolean isCaught(Piece piece) {
+        return moveResults.stream()
+                .anyMatch(moveResult -> moveResult.canCatch(piece));
+    }
+
+    public MoveResults add(MoveResults moveResults) {
+        List<MoveResult> results = new ArrayList<>();
+        results.addAll(this.moveResults);
+        results.addAll(moveResults.moveResults);
+        return new MoveResults(results);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -22,17 +34,5 @@ public class MoveResults {
     @Override
     public int hashCode() {
         return Objects.hash(moveResults);
-    }
-
-    public boolean isCaught(Piece piece) {
-        return moveResults.stream()
-                .anyMatch(moveResult -> moveResult.canCatch(piece));
-    }
-
-    public MoveResults add(MoveResults moveResults) {
-        List<MoveResult> results = new ArrayList<>();
-        results.addAll(this.moveResults);
-        results.addAll(moveResults.moveResults);
-        return new MoveResults(results);
     }
 }

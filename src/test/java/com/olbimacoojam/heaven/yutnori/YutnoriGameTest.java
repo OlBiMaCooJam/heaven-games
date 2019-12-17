@@ -32,4 +32,13 @@ class YutnoriGameTest {
 
         assertThrows(IncorrectTurnException.class, () -> yutnoriGame.throwYut(user2));
     }
+
+//    @Test
+//    void move_test() {
+//        YutnoriGame yutnoriGame = new YutnoriGame(() -> Yut.DO);
+//        yutnoriGame.initialize(Arrays.asList(user1, user2));
+//
+//        yutnoriGame.throwYut(user1);
+//        yutnoriGame.move(user1, PointName.STANDBY);
+//    }
 }

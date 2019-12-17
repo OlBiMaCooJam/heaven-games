@@ -1,6 +1,8 @@
 package com.olbimacoojam.heaven.yutnori;
 
 import com.olbimacoojam.heaven.yutnori.point.Point;
+import com.olbimacoojam.heaven.yutnori.point.PointName;
+import com.olbimacoojam.heaven.yutnori.point.Points;
 
 import java.util.Collections;
 import java.util.List;
@@ -13,6 +15,10 @@ public class MoveVerifier {
     public MoveVerifier(Color color, Point point) {
         this.color = color;
         this.point = point;
+    }
+
+    public static MoveVerifier of(Color color, PointName pointName) {
+        return new MoveVerifier(color, Points.get(pointName));
     }
 
     public List<Piece> findMovablePieces(List<Piece> pieces) {
