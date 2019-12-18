@@ -10,18 +10,16 @@ import com.olbimacoojam.heaven.yutnori.yutnorigame.Color;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.util.Arrays;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
-class PieceTest {
+class PieceTest extends YutnoriBaseTest {
     @Test
     @DisplayName("말 움직임 테스트 (대기에서 => 도)")
     void move_test() {
         Piece piece = Piece.of(Color.BLACK, PointName.STANDBY);
         MoveResult moveResult = piece.move(Yut.DO);
 
-        Route checkRoute = new Route(Arrays.asList(Points.getStandByPoint(), Points.get(PointName.DO)));
+        Route checkRoute = createRoute(PointName.STANDBY, PointName.DO);
         MoveResult checkMoveResult = new MoveResult(piece, checkRoute);
         assertThat(moveResult).isEqualTo(checkMoveResult);
         assertThat(piece.getPoint()).isEqualTo(Points.get(PointName.DO));
@@ -34,7 +32,7 @@ class PieceTest {
         Piece piece = Piece.of(Color.BLACK, PointName.STANDBY);
         MoveResult moveResult = piece.move(Yut.MO);
 
-        Route checkRoute = new Route(Arrays.asList(Points.getStandByPoint(), Points.get(PointName.DO), Points.get(PointName.GAE), Points.get(PointName.GUL), Points.get(PointName.YUT), Points.get(PointName.MO)));
+        Route checkRoute = createRoute(PointName.STANDBY, PointName.DO, PointName.GAE, PointName.GUL, PointName.YUT, PointName.MO);
         MoveResult checkMoveResult = new MoveResult(piece, checkRoute);
         assertThat(moveResult).isEqualTo(checkMoveResult);
         assertThat(piece.getPoint()).isEqualTo(Points.get(PointName.MO));
@@ -46,7 +44,7 @@ class PieceTest {
         Piece piece = Piece.of(Color.BLACK, PointName.MO);
         MoveResult moveResult = piece.move(Yut.GAE );
 
-        Route checkRoute = new Route(Arrays.asList(Points.get(PointName.MO), Points.get(PointName.MODO), Points.get(PointName.MOGAE)));
+        Route checkRoute = createRoute(PointName.MO, PointName.MODO, PointName.MOGAE);
         MoveResult checkMoveResult = new MoveResult(piece, checkRoute);
         assertThat(moveResult).isEqualTo(checkMoveResult);
         assertThat(piece.getPoint()).isEqualTo(Points.get(PointName.MOGAE));
@@ -58,7 +56,7 @@ class PieceTest {
         Piece piece = Piece.of(Color.BLACK, PointName.MO);
         MoveResult moveResult = piece.goBackToStandBy();
 
-        Route checkRoute = new Route(Arrays.asList(Points.get(PointName.MO), Points.get(PointName.STANDBY)));
+        Route checkRoute = createRoute(PointName.MO, PointName.STANDBY);
         MoveResult checkMoveResult = new MoveResult(piece, checkRoute);
         assertThat(moveResult).isEqualTo(checkMoveResult);
         assertThat(piece.getPoint()).isEqualTo(Points.get(PointName.STANDBY));

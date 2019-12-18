@@ -7,7 +7,7 @@ import com.olbimacoojam.heaven.yutnori.piece.Piece;
 import com.olbimacoojam.heaven.yutnori.piece.moveresult.MoveResult;
 import com.olbimacoojam.heaven.yutnori.piece.moveresult.MoveResults;
 import com.olbimacoojam.heaven.yutnori.piece.moveresult.Route;
-import com.olbimacoojam.heaven.yutnori.point.Points;
+import com.olbimacoojam.heaven.yutnori.point.PointName;
 import com.olbimacoojam.heaven.yutnori.yut.Yut;
 import com.olbimacoojam.heaven.yutnori.yutnorigame.Color;
 import com.olbimacoojam.heaven.yutnori.yutnorigame.Turn;
@@ -17,12 +17,11 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 
-import static com.olbimacoojam.heaven.yutnori.point.PointName.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-class TurnTest {
+class TurnTest extends YutnoriBaseTest {
     private User turnUser;
     private User other;
     private Turn turn;
@@ -99,8 +98,8 @@ class TurnTest {
         turn.saveOneThrow(turnUser, Yut.DO);
         turn.consumeYut(turnUser, Yut.DO);
 
-        Route route = new Route(Arrays.asList(Points.get(DO), Points.get(GAE)));
-        MoveResult moveResult = new MoveResult(Piece.of(Color.BLACK, DO), route);
+        Route route = createRoute(PointName.DO, PointName.GAE);
+        MoveResult moveResult = new MoveResult(Piece.of(Color.BLACK, PointName.DO), route);
         MoveResults moveResults = new MoveResults(Arrays.asList(moveResult));
 
         Turn nextTurn = turn.next(moveResults, yutnoriParticipants);
@@ -116,8 +115,8 @@ class TurnTest {
         turn.saveOneThrow(turnUser, Yut.DO);
         turn.consumeYut(turnUser, Yut.DO);
 
-        Route route = new Route(Arrays.asList(Points.get(DO), Points.get(GAE)));
-        MoveResult moveResult = new MoveResult(Piece.of(Color.BLACK, DO), route);
+        Route route = createRoute(PointName.DO, PointName.GAE);
+        MoveResult moveResult = new MoveResult(Piece.of(Color.BLACK, PointName.DO), route);
         MoveResults moveResults = new MoveResults(Arrays.asList(moveResult));
 
         Turn nextTurn = turn.next(moveResults, yutnoriParticipants);
@@ -133,10 +132,10 @@ class TurnTest {
         turn.saveOneThrow(turnUser, Yut.DO);
         turn.consumeYut(turnUser, Yut.DO);
 
-        Route route = new Route(Arrays.asList(Points.get(DO), Points.get(GAE)));
-        MoveResult moveResult = new MoveResult(Piece.of(Color.BLACK, GAE), route);
-        Route caughtRoute = new Route(Arrays.asList(Points.get(GAE), Points.get(STANDBY)));
-        MoveResult moveResult2 = new MoveResult(Piece.of(Color.RED, STANDBY), caughtRoute);
+        Route route = createRoute(PointName.DO, PointName.GAE);
+        MoveResult moveResult = new MoveResult(Piece.of(Color.BLACK, PointName.GAE), route);
+        Route caughtRoute = createRoute(PointName.GAE, PointName.STANDBY);
+        MoveResult moveResult2 = new MoveResult(Piece.of(Color.RED, PointName.STANDBY), caughtRoute);
         MoveResults moveResults = new MoveResults(Arrays.asList(moveResult, moveResult2));
 
         Turn nextTurn = turn.next(moveResults, yutnoriParticipants);
