@@ -24,13 +24,7 @@ public class CompletePoint implements Point {
     }
 
     @Override
-    public int getPosition() {
-        return 0;
-    }
-
-    @Override
     public void makeConnection(Point previousPoint, Point nextPoint) {
-
     }
 
     @Override

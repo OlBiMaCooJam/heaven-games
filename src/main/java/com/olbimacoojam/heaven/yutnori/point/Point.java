@@ -28,8 +28,6 @@ public interface Point {
 
     PointName getPointName();
 
-    int getPosition();
-
     default boolean isRightDiagonal() {
         return false;
     }

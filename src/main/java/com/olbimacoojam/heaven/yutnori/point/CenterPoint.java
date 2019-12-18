@@ -26,11 +26,6 @@ public class CenterPoint implements Point {
     }
 
     @Override
-    public int getPosition() {
-        return 0;
-    }
-
-    @Override
     public void makeConnection(Point previousPoint, Point nextPoint) {
         this.previousPoint = previousPoint;
         this.rightNextPoint = nextPoint;

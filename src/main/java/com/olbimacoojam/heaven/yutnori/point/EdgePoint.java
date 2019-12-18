@@ -24,16 +24,6 @@ public class EdgePoint implements Point {
     }
 
     @Override
-    public Point getPreviousPoint() {
-        return null;
-    }
-
-    @Override
-    public int getPosition() {
-        return 0;
-    }
-
-    @Override
     public void makeConnection(Point previousPoint, Point nextPoint) {
         this.previousPoint = previousPoint;
         this.nextPoint = nextPoint;
@@ -48,8 +38,8 @@ public class EdgePoint implements Point {
     public String toString() {
         return "EdgePoint{" +
                 "pointName=" + pointName +
-                ", nextPoint=" + nextPoint.getPosition() +
-                ", inflectPoint=" + inflectPoint.getPosition() +
+                ", nextPoint=" + nextPoint.getPointName() +
+                ", inflectPoint=" + inflectPoint.getPointName() +
                 '}';
     }
 }

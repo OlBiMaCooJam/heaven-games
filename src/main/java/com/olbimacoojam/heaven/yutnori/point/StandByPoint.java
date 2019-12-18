@@ -24,11 +24,6 @@ public class StandByPoint implements Point {
     }
 
     @Override
-    public int getPosition() {
-        return 0;
-    }
-
-    @Override
     public void makeConnection(Point previousPoint, Point nextPoint) {
         this.nextPoint = nextPoint;
     }
