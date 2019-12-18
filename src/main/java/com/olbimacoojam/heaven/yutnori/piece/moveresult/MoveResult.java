@@ -2,9 +2,11 @@ package com.olbimacoojam.heaven.yutnori.piece.moveresult;
 
 import com.olbimacoojam.heaven.yutnori.piece.Piece;
 import com.olbimacoojam.heaven.yutnori.point.PointName;
+import lombok.ToString;
 
 import java.util.Objects;
 
+@ToString
 public class MoveResult {
     private final Piece piece;
     private final Route route;

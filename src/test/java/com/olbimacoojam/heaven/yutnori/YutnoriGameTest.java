@@ -183,4 +183,53 @@ class YutnoriGameTest extends YutnoriBaseTest {
 
         assertDoesNotThrow(() -> yutnoriGame.move(user1, PointName.DO, Yut.MO));
     }
+
+    @Test
+    @DisplayName("도였을 때 빽도 나옴")
+    void move_test9() {
+        Piece piece = Piece.of(Color.BLACK, PointName.DO);
+
+        YutnoriGame yutnoriGame = new YutnoriGame(yutnoriParticipants -> new Board(Arrays.asList(piece)));
+        yutnoriGame.initialize(Arrays.asList(user1, user2));
+
+        yutnoriGame.throwYut(user1, () -> Yut.BACKDO);
+        MoveResults moveResults = yutnoriGame.move(user1, PointName.DO, Yut.BACKDO);
+
+        MoveResults expectedMoveResults = new MoveResults(Arrays.asList(
+                new MoveResult(piece, createRoute(PointName.DO, PointName.STANDBY))
+        ));
+
+        assertThat(moveResults).isEqualTo(expectedMoveResults);
+    }
+
+    @Test
+    @DisplayName("StandBy에 있을 때 빽도 나옴")
+    void move_test10() {
+        Piece piece = Piece.of(Color.BLACK, PointName.STANDBY);
+
+        YutnoriGame yutnoriGame = new YutnoriGame(yutnoriParticipants -> new Board(Arrays.asList(piece)));
+        yutnoriGame.initialize(Arrays.asList(user1, user2));
+
+        yutnoriGame.throwYut(user1, () -> Yut.BACKDO);
+        MoveResults moveResults = yutnoriGame.move(user1, PointName.STANDBY, Yut.BACKDO);
+
+        MoveResults expectedMoveResults = new MoveResults(Arrays.asList(
+                new MoveResult(piece, createRoute(PointName.STANDBY, PointName.STANDBY))
+        ));
+
+        assertThat(moveResults).isEqualTo(expectedMoveResults);
+    }
+
+    @Test
+    @DisplayName("StandBy에 있을 때 예")
+    void move_test11() {
+        Piece piece = Piece.of(Color.BLACK, PointName.STANDBY);
+
+        YutnoriGame yutnoriGame = new YutnoriGame(yutnoriParticipants -> new Board(Arrays.asList(piece)));
+        yutnoriGame.initialize(Arrays.asList(user1, user2));
+
+        yutnoriGame.throwYut(user1, () -> Yut.BACKDO);
+
+        assertThrows(IncorrectTurnException.class, () -> yutnoriGame.throwYut(user1, () -> Yut.MO));
+    }
 }

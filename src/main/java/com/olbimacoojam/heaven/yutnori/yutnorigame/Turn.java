@@ -41,9 +41,10 @@ public class Turn {
         return yutnoriParticipant.isRightThrower(user);
     }
 
-    public boolean consumeYut(User user, Yut yut) {
+    public void consumeYut(User user, Yut yut) {
         if (canMove(user, yut)) {
-            return thrownYuts.remove(yut);
+            thrownYuts.remove(yut);
+            return;
         }
         throw new NotExistYutException(yut.name());
     }

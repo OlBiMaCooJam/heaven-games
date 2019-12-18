@@ -53,7 +53,7 @@ class BoardTest extends YutnoriBaseTest {
 
         MoveResult moveResult1 = new MoveResult(piece1, createRoute(PointName.GUL, PointName.YUT, PointName.MO));
         MoveResult moveResult2 = new MoveResult(piece3, createRoute(PointName.GUL, PointName.YUT, PointName.MO));
-        MoveResult moveResult3 = new MoveResult(piece4, createRoute(PointName.MO, PointName.STANDBY, PointName.MO));
+        MoveResult moveResult3 = new MoveResult(piece4, createRoute(PointName.MO, PointName.STANDBY));
         MoveResults checkMoveResults = new MoveResults(Arrays.asList(moveResult1, moveResult2, moveResult3));
         assertThat(finalMoveResults).isEqualTo(checkMoveResults);
     }

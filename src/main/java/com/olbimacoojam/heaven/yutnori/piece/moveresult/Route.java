@@ -7,6 +7,7 @@ import lombok.EqualsAndHashCode;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @EqualsAndHashCode
 public class Route {
@@ -48,5 +49,17 @@ public class Route {
     public boolean isDestination(PointName pointName) {
         Point destination = getDestination();
         return destination.isName(pointName);
+    }
+
+    @Override
+    public String toString() {
+        String route = this.route.stream()
+                .map(Point::getPointName)
+                .map(PointName::name)
+                .collect(Collectors.joining(", "));
+
+        return "Route{" +
+                "route=" + route +
+                '}';
     }
 }

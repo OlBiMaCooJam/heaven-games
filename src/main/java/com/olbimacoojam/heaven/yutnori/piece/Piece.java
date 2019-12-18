@@ -7,7 +7,9 @@ import com.olbimacoojam.heaven.yutnori.point.PointName;
 import com.olbimacoojam.heaven.yutnori.point.Points;
 import com.olbimacoojam.heaven.yutnori.yut.Yut;
 import com.olbimacoojam.heaven.yutnori.yutnorigame.Color;
+import lombok.Getter;
 
+@Getter
 public class Piece {
     private final Color color;
     private Point point;

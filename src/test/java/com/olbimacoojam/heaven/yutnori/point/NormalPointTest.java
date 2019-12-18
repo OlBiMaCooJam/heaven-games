@@ -25,4 +25,20 @@ class NormalPointTest {
         assertThat(route).isEqualTo(expectedRoute);
     }
 
+    @Test
+    @DisplayName("빽도일때 뒤로가기 테스트")
+    void findPreviousPoint() {
+        Point origin = new NormalPoint(PointName.GAE);
+        Point destination = new NormalPoint(PointName.DO);
+        Point noGoPoint = new NormalPoint(PointName.GUL);
+
+        origin.makeConnection(destination, noGoPoint);
+        destination.makeConnection(null, origin);
+        noGoPoint.makeConnection(origin, null);
+
+        Route route = new Route();
+        origin.findRoute(route, Yut.BACKDO);
+        Route expectedRoute = new Route(Arrays.asList(origin, destination));
+        assertThat(route).isEqualTo(expectedRoute);
+    }
 }
