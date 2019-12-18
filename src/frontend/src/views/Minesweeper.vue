@@ -86,7 +86,7 @@
                   @click.left="clickLeft(x-1, y-1)"
                   @click.right="clickRight(x-1, y-1, $event)"
               >
-                <v-icon>{{board.blocks[y-1][x-1].status}}</v-icon>
+                <v-icon>{{board.blocks[y-1][x-1]}}</v-icon>
               </v-btn>
             </v-col>
           </template>
@@ -133,34 +133,27 @@
         for (let i = 0; i < this.board.rows; i++) {
           this.board.blocks.push([]);
           for (let j = 0; j < this.board.columns; j++) {
-            this.board.blocks[i].push({status: this.icons.UNCLICKED, clicked: false});
+            this.board.blocks[i].push(this.icons.UNCLICKED);
           }
         }
       },
       async clickLeft(x, y) {
-        const response = await this.click(x, y, "LEFT");
-        const blockStatus = response.data.blockStatus;
-        const numberOfAroundMines = response.data.numberOfAroundMines;
-
-        if (response.status === 200) {
-          this.board.blocks = this.changeStatus(x, y, blockStatus, numberOfAroundMines);
-          this.board.blocks[y][x].clicked = true;
-          if (blockStatus === "CLICKED" && numberOfAroundMines === 0) {
-            this.propagateBlanks(x, y);
-          }
+        const clickedBlocks = await this.click(x, y, "LEFT");
+        for (let i = 0, len = clickedBlocks.length; i < len; i++) {
+          const clickedBlock = clickedBlocks[i];
+          this.board.blocks = this.changeStatus(clickedBlock.x, clickedBlock.y,
+              clickedBlock.blockStatus, clickedBlock.numberOfAroundMines);
         }
       },
       async clickRight(x, y, event) {
         event.preventDefault();
-        const response = await this.click(x, y, "RIGHT");
-        if (response.status === 200) {
-          this.board.blocks = this.changeStatus(x, y, response.data.blockStatus);
-        }
+        const clickedBlocks = await this.click(x, y, "RIGHT");
+        this.board.blocks = this.changeStatus(x, y, clickedBlocks[0].blockStatus, clickedBlocks[0].numberOfAroundMines);
       },
       changeStatus(x, y, blockStatus, numberOfAroundMines) {
         const nextStatus = this.getNextStatus(blockStatus, numberOfAroundMines);
         let newBoard = [...this.board.blocks];
-        newBoard[y].splice(x, 1, {status: nextStatus, clicked: this.board.blocks[y][x].clicked});
+        newBoard[y].splice(x, 1, nextStatus);
         return newBoard;
       },
       getNextStatus(status, numberOfAroundMines) {
@@ -168,15 +161,6 @@
           return this.icons.CLICKED[numberOfAroundMines];
         }
         return this.icons[status]
-      },
-      async propagateBlanks(x, y) {
-        for (let i = y - 1; i <= y + 1; i++) {
-          for (let j = x - 1; j <= x + 1; j++) {
-            if (i >= 0 && j >= 0 && i < this.board.columns && j < this.board.rows && this.board.blocks[j][i].clicked === false) {
-              this.clickLeft(j, i)
-            }
-          }
-        }
       },
       checkNumMines() {
         const maxMines = this.board.rows * this.board.columns - 1;
@@ -188,6 +172,23 @@
       createBoard() {
         this.addBlock();
         this.gameCreated = true;
+      },
+      parseBlocks(clickedBlocks) {
+        const blocks = [];
+        for (let block in clickedBlocks) {
+          const position = this.parsePosition(block);
+          clickedBlocks[block].x = position.x;
+          clickedBlocks[block].y = position.y;
+          blocks.push(clickedBlocks[block])
+        }
+
+        return blocks;
+      },
+      parsePosition(block) {
+        return {
+          x: block.match("x=[0-9]+")[0].split("=")[1],
+          y: block.match("y=[0-9]+")[0].split("=")[1]
+        }
       },
       async createGame() {
         try {
@@ -204,15 +205,16 @@
           alert(error)
         }
       },
-      click(x, y, clickType) {
+      async click(x, y, clickType) {
         try {
-          return axios.put('/rooms/1/minesweeper', {
+          const response = await axios.put('/rooms/1/minesweeper', {
             position: {
               x: x,
               y: y
             },
             clickType: clickType
           });
+          return this.parseBlocks(response.data.clickedBlocks);
         } catch (error) {
           alert(error)
         }
