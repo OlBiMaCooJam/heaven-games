@@ -11,15 +11,12 @@ import com.olbimacoojam.heaven.yutnori.yut.YutThrowStrategy;
 import java.util.List;
 
 public class YutnoriGame implements Game {
-
-    private final YutThrowStrategy yutThrowStrategy;
     private final BoardCreateStrategy boardCreateStrategy;
     private YutnoriParticipants yutnoriParticipants;
     private Board board;
     private Turn turn;
 
-    public YutnoriGame(YutThrowStrategy yutThrowStrategy, BoardCreateStrategy boardCreateStrategy) {
-        this.yutThrowStrategy = yutThrowStrategy;
+    public YutnoriGame(BoardCreateStrategy boardCreateStrategy) {
         this.boardCreateStrategy = boardCreateStrategy;
     }
 
@@ -30,7 +27,7 @@ public class YutnoriGame implements Game {
         board = boardCreateStrategy.createBoard(yutnoriParticipants);
     }
 
-    public Yut throwYut(User thrower) {
+    public Yut throwYut(User thrower, YutThrowStrategy yutThrowStrategy) {
         Yut yut = yutThrowStrategy.throwYut();
         return turn.saveOneThrow(thrower, yut);
     }

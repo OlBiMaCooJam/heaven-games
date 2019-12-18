@@ -2,55 +2,56 @@ package com.olbimacoojam.heaven.yutnori;
 
 import com.olbimacoojam.heaven.domain.User;
 import com.olbimacoojam.heaven.yutnori.exception.IncorrectTurnException;
+import com.olbimacoojam.heaven.yutnori.exception.NotExistYutException;
 import com.olbimacoojam.heaven.yutnori.piece.Piece;
 import com.olbimacoojam.heaven.yutnori.piece.moveresult.MoveResult;
 import com.olbimacoojam.heaven.yutnori.piece.moveresult.MoveResults;
-import com.olbimacoojam.heaven.yutnori.piece.moveresult.Route;
 import com.olbimacoojam.heaven.yutnori.point.PointName;
-import com.olbimacoojam.heaven.yutnori.point.Points;
 import com.olbimacoojam.heaven.yutnori.yut.Yut;
 import com.olbimacoojam.heaven.yutnori.yutnorigame.Board;
 import com.olbimacoojam.heaven.yutnori.yutnorigame.Color;
 import com.olbimacoojam.heaven.yutnori.yutnorigame.OneOnOneStrategy;
 import com.olbimacoojam.heaven.yutnori.yutnorigame.YutnoriGame;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
-class YutnoriGameTest {
+class YutnoriGameTest extends YutnoriBaseTest {
     private User user1 = new User(1L, "user1", "token1");
     private User user2 = new User(2L, "user2", "token2");
 
     @Test
     void throw_yut_test() {
-        YutnoriGame yutnoriGame = new YutnoriGame(() -> Yut.DO, new OneOnOneStrategy());
+        YutnoriGame yutnoriGame = new YutnoriGame(new OneOnOneStrategy());
         yutnoriGame.initialize(Arrays.asList(user1, user2));
 
-        assertThat(yutnoriGame.throwYut(user1)).isEqualTo(Yut.DO);
-        assertThrows(IncorrectTurnException.class, () -> yutnoriGame.throwYut(user2));
-        assertThrows(IncorrectTurnException.class, () -> yutnoriGame.throwYut(user1));
+        assertThat(yutnoriGame.throwYut(user1, () -> Yut.DO)).isEqualTo(Yut.DO);
+        assertThrows(IncorrectTurnException.class, () -> yutnoriGame.throwYut(user2, () -> Yut.DO));
+        assertThrows(IncorrectTurnException.class, () -> yutnoriGame.throwYut(user1, () -> Yut.DO));
     }
 
     @Test
     void fail_throw_yut_test() {
-        YutnoriGame yutnoriGame = new YutnoriGame(() -> Yut.DO, new OneOnOneStrategy());
+        YutnoriGame yutnoriGame = new YutnoriGame(new OneOnOneStrategy());
         yutnoriGame.initialize(Arrays.asList(user1, user2));
 
-        assertThrows(IncorrectTurnException.class, () -> yutnoriGame.throwYut(user2));
+        assertThrows(IncorrectTurnException.class, () -> yutnoriGame.throwYut(user2, () -> Yut.DO));
     }
 
     @Test
     void move_test() {
         Piece piece = Piece.of(Color.BLACK, PointName.STANDBY);
 
-        YutnoriGame yutnoriGame = new YutnoriGame(() -> Yut.DO, yutnoriParticipants -> new Board(Arrays.asList(piece)));
+        YutnoriGame yutnoriGame = new YutnoriGame(yutnoriParticipants -> new Board(Arrays.asList(piece)));
         yutnoriGame.initialize(Arrays.asList(user1, user2));
 
-        yutnoriGame.throwYut(user1);
+        yutnoriGame.throwYut(user1, () -> Yut.DO);
         MoveResults moveResults = yutnoriGame.move(user1, PointName.STANDBY, Yut.DO);
 
         MoveResults expectedMoveResults = new MoveResults(Arrays.asList(
@@ -59,13 +60,127 @@ class YutnoriGameTest {
         assertThat(moveResults).isEqualTo(expectedMoveResults);
     }
 
-    private Route createRoute(PointName... pointNames) {
-        Route route = new Route();
+    @Test
+    @DisplayName("게임진행 시 엎기 테스트")
+    void move_test2() {
+        Piece piece = Piece.of(Color.BLACK, PointName.STANDBY);
+        Piece piece2 = Piece.of(Color.BLACK, PointName.DO);
+        Piece piece3 = Piece.of(Color.RED, PointName.GUL);
 
-        for (PointName pointName : pointNames) {
-            route.add(Points.get(pointName));
-        }
+        YutnoriGame yutnoriGame = new YutnoriGame(yutnoriParticipants -> new Board(Arrays.asList(piece, piece2, piece3)));
+        yutnoriGame.initialize(Arrays.asList(user1, user2));
 
-        return route;
+        yutnoriGame.throwYut(user1, () -> Yut.DO);
+        yutnoriGame.move(user1, PointName.STANDBY, Yut.DO);
+
+        yutnoriGame.throwYut(user2, () -> Yut.DO);
+        yutnoriGame.move(user2, PointName.GUL, Yut.DO);
+
+        yutnoriGame.throwYut(user1, () -> Yut.DO);
+        MoveResults moveResults = yutnoriGame.move(user1, PointName.DO, Yut.DO);
+
+        MoveResults expectedMoveResults = new MoveResults(Arrays.asList(
+                new MoveResult(piece, createRoute(PointName.DO, PointName.GAE)),
+                new MoveResult(piece2, createRoute(PointName.DO, PointName.GAE))
+        ));
+        assertThat(moveResults).isEqualTo(expectedMoveResults);
+    }
+
+    @Test
+    @DisplayName("게임 진행시 잡기 테스트")
+    void move_test3() {
+        Piece piece = Piece.of(Color.BLACK, PointName.STANDBY);
+        Piece piece2 = Piece.of(Color.RED, PointName.DO);
+
+        YutnoriGame yutnoriGame = new YutnoriGame(yutnoriParticipants -> new Board(Arrays.asList(piece, piece2)));
+        yutnoriGame.initialize(Arrays.asList(user1, user2));
+
+        yutnoriGame.throwYut(user1, () -> Yut.DO);
+        MoveResults moveResults = yutnoriGame.move(user1, PointName.STANDBY, Yut.DO);
+
+        MoveResults expectedMoveResults = new MoveResults(Arrays.asList(
+                new MoveResult(piece, createRoute(PointName.STANDBY, PointName.DO)),
+                new MoveResult(piece2, createRoute(PointName.DO, PointName.STANDBY))
+        ));
+        assertThat(moveResults).isEqualTo(expectedMoveResults);
+    }
+
+    @Test
+    @DisplayName("게임 진행시 잡기 예외1:잡았는데 움직이려 할 때")
+    void move_test4() {
+        Piece piece = Piece.of(Color.BLACK, PointName.STANDBY);
+        Piece piece2 = Piece.of(Color.RED, PointName.DO);
+        Piece piece3 = Piece.of(Color.RED, PointName.GAE);
+
+        YutnoriGame yutnoriGame = new YutnoriGame(yutnoriParticipants -> new Board(Arrays.asList(piece, piece2, piece3)));
+        yutnoriGame.initialize(Arrays.asList(user1, user2));
+
+        yutnoriGame.throwYut(user1, () -> Yut.DO);
+        yutnoriGame.move(user1, PointName.STANDBY, Yut.DO);
+
+        assertThrows(NotExistYutException.class, () -> yutnoriGame.move(user1, PointName.DO, Yut.DO));
+    }
+
+    @Test
+    @DisplayName("게임 진행시 잡기 예외2:잡았는데 다른 팀이 움직이려 할 때")
+    void move_test5() {
+        Piece piece = Piece.of(Color.BLACK, PointName.STANDBY);
+        Piece piece2 = Piece.of(Color.RED, PointName.DO);
+        Piece piece3 = Piece.of(Color.RED, PointName.GAE);
+
+        YutnoriGame yutnoriGame = new YutnoriGame(yutnoriParticipants -> new Board(Arrays.asList(piece, piece2, piece3)));
+        yutnoriGame.initialize(Arrays.asList(user1, user2));
+
+        yutnoriGame.throwYut(user1, () -> Yut.DO);
+        yutnoriGame.move(user1, PointName.STANDBY, Yut.DO);
+
+        assertThrows(NotExistYutException.class, () -> yutnoriGame.move(user2, PointName.DO, Yut.DO));
+    }
+
+    @Test
+    @DisplayName("게임 진행시 잡았을 때")
+    void move_test6() {
+        Piece piece = Piece.of(Color.BLACK, PointName.STANDBY);
+        Piece piece2 = Piece.of(Color.RED, PointName.DO);
+        Piece piece3 = Piece.of(Color.RED, PointName.GAE);
+
+        YutnoriGame yutnoriGame = new YutnoriGame(yutnoriParticipants -> new Board(Arrays.asList(piece, piece2, piece3)));
+        yutnoriGame.initialize(Arrays.asList(user1, user2));
+
+        yutnoriGame.throwYut(user1, () -> Yut.DO);
+        yutnoriGame.move(user1, PointName.STANDBY, Yut.DO);
+
+        assertDoesNotThrow(() -> yutnoriGame.throwYut(user1, () -> Yut.GAE));
+        assertDoesNotThrow(() -> yutnoriGame.move(user1, PointName.GAE, Yut.GAE));
+    }
+
+    @Test
+    @DisplayName("모가 나온 다음 던지지 않고 말을 이동시키려 할 때")
+    void move_test7() {
+        Piece piece = Piece.of(Color.BLACK, PointName.STANDBY);
+
+        YutnoriGame yutnoriGame = new YutnoriGame(yutnoriParticipants -> new Board(Arrays.asList(piece)));
+        yutnoriGame.initialize(Arrays.asList(user1, user2));
+
+        yutnoriGame.throwYut(user1, () -> Yut.MO);
+
+        assertThrows(NotExistYutException.class, () -> yutnoriGame.move(user1, PointName.STANDBY, Yut.MO));
+    }
+
+    @Test
+    @DisplayName("모+윷+도 나온 다음 도를 사용해 이동시킨 다음 모를 사용해 움직이려 할 때")
+    void move_test8() {
+        Piece piece = Piece.of(Color.BLACK, PointName.STANDBY);
+
+        YutnoriGame yutnoriGame = new YutnoriGame(yutnoriParticipants -> new Board(Arrays.asList(piece)));
+        yutnoriGame.initialize(Arrays.asList(user1, user2));
+
+        yutnoriGame.throwYut(user1, () -> Yut.MO);
+        yutnoriGame.throwYut(user1, () -> Yut.YUT);
+        yutnoriGame.throwYut(user1, () -> Yut.DO);
+
+        yutnoriGame.move(user1, PointName.STANDBY, Yut.DO);
+
+        assertDoesNotThrow(() -> yutnoriGame.move(user1, PointName.DO, Yut.MO));
     }
 }
