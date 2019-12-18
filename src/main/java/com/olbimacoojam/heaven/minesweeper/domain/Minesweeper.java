@@ -56,8 +56,8 @@ public class Minesweeper implements Game {
         }
 
         ClickedBlocks clickedBlocks = ClickedBlocks.of(click.getPosition(), clickedBlock);
-        if (clickedBlock.isBlankBlock()) {
-            clickedBlocks.putAll(propagateBlanks(click));
+        if (clickedBlock.isBlankBlock() && click.getClickType().isLeftClick()) {
+            return clickedBlocks.putAll(propagateBlanks(click));
         }
 
         return clickedBlocks;
@@ -66,13 +66,10 @@ public class Minesweeper implements Game {
     private ClickedBlocks propagateBlanks(Click click) {
         Position position = click.getPosition();
 
-        ClickedBlocks clickedBlocks = ClickedBlocks.newClickedBlocks();
-        position.getAroundPositions().stream()
+        return position.getAroundPositions().stream()
                 .filter(pos -> board.contains(pos) && !board.isClicked(pos))
                 .map(pos -> click(user, Click.leftClickOn(pos)))
-                .forEach(clickedBlocks::putAll);
-
-        return clickedBlocks;
+                .reduce(ClickedBlocks.newClickedBlocks(), ClickedBlocks::putAll);
     }
 
     private void checkGameOver() {

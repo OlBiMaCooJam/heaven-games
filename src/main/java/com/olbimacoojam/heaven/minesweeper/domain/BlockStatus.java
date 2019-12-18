@@ -7,11 +7,8 @@ public enum BlockStatus {
     FLAG,
     QUESTION_MARK;
 
-    private static final String LEFT_CLICK = "LEFT";
-    private static final String RIGHT_CLICK = "RIGHT";
-
     public BlockStatus nextStatus(ClickType clickType, boolean isMine) {
-        if (LEFT_CLICK.equals(clickType.name())) {
+        if (clickType.isLeftClick()) {
             return isMine ? MINE : CLICKED;
         }
 

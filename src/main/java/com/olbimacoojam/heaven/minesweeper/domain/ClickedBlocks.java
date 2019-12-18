@@ -27,7 +27,11 @@ public class ClickedBlocks {
         return new ClickedBlocks(clickedBlocks);
     }
 
-    public void putAll(ClickedBlocks clickedBlocks) {
-        this.clickedBlocks.putAll(clickedBlocks.clickedBlocks);
+    public ClickedBlocks putAll(ClickedBlocks clickedBlocks) {
+        ClickedBlocks blocks = new ClickedBlocks();
+        blocks.clickedBlocks.putAll(this.clickedBlocks);
+        blocks.clickedBlocks.putAll(clickedBlocks.clickedBlocks);
+
+        return blocks;
     }
 }
