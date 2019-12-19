@@ -1,9 +1,11 @@
 package com.olbimacoojam.heaven.minesweeper.domain;
 
 import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 @Getter
+@EqualsAndHashCode
 public class Block {
     public static final int BLANK = 0;
     @Getter(AccessLevel.NONE)
