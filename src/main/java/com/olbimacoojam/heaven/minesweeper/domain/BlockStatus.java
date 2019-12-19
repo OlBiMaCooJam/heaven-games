@@ -16,15 +16,15 @@ public enum BlockStatus {
             return this;
         }
 
-        return nextRightClickStatus(this);
+        return nextRightClickStatus();
     }
 
-    private BlockStatus nextRightClickStatus(BlockStatus blockStatus) {
-        if (UNCLICKED.equals(blockStatus)) {
+    private BlockStatus nextRightClickStatus() {
+        if (UNCLICKED.equals(this)) {
             return FLAG;
         }
 
-        if (FLAG.equals(blockStatus)) {
+        if (FLAG.equals(this)) {
             return QUESTION_MARK;
         }
 
