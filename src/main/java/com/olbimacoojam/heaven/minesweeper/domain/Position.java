@@ -1,5 +1,6 @@
 package com.olbimacoojam.heaven.minesweeper.domain;
 
+import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,7 +12,7 @@ import java.util.stream.IntStream;
 
 @Getter
 @EqualsAndHashCode
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class Position {
     private Integer x;
     private Integer y;
