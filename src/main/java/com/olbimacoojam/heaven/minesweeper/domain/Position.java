@@ -1,18 +1,17 @@
 package com.olbimacoojam.heaven.minesweeper.domain;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 @Getter
+@EqualsAndHashCode
 @NoArgsConstructor
-@ToString
 public class Position {
     private static final Integer MAX_Y = 30;
     private static final Integer MAX_X = 30;
@@ -37,19 +36,5 @@ public class Position {
                 .collect(Collectors.toList());
 
         return Collections.unmodifiableList(positions);
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Position position = (Position) o;
-        return Objects.equals(x, position.x) &&
-                Objects.equals(y, position.y);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(x, y);
     }
 }
