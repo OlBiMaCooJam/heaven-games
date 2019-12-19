@@ -5,20 +5,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import javax.persistence.*;
-
-/**
- * temporary class
- */
+import javax.persistence.Column;
+import javax.persistence.Entity;
 
 @Getter
 @Entity
 @ToString
 @NoArgsConstructor
 public class User extends BaseEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
 
     @Column(unique = true)
     private Long kakaoId;

@@ -6,10 +6,13 @@
                     <MafiaCitizen :citizen="citizen" :key="citizen.name" v-for='citizen in citizens'/>
                 </v-row>
             </v-col>
-            <v-col cols="6">
+            <v-col cols="3">
                 <v-row align='center' justify='center'>
                     <Timer :date=date :roomId=id></Timer>
                 </v-row>
+            </v-col>
+            <v-col cols="3">
+                <Vote :dialog=false :citizens="citizens" :vote_msg="vote_message"></Vote>
             </v-col>
         </v-row>
     </v-container>
@@ -18,10 +21,12 @@
 <script>
     import MafiaCitizen from "../components/MafiaCitizen";
     import Timer from "../components/Timer";
+    import Vote from "../components/Vote";
 
     export default {
         name: 'Mafia',
         components: {
+            Vote,
             Timer,
             MafiaCitizen
         },
@@ -39,6 +44,7 @@
                     {name: '모비', occupation: '마피아', src: require('../assets/p10.png')}, // 테스트 데이터
                 ],
                 date: 234, // 테스트 데이터
+                vote_message: "누가 마피아일까?",
             }
         },
         id: 1,
