@@ -33,7 +33,7 @@ public class Block {
     }
 
     public boolean isBlankBlock() {
-        return !isMine && numberOfAroundMines == BLANK && blockStatus.isClicked();
+        return !isMine && numberOfAroundMines == BLANK && isClicked();
     }
 
     public boolean isClicked() {
