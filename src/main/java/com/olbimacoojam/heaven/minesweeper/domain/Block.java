@@ -26,8 +26,8 @@ public class Block {
         return new Block(nextBlockStatus, numberOfAroundMines, isMine);
     }
 
-    public boolean isClickedMine() {
-        return isMine && blockStatus.isClicked();
+    public boolean isMine() {
+        return blockStatus.isMine();
     }
 
     public boolean isBlankBlock() {

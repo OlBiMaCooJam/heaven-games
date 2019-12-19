@@ -23,7 +23,8 @@ public class MinesweeperService {
         return minesweeper;
     }
 
-    public ClickedBlocks click(User user, Integer roomId, Click click, Minesweeper minesweeper) {
-        return minesweeper.click(user, click);
+    public ClickResponse click(User user, Integer roomId, Click click, Minesweeper minesweeper) {
+        ClickedBlocks clickedBlocks = minesweeper.click(user, click);
+        return new ClickResponse(clickedBlocks, minesweeper.isGameOver());
     }
 }

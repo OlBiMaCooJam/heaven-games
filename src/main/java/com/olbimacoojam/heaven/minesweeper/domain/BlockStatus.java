@@ -34,4 +34,8 @@ public enum BlockStatus {
     public boolean isClicked() {
         return CLICKED.equals(this);
     }
+
+    public boolean isMine() {
+        return MINE.equals(this);
+    }
 }

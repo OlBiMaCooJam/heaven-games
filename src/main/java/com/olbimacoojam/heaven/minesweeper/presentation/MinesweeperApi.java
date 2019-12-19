@@ -2,10 +2,10 @@ package com.olbimacoojam.heaven.minesweeper.presentation;
 
 import com.olbimacoojam.heaven.domain.User;
 import com.olbimacoojam.heaven.domain.UserSession;
+import com.olbimacoojam.heaven.minesweeper.application.ClickResponse;
 import com.olbimacoojam.heaven.minesweeper.application.MinesweeperCreateRequest;
 import com.olbimacoojam.heaven.minesweeper.application.MinesweeperService;
 import com.olbimacoojam.heaven.minesweeper.domain.Click;
-import com.olbimacoojam.heaven.minesweeper.domain.ClickedBlocks;
 import com.olbimacoojam.heaven.minesweeper.domain.Minesweeper;
 import com.olbimacoojam.heaven.service.RoomService;
 import lombok.RequiredArgsConstructor;
@@ -38,7 +38,7 @@ public class MinesweeperApi {
     public ResponseEntity click(HttpSession httpSession, @PathVariable Integer roomId, @RequestBody Click click) {
         User user = (User) httpSession.getAttribute(UserSession.USER_SESSION);
         Minesweeper minesweeper = (Minesweeper) httpSession.getAttribute("mine");
-        ClickedBlocks clickedBlocks = minesweeperService.click(user, roomId, click, minesweeper);
-        return ResponseEntity.ok(clickedBlocks);
+        ClickResponse clickResponse = minesweeperService.click(user, roomId, click, minesweeper);
+        return ResponseEntity.ok(clickResponse);
     }
 }

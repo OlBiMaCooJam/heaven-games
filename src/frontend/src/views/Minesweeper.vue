@@ -83,8 +83,8 @@
                   style="height: 64px; background-color: lightgoldenrodyellow; border: 1px solid #E7B547"
                   outlined
                   tile
-                  @click.left="clickLeft(x-1, y-1)"
-                  @click.right="clickRight(x-1, y-1, $event)"
+                  @click.left="clickBlock(x-1, y-1, clickLeft)"
+                  @click.right="clickBlock(x-1, y-1, clickRight, $event)"
               >
                 <v-icon>{{board.blocks[y-1][x-1]}}</v-icon>
               </v-btn>
@@ -113,7 +113,6 @@
           columns: 10,
           mines: 1,
           maxMines: 99,
-
         },
         icons: {
           UNCLICKED: '',
@@ -124,6 +123,7 @@
             'mdi-numeric-3', 'mdi-numeric-4', 'mdi-numeric-5',
             'mdi-numeric-6', 'mdi-numeric-7', 'mdi-numeric-8']
         },
+        gameOver: false,
         dialog: true,
         gameCreated: false,
       }
@@ -137,17 +137,29 @@
           }
         }
       },
+      clickBlock(x, y, clickCallback, event) {
+        if (this.checkGameOver()) {
+          return;
+        }
+
+        clickCallback(x, y, event);
+      },
       async clickLeft(x, y) {
-        const clickedBlocks = await this.click(x, y, "LEFT");
+        const clickResponse = await this.click(x, y, "LEFT");
+        const clickedBlocks = clickResponse.clickedBlocks;
+        this.gameOver = clickResponse.gameOver;
         for (let i = 0, len = clickedBlocks.length; i < len; i++) {
           const clickedBlock = clickedBlocks[i];
           this.board.blocks = this.changeStatus(clickedBlock.x, clickedBlock.y,
               clickedBlock.blockStatus, clickedBlock.numberOfAroundMines);
         }
+
+        this.checkGameOver();
       },
       async clickRight(x, y, event) {
         event.preventDefault();
-        const clickedBlocks = await this.click(x, y, "RIGHT");
+        const clickResponse = await this.click(x, y, "RIGHT");
+        const clickedBlocks = clickResponse.clickedBlocks;
         this.board.blocks = this.changeStatus(x, y, clickedBlocks[0].blockStatus, clickedBlocks[0].numberOfAroundMines);
       },
       changeStatus(x, y, blockStatus, numberOfAroundMines) {
@@ -214,10 +226,20 @@
             },
             clickType: clickType
           });
-          return this.parseBlocks(response.data.clickedBlocks);
+          return {
+            clickedBlocks: this.parseBlocks(response.data.clickedBlocks.clickedBlocks),
+            gameOver: response.data.gameOver
+          };
         } catch (error) {
           alert(error)
         }
+      },
+      checkGameOver() {
+        if (this.gameOver) {
+          alert("GameOver");
+          return true;
+        }
+        return false;
       },
     }
   }
