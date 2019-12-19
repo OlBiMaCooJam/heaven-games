@@ -13,8 +13,6 @@ import java.util.stream.IntStream;
 @EqualsAndHashCode
 @NoArgsConstructor
 public class Position {
-    private static final Integer MAX_Y = 30;
-    private static final Integer MAX_X = 30;
     private Integer x;
     private Integer y;
 
