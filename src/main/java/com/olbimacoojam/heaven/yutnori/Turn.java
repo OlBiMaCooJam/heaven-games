@@ -60,10 +60,6 @@ public class Turn {
         return new Turn(yutnoriParticipants.next(yutnoriParticipant));
     }
 
-//    public boolean canThrow() {
-//        return canThrow;
-//    }
-
     public User getUser() {
         return yutnoriParticipant.getParticipant();
     }
