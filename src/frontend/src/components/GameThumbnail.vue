@@ -25,6 +25,7 @@
       game: {
         title: String,
         src: String,
+        url: String,
         link: String
       }
     }
