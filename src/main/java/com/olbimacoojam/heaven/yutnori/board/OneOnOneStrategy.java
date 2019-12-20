@@ -1,5 +1,8 @@
-package com.olbimacoojam.heaven.yutnori;
+package com.olbimacoojam.heaven.yutnori.board;
 
+import com.olbimacoojam.heaven.yutnori.Color;
+import com.olbimacoojam.heaven.yutnori.participant.YutnoriParticipant;
+import com.olbimacoojam.heaven.yutnori.participant.YutnoriParticipants;
 import com.olbimacoojam.heaven.yutnori.piece.Piece;
 import com.olbimacoojam.heaven.yutnori.point.PointName;
 

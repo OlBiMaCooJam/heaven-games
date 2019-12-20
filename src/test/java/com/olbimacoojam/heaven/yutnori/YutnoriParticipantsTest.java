@@ -1,6 +1,8 @@
 package com.olbimacoojam.heaven.yutnori;
 
 import com.olbimacoojam.heaven.domain.User;
+import com.olbimacoojam.heaven.yutnori.participant.YutnoriParticipant;
+import com.olbimacoojam.heaven.yutnori.participant.YutnoriParticipants;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;

@@ -1,5 +1,7 @@
-package com.olbimacoojam.heaven.yutnori;
+package com.olbimacoojam.heaven.yutnori.board;
 
+import com.olbimacoojam.heaven.yutnori.Color;
+import com.olbimacoojam.heaven.yutnori.MoveVerifier;
 import com.olbimacoojam.heaven.yutnori.piece.Piece;
 import com.olbimacoojam.heaven.yutnori.piece.moveresult.MoveResult;
 import com.olbimacoojam.heaven.yutnori.piece.moveresult.MoveResults;

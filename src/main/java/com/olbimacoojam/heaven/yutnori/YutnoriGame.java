@@ -2,7 +2,10 @@ package com.olbimacoojam.heaven.yutnori;
 
 import com.olbimacoojam.heaven.domain.User;
 import com.olbimacoojam.heaven.game.Game;
+import com.olbimacoojam.heaven.yutnori.board.Board;
+import com.olbimacoojam.heaven.yutnori.board.BoardCreateStrategy;
 import com.olbimacoojam.heaven.yutnori.exception.IllegalTurnException;
+import com.olbimacoojam.heaven.yutnori.participant.YutnoriParticipants;
 import com.olbimacoojam.heaven.yutnori.piece.moveresult.MoveResults;
 import com.olbimacoojam.heaven.yutnori.point.PointName;
 import com.olbimacoojam.heaven.yutnori.yut.Yut;

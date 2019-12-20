@@ -1,6 +1,8 @@
 package com.olbimacoojam.heaven.yutnori;
 
 import com.olbimacoojam.heaven.domain.User;
+import com.olbimacoojam.heaven.yutnori.board.Board;
+import com.olbimacoojam.heaven.yutnori.board.OneOnOneStrategy;
 import com.olbimacoojam.heaven.yutnori.exception.IllegalTurnException;
 import com.olbimacoojam.heaven.yutnori.piece.Piece;
 import com.olbimacoojam.heaven.yutnori.piece.moveresult.MoveResult;

@@ -1,6 +1,7 @@
-package com.olbimacoojam.heaven.yutnori;
+package com.olbimacoojam.heaven.yutnori.participant;
 
 import com.olbimacoojam.heaven.domain.User;
+import com.olbimacoojam.heaven.yutnori.Color;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
