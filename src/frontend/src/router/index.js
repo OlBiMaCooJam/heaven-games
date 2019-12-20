@@ -29,6 +29,11 @@ const routes = [
     name: 'login',
     component: () => import('../views/Login.vue')
   },
+  {
+    path: '/minesweeper',
+    name: 'minesweeper',
+    component: () => import('../views/Minesweeper.vue')
+  },
 
 ]
 
