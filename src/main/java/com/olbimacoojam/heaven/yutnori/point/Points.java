@@ -57,4 +57,8 @@ public class Points {
     public static Point get(PointName pointName) {
         return points.get(pointName);
     }
+
+    public static boolean isCompleted(Point point) {
+        return points.get(COMPLETE).equals(point);
+    }
 }

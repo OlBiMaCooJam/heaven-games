@@ -4,9 +4,9 @@ import com.olbimacoojam.heaven.domain.User;
 import com.olbimacoojam.heaven.game.Game;
 import com.olbimacoojam.heaven.yutnori.piece.moveresult.MoveResults;
 import com.olbimacoojam.heaven.yutnori.point.PointName;
-import com.olbimacoojam.heaven.yutnori.point.Points;
 import com.olbimacoojam.heaven.yutnori.yut.Yut;
 import com.olbimacoojam.heaven.yutnori.yut.YutThrowStrategy;
+import com.olbimacoojam.heaven.yutnori.yutnorigame.exception.IllegalTurnException;
 
 import java.util.List;
 
@@ -33,10 +33,27 @@ public class YutnoriGame implements Game {
     }
 
     public MoveResults move(User user, PointName pointName, Yut yut) {
-        turn.consumeYut(user, yut);
-        MoveVerifier moveVerifier = new MoveVerifier(turn.getTeamColor(), Points.get(pointName));
+        checkTurn(user, yut);
+
+        Color teamColor = turn.getTeamColor();
+
+        MoveVerifier moveVerifier = MoveVerifier.of(teamColor, pointName);
         MoveResults moveResults = board.move(moveVerifier, yut);
+        turn.removeYut(yut);
+
+        if (board.isComplete(teamColor)) {
+            yutnoriParticipants.finish(teamColor);
+        }
+
         turn = turn.next(moveResults, yutnoriParticipants);
+
         return moveResults;
+    }
+
+    private void checkTurn(User user, Yut yut) {
+        if (turn.canMove(user, yut)) {
+            return;
+        }
+        throw new IllegalTurnException();
     }
 }

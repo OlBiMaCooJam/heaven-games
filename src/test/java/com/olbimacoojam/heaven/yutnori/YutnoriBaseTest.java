@@ -5,7 +5,7 @@ import com.olbimacoojam.heaven.yutnori.point.PointName;
 import com.olbimacoojam.heaven.yutnori.point.Points;
 
 public abstract class YutnoriBaseTest {
-    Route createRoute(PointName... pointNames) {
+    protected Route createRoute(PointName... pointNames) {
         Route route = new Route();
 
         for (PointName pointName : pointNames) {

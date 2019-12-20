@@ -7,6 +7,7 @@ import lombok.Getter;
 @Getter
 @EqualsAndHashCode
 public class YutnoriParticipant {
+
     private final User participant;
     private final Color color;
 
@@ -21,5 +22,17 @@ public class YutnoriParticipant {
 
     public String getName() {
         return participant.getName();
+    }
+
+    public boolean isColor(Color color) {
+        return this.color.equals(color);
+    }
+
+    @Override
+    public String toString() {
+        return "YutnoriParticipant{" +
+                "participant=" + participant +
+                ", color=" + color +
+                '}';
     }
 }

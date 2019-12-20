@@ -44,4 +44,10 @@ public class Board {
                 .filter(moveResults::isCaught)
                 .collect(Collectors.toList());
     }
+
+    public boolean isComplete(Color color) {
+        return pieces.stream()
+                .filter(piece -> piece.isColor(color))
+                .allMatch(Piece::isComplete);
+    }
 }

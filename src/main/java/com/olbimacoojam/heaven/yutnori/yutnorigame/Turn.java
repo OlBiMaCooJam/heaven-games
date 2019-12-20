@@ -1,11 +1,10 @@
 package com.olbimacoojam.heaven.yutnori.yutnorigame;
 
 import com.olbimacoojam.heaven.domain.User;
-import com.olbimacoojam.heaven.yutnori.exception.IncorrectTurnException;
-import com.olbimacoojam.heaven.yutnori.exception.NotExistYutException;
 import com.olbimacoojam.heaven.yutnori.piece.moveresult.MoveResults;
 import com.olbimacoojam.heaven.yutnori.yut.Yut;
 import com.olbimacoojam.heaven.yutnori.yut.Yuts;
+import com.olbimacoojam.heaven.yutnori.yutnorigame.exception.IllegalTurnException;
 import lombok.EqualsAndHashCode;
 
 @EqualsAndHashCode
@@ -30,7 +29,7 @@ public class Turn {
             canThrow = thrownYuts.isThrowAvailable();
             return yut;
         }
-        throw new IncorrectTurnException("당신의 턴이 아니거나 지금은 말을 놓을 때입니다.");
+        throw new IllegalTurnException();
     }
 
     private boolean canThrow(User thrower) {
@@ -41,15 +40,7 @@ public class Turn {
         return yutnoriParticipant.isRightThrower(user);
     }
 
-    public void consumeYut(User user, Yut yut) {
-        if (canMove(user, yut)) {
-            thrownYuts.remove(yut);
-            return;
-        }
-        throw new NotExistYutException(yut.name());
-    }
-
-    private boolean canMove(User user, Yut yut) {
+    boolean canMove(User user, Yut yut) {
         return isRightTurn(user) && !canThrow && thrownYuts.contains(yut);
     }
 
@@ -62,18 +53,31 @@ public class Turn {
             return new Turn(yutnoriParticipant, thrownYuts, true);
         }
 
-        if (thrownYuts.isRemaining()) {
+        if (yutnoriParticipants.isPlaying(yutnoriParticipant) && thrownYuts.isRemaining()) {
             return new Turn(yutnoriParticipant, thrownYuts, false);
         }
 
         return new Turn(yutnoriParticipants.next(yutnoriParticipant));
     }
 
-    public boolean canThrow() {
-        return canThrow;
-    }
+//    public boolean canThrow() {
+//        return canThrow;
+//    }
 
     public User getUser() {
         return yutnoriParticipant.getParticipant();
+    }
+
+    public void removeYut(Yut yut) {
+        thrownYuts.remove(yut);
+    }
+
+    @Override
+    public String toString() {
+        return "Turn{" +
+                "yutnoriParticipant=" + yutnoriParticipant +
+                ", thrownYuts=" + thrownYuts +
+                ", canThrow=" + canThrow +
+                '}';
     }
 }

@@ -49,4 +49,12 @@ public class Piece {
     public Point getPoint() {
         return point;
     }
+
+    public boolean isColor(Color color) {
+        return this.color == color;
+    }
+
+    public boolean isComplete() {
+        return Points.isCompleted(this.point);
+    }
 }
