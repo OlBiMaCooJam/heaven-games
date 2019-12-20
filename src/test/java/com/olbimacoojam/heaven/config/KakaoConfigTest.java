@@ -3,7 +3,6 @@ package com.olbimacoojam.heaven.config;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.web.reactive.function.client.WebClient;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -20,10 +19,5 @@ class KakaoConfigTest {
     @Test
     void KakaoConfig_yml파일_매핑테스트_resource() {
         assertThat(kakaoConfig.getResource().get("userInfoPath")).isNotNull();
-    }
-
-    @Test
-    void name() {
-        WebClient webClient = WebClient.create();
     }
 }

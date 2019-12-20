@@ -5,14 +5,17 @@ import com.olbimacoojam.heaven.domain.UserSession;
 import com.olbimacoojam.heaven.service.KakaoApiService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Controller;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-@Controller
+@RestController
 public class KakaoLoginController {
     private static final Logger LOGGER = LoggerFactory.getLogger(KakaoLoginController.class);
 
@@ -33,7 +36,7 @@ public class KakaoLoginController {
     }
 
     @GetMapping("/oauth")
-    public String oauth(HttpSession httpSession, @RequestParam("code") String code) {
+    public ResponseEntity oauth(HttpSession httpSession, @RequestParam("code") String code) {
         LOGGER.info("code: {}", code);
 
         String accessToken = kakaoApiService.getAccessToken(code);
@@ -48,6 +51,8 @@ public class KakaoLoginController {
         UserSession userSession = new UserSession(user.getId(), user.getName(), accessToken);
         httpSession.setAttribute(UserSession.USER_SESSION, userSession);
 
-        return "redirect:/";
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Location", "/");
+        return new ResponseEntity<String>(headers, HttpStatus.FOUND);
     }
 }
