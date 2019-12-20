@@ -1,12 +1,12 @@
 package com.olbimacoojam.heaven.yutnori.piece;
 
+import com.olbimacoojam.heaven.yutnori.Color;
 import com.olbimacoojam.heaven.yutnori.piece.moveresult.MoveResult;
 import com.olbimacoojam.heaven.yutnori.piece.moveresult.Route;
 import com.olbimacoojam.heaven.yutnori.point.Point;
 import com.olbimacoojam.heaven.yutnori.point.PointName;
 import com.olbimacoojam.heaven.yutnori.point.Points;
 import com.olbimacoojam.heaven.yutnori.yut.Yut;
-import com.olbimacoojam.heaven.yutnori.yutnorigame.Color;
 import lombok.Getter;
 
 @Getter

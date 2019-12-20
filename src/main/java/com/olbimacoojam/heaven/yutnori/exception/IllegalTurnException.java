@@ -1,4 +1,4 @@
-package com.olbimacoojam.heaven.yutnori.yutnorigame.exception;
+package com.olbimacoojam.heaven.yutnori.exception;
 
 public class IllegalTurnException extends RuntimeException {
 }

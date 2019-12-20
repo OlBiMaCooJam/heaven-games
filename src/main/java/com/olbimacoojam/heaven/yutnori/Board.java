@@ -1,4 +1,4 @@
-package com.olbimacoojam.heaven.yutnori.yutnorigame;
+package com.olbimacoojam.heaven.yutnori;
 
 import com.olbimacoojam.heaven.yutnori.piece.Piece;
 import com.olbimacoojam.heaven.yutnori.piece.moveresult.MoveResult;

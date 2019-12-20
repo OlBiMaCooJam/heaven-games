@@ -1,4 +1,4 @@
-package com.olbimacoojam.heaven.yutnori.yutnorigame;
+package com.olbimacoojam.heaven.yutnori;
 
 import com.olbimacoojam.heaven.domain.User;
 import lombok.EqualsAndHashCode;

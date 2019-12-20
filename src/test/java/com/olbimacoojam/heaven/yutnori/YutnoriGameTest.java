@@ -1,16 +1,12 @@
 package com.olbimacoojam.heaven.yutnori;
 
 import com.olbimacoojam.heaven.domain.User;
+import com.olbimacoojam.heaven.yutnori.exception.IllegalTurnException;
 import com.olbimacoojam.heaven.yutnori.piece.Piece;
 import com.olbimacoojam.heaven.yutnori.piece.moveresult.MoveResult;
 import com.olbimacoojam.heaven.yutnori.piece.moveresult.MoveResults;
 import com.olbimacoojam.heaven.yutnori.point.PointName;
 import com.olbimacoojam.heaven.yutnori.yut.Yut;
-import com.olbimacoojam.heaven.yutnori.yutnorigame.Board;
-import com.olbimacoojam.heaven.yutnori.yutnorigame.Color;
-import com.olbimacoojam.heaven.yutnori.yutnorigame.OneOnOneStrategy;
-import com.olbimacoojam.heaven.yutnori.yutnorigame.YutnoriGame;
-import com.olbimacoojam.heaven.yutnori.yutnorigame.exception.IllegalTurnException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -31,8 +27,8 @@ class YutnoriGameTest extends YutnoriBaseTest {
         yutnoriGame.initialize(Arrays.asList(user1, user2));
 
         assertThat(yutnoriGame.throwYut(user1, () -> Yut.DO)).isEqualTo(Yut.DO);
-        assertThrows(IncorrectTurnException.class, () -> yutnoriGame.throwYut(user2, () -> Yut.DO));
-        assertThrows(IncorrectTurnException.class, () -> yutnoriGame.throwYut(user1, () -> Yut.DO));
+        assertThrows(IllegalTurnException.class, () -> yutnoriGame.throwYut(user2, () -> Yut.DO));
+        assertThrows(IllegalTurnException.class, () -> yutnoriGame.throwYut(user1, () -> Yut.DO));
     }
 
     @Test
@@ -40,7 +36,7 @@ class YutnoriGameTest extends YutnoriBaseTest {
         YutnoriGame yutnoriGame = new YutnoriGame(new OneOnOneStrategy());
         yutnoriGame.initialize(Arrays.asList(user1, user2));
 
-        assertThrows(IncorrectTurnException.class, () -> yutnoriGame.throwYut(user2, () -> Yut.DO));
+        assertThrows(IllegalTurnException.class, () -> yutnoriGame.throwYut(user2, () -> Yut.DO));
     }
 
     @Test
@@ -229,7 +225,7 @@ class YutnoriGameTest extends YutnoriBaseTest {
 
         yutnoriGame.throwYut(user1, () -> Yut.BACKDO);
 
-        assertThrows(IncorrectTurnException.class, () -> yutnoriGame.throwYut(user1, () -> Yut.MO));
+        assertThrows(IllegalTurnException.class, () -> yutnoriGame.throwYut(user1, () -> Yut.MO));
     }
 
     @Test
@@ -246,25 +242,6 @@ class YutnoriGameTest extends YutnoriBaseTest {
         yutnoriGame.move(user1, PointName.CHAMMUGI, Yut.GAE);
 
         assertDoesNotThrow(() -> yutnoriGame.throwYut(user2, () -> Yut.DO));
-//        yutnoriGame.move(user2, PointName.DO, Yut.DO);
     }
-
-//    @Test
-//    @DisplayName("보드 움직임 테스트")
-//    void move_test13() {
-//        Piece piece = Piece.of(Color.BLACK, PointName.STANDBY);
-//
-//        YutnoriGame yutnoriGame = new YutnoriGame(yutnoriParticipants -> new Board(Arrays.asList(piece)));
-//        yutnoriGame.initialize(Arrays.asList(user1, user2));
-//
-//        yutnoriGame.throwYut(user1, () -> Yut.DO);
-//        TurnResult turnResult = yutnoriGame.move(user1, PointName.STANDBY, Yut.DO);
-//
-//        MoveResults expectedMoveResults = new MoveResults(Arrays.asList(
-//                new MoveResult(piece, createRoute(PointName.STANDBY, PointName.DO))
-//        ));
-//        assertThat(moveResults).isEqualTo(expectedMoveResults);
-//    }
-
 
 }

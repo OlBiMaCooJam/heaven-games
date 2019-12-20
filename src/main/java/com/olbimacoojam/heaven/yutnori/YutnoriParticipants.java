@@ -1,8 +1,8 @@
-package com.olbimacoojam.heaven.yutnori.yutnorigame;
+package com.olbimacoojam.heaven.yutnori;
 
 import com.olbimacoojam.heaven.domain.User;
 import com.olbimacoojam.heaven.yutnori.exception.NoSuchColorPlayingException;
-import com.olbimacoojam.heaven.yutnori.yutnorigame.exception.NotExistParticipantException;
+import com.olbimacoojam.heaven.yutnori.exception.NotExistParticipantException;
 
 import java.util.ArrayList;
 import java.util.Arrays;

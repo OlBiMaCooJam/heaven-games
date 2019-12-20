@@ -6,9 +6,6 @@ import com.olbimacoojam.heaven.yutnori.piece.moveresult.MoveResults;
 import com.olbimacoojam.heaven.yutnori.point.PointName;
 import com.olbimacoojam.heaven.yutnori.point.Points;
 import com.olbimacoojam.heaven.yutnori.yut.Yut;
-import com.olbimacoojam.heaven.yutnori.yutnorigame.Board;
-import com.olbimacoojam.heaven.yutnori.yutnorigame.Color;
-import com.olbimacoojam.heaven.yutnori.yutnorigame.MoveVerifier;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
