@@ -1,9 +1,9 @@
 <template>
   <v-container>
-    <span>Game Id : {{$route.params.id}}</span>
+    <span>Room Id : {{$route.params.id}}</span>
     <v-row align="center" justify="end" class="ma-5">
-      <router-link :to="'/game/' + 'mafia'">
-        <v-btn icon>
+      <router-link :to="'/game/' + 'mafia/' + $route.params.id">
+        <v-btn icon @click="start()">
           게임 시작
         </v-btn>
       </router-link>
@@ -13,8 +13,48 @@
 </template>
 
 <script>
+  import SockJS from "sockjs-client";
+  import Stomp from "webstomp-client";
+  import router from "../router";
+
   export default {
-    name: "Game"
+    name: "Game",
+    data() {
+      return {
+        userId: '',
+        roomId: this.$route.params.id,
+        client: {}
+      }
+    },
+    methods: {
+      start: function() {
+        this.client.send('/app/rooms/'+ this.roomId + '/start');
+      }
+    },
+    created() {
+      const game = this;
+      game.client = Stomp.over(new SockJS('/websocket'));
+
+      game.client.connect({}, function () {
+        let join = true;
+        game.client.send('/app/rooms/' + game.roomId);
+        game.client.subscribe('/topic/rooms/' + game.roomId, function(response){
+          const roomResponse = JSON.parse(response.body)
+          const players = roomResponse.players;
+          if(join){
+            game.userId = players[players.length-1].id;
+            join = false;
+          }
+        });
+        game.client.subscribe('/topic/rooms/' + game.roomId + '/start', function(){
+            router.push('/game/mafia/' + game.roomId);
+        });
+      });
+    },
+    destroyed() {
+      this.client.send('/app/rooms/' + this.roomId + '/leave/' + this.userId);
+      this.client.disconnect();
+    }
   }
 </script>
 

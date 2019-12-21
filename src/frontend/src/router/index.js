@@ -30,7 +30,7 @@ const routes = [
     component: () => import('../views/Login.vue')
   },
   {
-    path: '/game/mafia',
+    path: '/game/mafia/:id',
     name: 'mafia',
     component: () => import('../views/Mafia.vue')
   },

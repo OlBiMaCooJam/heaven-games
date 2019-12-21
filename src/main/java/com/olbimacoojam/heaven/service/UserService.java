@@ -19,4 +19,8 @@ public class UserService {
     public User findById(Long userId) {
         return userRepository.findById(userId).orElseThrow(NotFoundUserException::new);
     }
+
+    public void deleteById(Long userId) {
+        userRepository.deleteById(userId);
+    }
 }

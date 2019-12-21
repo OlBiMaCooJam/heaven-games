@@ -1,6 +1,7 @@
 package com.olbimacoojam.heaven.domain;
 
 import com.olbimacoojam.heaven.BaseEntity;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -15,11 +16,8 @@ import javax.persistence.*;
 @Entity
 @ToString
 @NoArgsConstructor
+@EqualsAndHashCode
 public class User extends BaseEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
     @Column(unique = true)
     private Long kakaoId;
 
