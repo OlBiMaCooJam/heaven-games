@@ -1,6 +1,6 @@
 <template>
     <v-container class="pa-0">
-        <router-link :to="'/rooms/' + room.id">
+        <router-link :to="'/games/' + gameId + '/rooms/' + room.id">
             <v-list-item class="room">
                 <v-list-item-avatar class="game-logo">
                     <v-img :src="gameLogo"/>
@@ -26,7 +26,8 @@
                 id: Number,
                 title: String,
             },
-            gameLogo: String
+            gameLogo: String,
+            gameId: Number,
         }
     };
 </script>
