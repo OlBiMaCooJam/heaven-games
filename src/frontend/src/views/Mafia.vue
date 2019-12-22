@@ -52,4 +52,15 @@
 </script>
 
 <style scoped>
+    #mafia-app {
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        text-align: center;
+        height: 100%;
+        background: url('../assets/mafia-bg.jpg') no-repeat center center fixed;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
+    }
 </style>
