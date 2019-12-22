@@ -59,4 +59,8 @@ public class YutnoriGame implements Game {
         }
         throw new IllegalTurnException();
     }
+
+//    public Object getStartingStatus() {
+//
+//    }
 }

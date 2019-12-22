@@ -39,9 +39,9 @@ public class RoomService {
                 .collect(Collectors.toList());
     }
 
-    public RoomResponseDto subscribe(int roomId) {
+    public RoomResponseDto subscribe(int roomId, User user) {
         Room room = roomRepository.findById(roomId);
-        room.join(new User());
+        room.join(user);
         return modelMapper.map(room, RoomResponseDto.class);
     }
 
@@ -64,4 +64,10 @@ public class RoomService {
 
         return players.size();
     }
+
+//    public RoomResponseDto initiateGame(int roomId) {
+//        Room room = roomRepository.findById(roomId);
+//        return modelMapper.map(room.initiateGame(), GameStartResponseDto.class);
+//
+//    }
 }

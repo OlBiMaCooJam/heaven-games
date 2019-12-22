@@ -30,4 +30,9 @@ public class Room {
     public void startGame() {
         game.initialize(players);
     }
+
+//    public Object initiateGame() {
+//        game.initialize(players);
+//        return ((YutnoriGame)game).getStartingStatus())
+//    }
 }
