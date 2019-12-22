@@ -4,8 +4,14 @@ import com.olbimacoojam.heaven.domain.Room;
 import com.olbimacoojam.heaven.domain.RoomFactory;
 import com.olbimacoojam.heaven.domain.RoomRepository;
 import com.olbimacoojam.heaven.domain.User;
+import com.olbimacoojam.heaven.dto.GameStartResponseDtos;
 import com.olbimacoojam.heaven.dto.RoomResponseDto;
+import com.olbimacoojam.heaven.dto.YutResponse;
 import com.olbimacoojam.heaven.game.Game;
+import com.olbimacoojam.heaven.yutnori.YutnoriGame;
+import com.olbimacoojam.heaven.yutnori.yut.RandomYutThrowStrategy;
+import com.olbimacoojam.heaven.yutnori.yut.Yut;
+import com.olbimacoojam.heaven.yutnori.yut.YutThrowStrategy;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,12 +24,14 @@ public class RoomService {
     private final RoomFactory roomFactory;
     private final ModelMapper modelMapper;
     private final RoomRepository roomRepository;
+    private final YutThrowStrategy yutThrowStrategy;
 
     @Autowired
     public RoomService(RoomFactory roomFactory, ModelMapper modelMapper, RoomRepository roomRepository) {
         this.roomFactory = roomFactory;
         this.modelMapper = modelMapper;
         this.roomRepository = roomRepository;
+        this.yutThrowStrategy = new RandomYutThrowStrategy();
     }
 
     public RoomResponseDto createRoom() {
@@ -65,9 +73,16 @@ public class RoomService {
         return players.size();
     }
 
-//    public RoomResponseDto initiateGame(int roomId) {
-//        Room room = roomRepository.findById(roomId);
-//        return modelMapper.map(room.initiateGame(), GameStartResponseDto.class);
-//
-//    }
+    public GameStartResponseDtos initiateGame(int roomId) {
+        Room room = roomRepository.findById(roomId);
+        GameStartResponseDtos gameStartResponseDtos = room.initiateGame();
+        return gameStartResponseDtos;
+    }
+
+    public YutResponse throwYut(int roomId, User thrower) {
+        Room room = roomRepository.findById(roomId);
+        YutnoriGame yutnoriGame = (YutnoriGame) room.getGame();
+        Yut yut = yutnoriGame.throwYut(thrower, yutThrowStrategy);
+        return new YutResponse(yut.name());
+    }
 }

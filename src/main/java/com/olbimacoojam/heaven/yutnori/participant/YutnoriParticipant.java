@@ -1,6 +1,7 @@
 package com.olbimacoojam.heaven.yutnori.participant;
 
 import com.olbimacoojam.heaven.domain.User;
+import com.olbimacoojam.heaven.dto.GameStartResponseDto;
 import com.olbimacoojam.heaven.yutnori.Color;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -35,5 +36,9 @@ public class YutnoriParticipant {
                 "participant=" + participant +
                 ", color=" + color +
                 '}';
+    }
+
+    public GameStartResponseDto getGameStartResponseDto() {
+        return new GameStartResponseDto(participant.getName(), color.name());
     }
 }

@@ -1,6 +1,8 @@
 package com.olbimacoojam.heaven.yutnori;
 
 import com.olbimacoojam.heaven.domain.User;
+import com.olbimacoojam.heaven.dto.GameStartResponseDto;
+import com.olbimacoojam.heaven.dto.GameStartResponseDtos;
 import com.olbimacoojam.heaven.game.Game;
 import com.olbimacoojam.heaven.yutnori.board.Board;
 import com.olbimacoojam.heaven.yutnori.board.BoardCreateStrategy;
@@ -12,6 +14,7 @@ import com.olbimacoojam.heaven.yutnori.yut.Yut;
 import com.olbimacoojam.heaven.yutnori.yut.YutThrowStrategy;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class YutnoriGame implements Game {
     private final BoardCreateStrategy boardCreateStrategy;
@@ -60,7 +63,10 @@ public class YutnoriGame implements Game {
         throw new IllegalTurnException();
     }
 
-//    public Object getStartingStatus() {
-//
-//    }
+    public GameStartResponseDtos getStartingStatus() {
+        List<GameStartResponseDto> gameStartResponseDtos = yutnoriParticipants.stream()
+                .map(yutnoriParticipant -> yutnoriParticipant.getGameStartResponseDto())
+                .collect(Collectors.toList());
+        return new GameStartResponseDtos(gameStartResponseDtos);
+    }
 }

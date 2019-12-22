@@ -1,6 +1,8 @@
 package com.olbimacoojam.heaven.domain;
 
+import com.olbimacoojam.heaven.dto.GameStartResponseDtos;
 import com.olbimacoojam.heaven.game.Game;
+import com.olbimacoojam.heaven.yutnori.YutnoriGame;
 import lombok.Getter;
 
 import java.util.List;
@@ -31,8 +33,8 @@ public class Room {
         game.initialize(players);
     }
 
-//    public Object initiateGame() {
-//        game.initialize(players);
-//        return ((YutnoriGame)game).getStartingStatus())
-//    }
+    public GameStartResponseDtos initiateGame() {
+        game.initialize(players);
+        return ((YutnoriGame) game).getStartingStatus();
+    }
 }

@@ -1,7 +1,10 @@
 package com.olbimacoojam.heaven.controller.yutnori;
 
+import com.olbimacoojam.heaven.dto.GameStartResponseDtos;
 import com.olbimacoojam.heaven.dto.RoomResponseDto;
+import com.olbimacoojam.heaven.dto.YutResponse;
 import com.olbimacoojam.heaven.testhelp.Client;
+import com.olbimacoojam.heaven.yutnori.yut.Yut;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,11 +27,13 @@ import org.springframework.web.socket.sockjs.client.WebSocketTransport;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
+import java.util.stream.Collectors;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -49,21 +54,27 @@ class YutnoriGameControllerTest {
     private WebTestClient webTestClient;
     private List<Client> clients;
     private List<RoomResponseDto> list;
+    private Client firstClient;
+    private Client secondClient;
+
 
     @Test
     @DisplayName("게임시작요청 Test")
     void start_game() throws InterruptedException, ExecutionException, TimeoutException {
+
         //두 명의 클라이언트 로그인
         list = new ArrayList<>();
         Client firstClient = createClient();
         Client secondClient = createClient();
+
         //한 클라이언트가 방을 만든다
         int roomId = createRoom();
+
         // 두명의 클라이언트가 방에 입장
         CompletableFuture<RoomResponseDto> completableFutureForFirstClient = new CompletableFuture<>();
         CompletableFuture<RoomResponseDto> completableFutureForSecondClient = new CompletableFuture<>();
-        firstClient.getStompSession().subscribe(SUBSCRIBE_ROOM_ENDPOINT + roomId, getStompFrameHandler(completableFutureForFirstClient, list));
-        secondClient.getStompSession().subscribe(SUBSCRIBE_ROOM_ENDPOINT + roomId, getStompFrameHandler(completableFutureForSecondClient, list));
+        firstClient.getStompSession().subscribe(SUBSCRIBE_ROOM_ENDPOINT + roomId, getStompFrameHandlerRoomResponseDto(completableFutureForFirstClient, list));
+        secondClient.getStompSession().subscribe(SUBSCRIBE_ROOM_ENDPOINT + roomId, getStompFrameHandlerRoomResponseDto(completableFutureForSecondClient, list));
         firstClient.getStompSession().send(SEND_ROOM_ENDPOINT + roomId, null);
         secondClient.getStompSession().send(SEND_ROOM_ENDPOINT + roomId, null);
 
@@ -72,33 +83,102 @@ class YutnoriGameControllerTest {
         assertThat(roomResponseDto.getPlayers()).hasSize(2);
 
 
-//        //한 클라이언트가 게임을 시작함
-//        CompletableFuture<GameStartResponseDto> completableFutureForFirstClientGameStartResponseDto = new CompletableFuture<>();
-//        CompletableFuture<GameStartResponseDto> completableFutureForSecondClientGameStartRespoonseDto = new CompletableFuture<>();
-//        firstClient.getStompSession().subscribe("/topic/yutnori/" + roomId, getStompFrameHandler(completableFutureForFirstClientGameStartResponseDto));
-//        secondClient.getStompSession().subscribe("/topic/yutnori/" + roomId, getStompFrameHandler(completableFutureForSecondClientGameStartRespoonseDto));
-//
-//        firstClient.getStompSession().send("/app/yutnori/" + roomId, null);
-//
-//        GameStartResponseDto gameStartResponseDto = completableFutureForFirstClientGameStartResponseDto.get(100, SECONDS);
-//        System.out.println(gameStartResponseDto);
+        //한 클라이언트가 게임을 시작함
+        CompletableFuture<GameStartResponseDtos> completableFutureForFirstClientGameStartResponseDtos = new CompletableFuture<>();
+        CompletableFuture<GameStartResponseDtos> completableFutureForSecondClientGameStartResponseDtos = new CompletableFuture<>();
+        firstClient.getStompSession().subscribe("/topic/yutnori/" + roomId, getStompFrameHandlerGameStartResponse(completableFutureForFirstClientGameStartResponseDtos));
+        secondClient.getStompSession().subscribe("/topic/yutnori/" + roomId, getStompFrameHandlerGameStartResponse(completableFutureForSecondClientGameStartResponseDtos));
+
+        firstClient.getStompSession().send("/app/yutnori/" + roomId, null);
+
+        GameStartResponseDtos gameStartResponseDtos = completableFutureForFirstClientGameStartResponseDtos.get(100, SECONDS);
+        assertThat(gameStartResponseDtos.size()).isEqualTo(2);
+        assertThat(gameStartResponseDtos.containsUser("mockUser0")).isTrue();
+        assertThat(gameStartResponseDtos.containsUser("mockUser1")).isTrue();
     }
 
-    private StompFrameHandler getStompFrameHandler(CompletableFuture<GameStartResponseDto> completableFutureForGameStartResponseDto) {
+    @Test
+    @DisplayName("윷던지기요청 Test")
+    void throw_yut() throws InterruptedException, ExecutionException, TimeoutException {
+
+        //두 명의 클라이언트 로그인
+        list = new ArrayList<>();
+        Client firstClient = createClient();
+        Client secondClient = createClient();
+
+        //한 클라이언트가 방을 만든다
+        int roomId = createRoom();
+
+        // 두명의 클라이언트가 방에 입장
+        CompletableFuture<RoomResponseDto> completableFutureForFirstClient = new CompletableFuture<>();
+        CompletableFuture<RoomResponseDto> completableFutureForSecondClient = new CompletableFuture<>();
+        firstClient.getStompSession().subscribe(SUBSCRIBE_ROOM_ENDPOINT + roomId, getStompFrameHandlerRoomResponseDto(completableFutureForFirstClient, list));
+        secondClient.getStompSession().subscribe(SUBSCRIBE_ROOM_ENDPOINT + roomId, getStompFrameHandlerRoomResponseDto(completableFutureForSecondClient, list));
+        firstClient.getStompSession().send(SEND_ROOM_ENDPOINT + roomId, null);
+        secondClient.getStompSession().send(SEND_ROOM_ENDPOINT + roomId, null);
+
+        RoomResponseDto roomResponseDto = completableFutureForFirstClient.get(200, SECONDS);
+        assertThat(roomResponseDto.getId()).isEqualTo(roomId);
+        assertThat(roomResponseDto.getPlayers()).hasSize(2);
+
+
+        //한 클라이언트가 게임을 시작함
+        CompletableFuture<GameStartResponseDtos> completableFutureForFirstClientGameStartResponseDtos = new CompletableFuture<>();
+        CompletableFuture<GameStartResponseDtos> completableFutureForSecondClientGameStartResponseDtos = new CompletableFuture<>();
+        firstClient.getStompSession().subscribe("/topic/yutnori/" + roomId, getStompFrameHandlerGameStartResponse(completableFutureForFirstClientGameStartResponseDtos));
+        secondClient.getStompSession().subscribe("/topic/yutnori/" + roomId, getStompFrameHandlerGameStartResponse(completableFutureForSecondClientGameStartResponseDtos));
+
+        firstClient.getStompSession().send("/app/yutnori/" + roomId, null);
+
+        GameStartResponseDtos gameStartResponseDtos = completableFutureForFirstClientGameStartResponseDtos.get(100, SECONDS);
+        assertThat(gameStartResponseDtos.size()).isEqualTo(2);
+        assertThat(gameStartResponseDtos.containsUser("mockUser0")).isTrue();
+        assertThat(gameStartResponseDtos.containsUser("mockUser1")).isTrue();
+
+        //윷던지기
+        CompletableFuture<YutResponse> completableFutureForFirstClientYutResponse = new CompletableFuture<>();
+        CompletableFuture<YutResponse> completableFutureForSecondClientYutResponse = new CompletableFuture<>();
+        firstClient.getStompSession().subscribe("/topic/yutnori/" + roomId + "/yut-throw", getStompFrameHandlerYutResponse(completableFutureForFirstClientYutResponse));
+        secondClient.getStompSession().subscribe("/topic/yutnori" + roomId + "/yut-throw", getStompFrameHandlerYutResponse(completableFutureForSecondClientYutResponse));
+
+        firstClient.getStompSession().send("/app/yutnori/" + roomId + "/yut-throw", null);
+
+        YutResponse yutResponse = completableFutureForFirstClientYutResponse.get(100, SECONDS);
+        List<String> yutNames = Arrays.stream(Yut.values())
+                .map(yut -> yut.name())
+                .collect(Collectors.toList());
+        assertThat(yutNames).contains(yutResponse.getYut());
+    }
+
+    private StompFrameHandler getStompFrameHandlerYutResponse(CompletableFuture<YutResponse> completableFutureForFirstClientYutResponse) {
         return new StompFrameHandler() {
             @Override
             public Type getPayloadType(StompHeaders headers) {
-                return RoomResponseDto.class;
+                return YutResponse.class;
             }
 
             @Override
             public void handleFrame(StompHeaders headers, Object payload) {
-                completableFutureForGameStartResponseDto.complete((GameStartResponseDto) payload);
+                completableFutureForFirstClientYutResponse.complete((YutResponse) payload);
             }
         };
     }
 
-    private StompFrameHandler getStompFrameHandler(CompletableFuture<RoomResponseDto> completableFuture, List<RoomResponseDto> list) {
+    private StompFrameHandler getStompFrameHandlerGameStartResponse(CompletableFuture<GameStartResponseDtos> completableFutureForGameStartResponseDtos) {
+        return new StompFrameHandler() {
+            @Override
+            public Type getPayloadType(StompHeaders headers) {
+                return GameStartResponseDtos.class;
+            }
+
+            @Override
+            public void handleFrame(StompHeaders headers, Object payload) {
+                completableFutureForGameStartResponseDtos.complete((GameStartResponseDtos) payload);
+            }
+        };
+    }
+
+    private StompFrameHandler getStompFrameHandlerRoomResponseDto(CompletableFuture<RoomResponseDto> completableFuture, List<RoomResponseDto> list) {
         return new StompFrameHandler() {
             @Override
             public Type getPayloadType(StompHeaders headers) {
