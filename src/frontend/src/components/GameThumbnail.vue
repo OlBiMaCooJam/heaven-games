@@ -1,5 +1,5 @@
 <template>
-  <router-link :to="'/rooms'">
+    <router-link :to="'/games/' + game.id + '/rooms'">
       <v-card
         class="mx-auto ma-3"
         max-width="400"
@@ -21,9 +21,11 @@
     name: "GameThumbnail",
     props: {
       game: {
-        title: String,
-        src: String,
-        link: String
+          title: String,
+          src: String,
+          url: String,
+          link: String,
+          id: Number
       }
     }
   }

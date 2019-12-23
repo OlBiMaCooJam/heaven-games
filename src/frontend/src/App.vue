@@ -13,6 +13,9 @@
         <router-link to="/login">
           <v-btn text large>로그인</v-btn>
         </router-link>
+        <router-link to="/minesweeper">
+          <v-btn>gg</v-btn>
+        </router-link>
       </v-col>
     </v-row>
     <router-view/>

@@ -1,14 +1,13 @@
 <template>
   <v-container>
-    <span>Room Id : {{$route.params.id}}</span>
-    <v-row align="center" justify="end" class="ma-5">
-      <router-link :to="'/game/' + 'mafia/' + $route.params.id">
-        <v-btn icon @click="start()">
-          게임 시작
-        </v-btn>
-      </router-link>
-    </v-row>
-
+    <span>Game Id : {{$route.params.id}}</span>
+      <v-row align="center" justify="end" class="ma-5">
+          <router-link :to="'/games/' + $route.params.gameId + '/rooms/' + $route.params.roomId + '/start'">
+              <v-btn icon @click="start()">
+                  게임 시작
+              </v-btn>
+          </router-link>
+      </v-row>
   </v-container>
 </template>
 

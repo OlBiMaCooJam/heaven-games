@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 
-Vue.use(VueRouter)
+Vue.use(VueRouter);
 
 const routes = [
   {
@@ -15,12 +15,12 @@ const routes = [
     component: () => import('../views/Game.vue')
   },
   {
-    path: '/rooms',
+      path: '/games/:gameId/rooms',
     name: 'RoomList',
     component: () => import('../views/RoomList.vue')
   },
   {
-    path: '/rooms/:id',
+      path: '/games/:gameId/rooms/:roomId',
     name: 'game',
     component: () => import('../views/Game.vue')
   },
@@ -30,17 +30,21 @@ const routes = [
     component: () => import('../views/Login.vue')
   },
   {
-    path: '/game/mafia/:id',
-    name: 'mafia',
-    component: () => import('../views/Mafia.vue')
+    path: '/minesweeper',
+    name: 'minesweeper',
+    component: () => import('../views/Minesweeper.vue')
   },
-//    경로 수정 필요
-]
+    {
+        path: '/games/:gameId/rooms/:roomId/start',
+        name: 'mafia',
+        component: () => import('../views/Mafia.vue')
+    },
+];
 
 const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
   routes
-})
+});
 
 export default router

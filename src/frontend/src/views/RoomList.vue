@@ -14,7 +14,7 @@
                     </v-btn>
                 </v-row>
                 <v-row align="center" justify="center">
-                    <v-toolbar-title>게임 {{$route.params.id}}</v-toolbar-title>
+                    <v-toolbar-title>게임 {{$route.params.gameId}}</v-toolbar-title>
                 </v-row>
                 <v-row align="center" justify="end" class="ma-5">
                     <v-btn icon>
@@ -24,7 +24,8 @@
 
             </v-toolbar>
             <v-list>
-                <RoomPreview class="bottom-line" v-for='room in rooms' :key="room.id" :room="room" :game-logo="gameLogo"/>
+                <RoomPreview class="bottom-line" v-for='room in rooms' :key="room.id" :game-id="gameId" :room="room"
+                             :game-logo="gameLogo"/>
             </v-list>
         </v-card>
     </v-app>
@@ -44,7 +45,8 @@
                     {id: '4', playerCnt: 4, title: '사번'},
                 ],
                 // gameLogo: '../assets/yutgame.png'
-                gameLogo: 'https://cdn.vuetifyjs.com/images/lists/3.jpg'
+                gameLogo: 'https://cdn.vuetifyjs.com/images/lists/3.jpg',
+                gameId: 1,
             }
         },
     }

@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import './plugins/axios'
 import App from './App.vue'
 import vuetify from './plugins/vuetify';
 import router from './router'
@@ -9,4 +10,11 @@ new Vue({
     vuetify,
     router,
     render: h => h(App)
-}).$mount('#app')
+}).$mount('#app');
+
+Vue.filter('two_digits', function (value) {
+    if (value.toString().length <= 1) {
+        return "0" + value.toString();
+    }
+    return value.toString();
+});

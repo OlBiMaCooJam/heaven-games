@@ -6,6 +6,14 @@
                     <MafiaCitizen :citizen="citizen" :key="citizen.name" v-for='citizen in citizens'/>
                 </v-row>
             </v-col>
+            <v-col cols="3">
+                <v-row align='center' justify='center'>
+                    <Timer :date=date :roomId=id></Timer>
+                </v-row>
+            </v-col>
+            <v-col cols="3">
+                <Vote :dialog=false :citizens="citizens" :vote_msg="vote_message"></Vote>
+            </v-col>
             <div>
                 <div id="message-area">
                 </div>
@@ -23,11 +31,15 @@
     import MafiaCitizen from "../components/MafiaCitizen";
     import SockJS from "sockjs-client";
     import Stomp from "webstomp-client";
+    import Timer from "../components/Timer";
+    import Vote from "../components/Vote";
 
     export default {
         name: 'Mafia',
         components: {
-            MafiaCitizen,
+            Vote,
+            Timer,
+            MafiaCitizen
         },
         methods: {
             messageTemplate(mafiaChatMessage) {
@@ -65,13 +77,16 @@
                     {name: '코맥코', occupation: '마피아', src: require('../assets/p7.png')},
                     {name: '맥코맥', occupation: '마피아', src: require('../assets/p8.png')},
                     {name: '쿠기쿠', occupation: '마피아', src: require('../assets/p9.png')},
-                    {name: '반', occupation: '마피아', src: require('../assets/p10.png')}, // 테스트 데이터
+                    {name: '모비', occupation: '마피아', src: require('../assets/p10.png')}, // 테스트 데이터
                 ],
+                date: 234, // 테스트 데이터
+                vote_message: "누가 마피아일까?",
                 roomId: this.$route.params.id,
                 client: {},
                 userId: ''
             }
         },
+        id: 1,
         created() {
             this.client = Stomp.over(new SockJS('/websocket'));
             const game = this;
@@ -154,5 +169,17 @@
         border: 0;
         color: white;
         border-radius: 15px;
+    }
+
+    #mafia-app {
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        text-align: center;
+        height: 100%;
+        background: url('../assets/mafia-bg.jpg') no-repeat center center fixed;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
     }
 </style>
