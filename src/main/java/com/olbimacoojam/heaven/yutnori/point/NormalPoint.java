@@ -6,7 +6,8 @@ import lombok.Getter;
 
 @Getter
 public class NormalPoint implements Point {
-    private PointName pointName;
+
+    private final PointName pointName;
     private Point nextPoint;
     private Point previousPoint;
 

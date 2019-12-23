@@ -3,6 +3,7 @@ package com.olbimacoojam.heaven.yutnori.point;
 import java.util.function.Function;
 
 public enum PointName {
+
     STANDBY(StandByPoint::new, null, "DO"),
     COMPLETE(CompletePoint::new, null, null),
     DO(NormalPoint::new, "STANDBY", "GAE"),

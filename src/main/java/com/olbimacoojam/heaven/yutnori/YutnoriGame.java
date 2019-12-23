@@ -11,6 +11,7 @@ import com.olbimacoojam.heaven.yutnori.yut.YutThrowStrategy;
 import java.util.List;
 
 public class YutnoriGame implements Game {
+
     private final BoardCreateStrategy boardCreateStrategy;
     private YutnoriParticipants yutnoriParticipants;
     private Board board;
@@ -22,14 +23,15 @@ public class YutnoriGame implements Game {
 
     @Override
     public void initialize(List<User> players) {
-        yutnoriParticipants = new YutnoriParticipants(players);
+        yutnoriParticipants = YutnoriParticipants.of(players);
         turn = new Turn(yutnoriParticipants.getFirst());
         board = boardCreateStrategy.createBoard(yutnoriParticipants);
     }
 
     public Yut throwYut(User thrower, YutThrowStrategy yutThrowStrategy) {
         Yut yut = yutThrowStrategy.throwYut();
-        return turn.saveOneThrow(thrower, yut);
+        turn = turn.saveOneThrow(thrower, yut);
+        return yut;
     }
 
     public MoveResults move(User user, PointName pointName, Yut yut) {
@@ -51,9 +53,8 @@ public class YutnoriGame implements Game {
     }
 
     private void checkTurn(User user, Yut yut) {
-        if (turn.canMove(user, yut)) {
-            return;
+        if (!turn.canMove(user, yut)) {
+            throw new IllegalTurnException();
         }
-        throw new IllegalTurnException();
     }
 }

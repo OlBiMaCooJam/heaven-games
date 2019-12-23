@@ -1,14 +1,16 @@
 package com.olbimacoojam.heaven.yutnori;
 
 import com.olbimacoojam.heaven.yutnori.piece.Piece;
-import com.olbimacoojam.heaven.yutnori.piece.moveresult.MoveResult;
 import com.olbimacoojam.heaven.yutnori.piece.moveresult.MoveResults;
 import com.olbimacoojam.heaven.yutnori.yut.Yut;
+import lombok.EqualsAndHashCode;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@EqualsAndHashCode
 public class Board {
+
     private final List<Piece> pieces;
 
     public Board(List<Piece> pieces) {
@@ -26,17 +28,15 @@ public class Board {
     }
 
     private MoveResults movePieces(List<Piece> movablePieces, Yut yut) {
-        List<MoveResult> moveResults = movablePieces.stream()
+        return movablePieces.stream()
                 .map(piece -> piece.move(yut))
-                .collect(Collectors.toList());
-
-        return new MoveResults(moveResults);
+                .collect(Collectors.collectingAndThen(Collectors.toList(), MoveResults::new));
     }
 
     private MoveResults moveCaughtPieces(List<Piece> caughtPieces) {
-        return new MoveResults(caughtPieces.stream()
+        return caughtPieces.stream()
                 .map(Piece::goBackToStandBy)
-                .collect(Collectors.toList()));
+                .collect(Collectors.collectingAndThen(Collectors.toList(), MoveResults::new));
     }
 
     private List<Piece> findCaughtPieces(MoveResults moveResults) {

@@ -7,6 +7,7 @@ import java.util.List;
 
 @EqualsAndHashCode
 public class Yuts {
+
     private final List<Yut> yuts;
 
     public Yuts() {

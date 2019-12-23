@@ -1,12 +1,14 @@
 package com.olbimacoojam.heaven.yutnori.piece.moveresult;
 
 import com.olbimacoojam.heaven.yutnori.piece.Piece;
+import lombok.EqualsAndHashCode;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
+@EqualsAndHashCode
 public class MoveResults {
+
     private final List<MoveResult> moveResults;
 
     public MoveResults(List<MoveResult> moveResults) {
@@ -28,18 +30,5 @@ public class MoveResults {
     public boolean hasCaught() {
         return moveResults.stream()
                 .anyMatch(MoveResult::areYouCaught);
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        MoveResults that = (MoveResults) o;
-        return Objects.equals(moveResults, that.moveResults);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(moveResults);
     }
 }

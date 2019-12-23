@@ -1,34 +1,40 @@
 package com.olbimacoojam.heaven.yutnori.point;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static com.olbimacoojam.heaven.yutnori.point.PointName.*;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class Points {
+
     private static Map<PointName, Point> points;
 
     static {
         points = initializePoints();
     }
 
-    public static Map<PointName, Point> initializePoints() {
+    private static Map<PointName, Point> initializePoints() {
         Map<PointName, Point> map = Arrays.stream(PointName.values())
-                .collect(Collectors.toMap(p -> p, PointName::createPoint));
+                .collect(Collectors.toMap(Function.identity(), PointName::createPoint));
 
         connectPoints(map);
 
         return map;
     }
 
-    private static void connectPoints(Map<PointName, Point> map) {
+    private static void connectPoints(Map<PointName, Point> points) {
         for (PointName pointName : PointName.values()) {
-            Point prevPoint = map.get(pointName.getPrevPointName());
-            Point nextPoint = map.get(pointName.getNextPointName());
+            Point prevPoint = points.get(pointName.getPrevPointName());
+            Point nextPoint = points.get(pointName.getNextPointName());
 
-            Point point = map.get(pointName);
+            Point point = points.get(pointName);
             point.makeConnection(prevPoint, nextPoint);
         }
 
@@ -38,16 +44,12 @@ public class Points {
         inflectRelation.put(DUITMO, DUITMODO);
 
         for (PointName pointName : inflectRelation.keySet()) {
-            Point point = map.get(pointName);
+            Point point = points.get(pointName);
             PointName destinationPointName = inflectRelation.get(pointName);
-            Point destinationPoint = map.get(destinationPointName);
+            Point destinationPoint = points.get(destinationPointName);
 
             point.addInflectPoint(destinationPoint);
         }
-    }
-
-    public static Point getStandByPoint() {
-        return points.get(STANDBY);
     }
 
     public static int getTotalPointQuantities() {

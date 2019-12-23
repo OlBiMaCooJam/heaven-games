@@ -6,12 +6,15 @@ import com.olbimacoojam.heaven.yutnori.piece.moveresult.MoveResults;
 import com.olbimacoojam.heaven.yutnori.yut.Yut;
 import com.olbimacoojam.heaven.yutnori.yut.Yuts;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 @EqualsAndHashCode
+@ToString
 public class Turn {
+
     private final YutnoriParticipant yutnoriParticipant;
     private final Yuts thrownYuts;
-    private boolean canThrow;
+    private final boolean canThrow;
 
     private Turn(YutnoriParticipant yutnoriParticipant, Yuts thrownYuts, boolean canThrow) {
         this.yutnoriParticipant = yutnoriParticipant;
@@ -23,11 +26,10 @@ public class Turn {
         this(yutnoriParticipant, new Yuts(), true);
     }
 
-    public Yut saveOneThrow(User thrower, Yut yut) {
+    public Turn saveOneThrow(User thrower, Yut yut) {
         if (canThrow(thrower)) {
             thrownYuts.add(yut);
-            canThrow = thrownYuts.isThrowAvailable();
-            return yut;
+            return new Turn(yutnoriParticipant, thrownYuts, thrownYuts.isThrowAvailable());
         }
         throw new IllegalTurnException();
     }
@@ -60,24 +62,11 @@ public class Turn {
         return new Turn(yutnoriParticipants.next(yutnoriParticipant));
     }
 
-//    public boolean canThrow() {
-//        return canThrow;
-//    }
-
     public User getUser() {
         return yutnoriParticipant.getParticipant();
     }
 
     public void removeYut(Yut yut) {
         thrownYuts.remove(yut);
-    }
-
-    @Override
-    public String toString() {
-        return "Turn{" +
-                "yutnoriParticipant=" + yutnoriParticipant +
-                ", thrownYuts=" + thrownYuts +
-                ", canThrow=" + canThrow +
-                '}';
     }
 }

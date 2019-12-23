@@ -27,7 +27,6 @@ class PieceTest extends YutnoriBaseTest {
     @Test
     @DisplayName("말 움직임 테스트 (대기에서 => 모)")
     void move_test2() {
-        Points.initializePoints();
         Piece piece = Piece.of(Color.BLACK, PointName.STANDBY);
         MoveResult moveResult = piece.move(Yut.MO);
 

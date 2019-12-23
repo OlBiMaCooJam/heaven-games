@@ -6,6 +6,7 @@ import lombok.Getter;
 
 @Getter
 public class EdgePoint implements Point {
+
     private final PointName pointName;
     private Point nextPoint;
     private Point previousPoint;

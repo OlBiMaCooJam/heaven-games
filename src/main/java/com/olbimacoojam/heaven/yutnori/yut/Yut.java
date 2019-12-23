@@ -3,6 +3,7 @@ package com.olbimacoojam.heaven.yutnori.yut;
 import com.olbimacoojam.heaven.yutnori.piece.moveresult.Route;
 
 public enum Yut {
+
     DO(1),
     GAE(2),
     GUL(3),

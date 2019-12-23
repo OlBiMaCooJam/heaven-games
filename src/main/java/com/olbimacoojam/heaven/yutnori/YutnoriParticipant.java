@@ -3,9 +3,11 @@ package com.olbimacoojam.heaven.yutnori;
 import com.olbimacoojam.heaven.domain.User;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.ToString;
 
 @Getter
 @EqualsAndHashCode
+@ToString
 public class YutnoriParticipant {
 
     private final User participant;
@@ -26,13 +28,5 @@ public class YutnoriParticipant {
 
     public boolean isColor(Color color) {
         return this.color.equals(color);
-    }
-
-    @Override
-    public String toString() {
-        return "YutnoriParticipant{" +
-                "participant=" + participant +
-                ", color=" + color +
-                '}';
     }
 }

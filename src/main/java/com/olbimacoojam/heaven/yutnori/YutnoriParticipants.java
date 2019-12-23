@@ -5,26 +5,28 @@ import com.olbimacoojam.heaven.yutnori.exception.NoSuchColorPlayingException;
 import com.olbimacoojam.heaven.yutnori.exception.NotExistParticipantException;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 public class YutnoriParticipants {
+
     private final List<YutnoriParticipant> allYutnoriParticipants;
     private final List<YutnoriParticipant> finishedYutnoriParticipants;
 
-    public YutnoriParticipants(List<User> players) {
-        List<Color> colors = Arrays.asList(Color.values());
-        allYutnoriParticipants = IntStream.range(0, players.size())
-                .mapToObj(index -> new YutnoriParticipant(players.get(index), colors.get(index)))
-                .collect(Collectors.toList());
-        finishedYutnoriParticipants = new ArrayList<>();
+    public YutnoriParticipants(List<YutnoriParticipant> allYutnoriParticipants, List<YutnoriParticipant> finishedYutnoriParticipants) {
+        this.allYutnoriParticipants = allYutnoriParticipants;
+        this.finishedYutnoriParticipants = finishedYutnoriParticipants;
     }
 
-    public Stream<YutnoriParticipant> stream() {
-        return allYutnoriParticipants.stream();
+    private YutnoriParticipants(List<YutnoriParticipant> yutnoriParticipants) {
+        this(yutnoriParticipants, new ArrayList<>());
+    }
+
+    public static YutnoriParticipants of(List<User> players) {
+        return IntStream.range(0, players.size())
+                .mapToObj(i -> new YutnoriParticipant(players.get(i), Color.get(i)))
+                .collect(Collectors.collectingAndThen(Collectors.toList(), YutnoriParticipants::new));
     }
 
     public YutnoriParticipant getFirst() {
@@ -68,5 +70,11 @@ public class YutnoriParticipants {
 
     public boolean isPlaying(YutnoriParticipant yutnoriParticipant) {
         return !finishedYutnoriParticipants.contains(yutnoriParticipant);
+    }
+
+    public List<Color> getColors() {
+        return allYutnoriParticipants.stream()
+                .map(YutnoriParticipant::getColor)
+                .collect(Collectors.toList());
     }
 }

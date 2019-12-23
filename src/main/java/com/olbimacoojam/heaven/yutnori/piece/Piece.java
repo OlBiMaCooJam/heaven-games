@@ -11,6 +11,7 @@ import lombok.Getter;
 
 @Getter
 public class Piece {
+
     private final Color color;
     private Point point;
 
@@ -44,10 +45,6 @@ public class Piece {
 
     public boolean canCatch(Piece piece) {
         return this.color != piece.color && this.point == piece.point;
-    }
-
-    public Point getPoint() {
-        return point;
     }
 
     public boolean isColor(Color color) {

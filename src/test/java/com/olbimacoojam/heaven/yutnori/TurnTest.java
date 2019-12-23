@@ -27,14 +27,14 @@ class TurnTest extends YutnoriBaseTest {
     void setup() {
         turnUser = new User(1L, "kjm", "olaff");
         other = new User(2L, "other", "other");
-        yutnoriParticipants = new YutnoriParticipants(Arrays.asList(turnUser, other));
+        yutnoriParticipants = YutnoriParticipants.of(Arrays.asList(turnUser, other));
         turn = new Turn(yutnoriParticipants.getFirst());
     }
 
     @Test
     void save_one_throw() {
-        assertThat(turn.saveOneThrow(turnUser, Yut.MO)).isEqualTo(Yut.MO);
-        assertThat(turn.saveOneThrow(turnUser, Yut.DO)).isEqualTo(Yut.DO);
+        turn = turn.saveOneThrow(turnUser, Yut.MO);
+        assertDoesNotThrow(() -> turn = turn.saveOneThrow(turnUser, Yut.DO));
         assertThrows(IllegalTurnException.class, () -> turn.saveOneThrow(turnUser, Yut.DO));
     }
 
@@ -45,7 +45,7 @@ class TurnTest extends YutnoriBaseTest {
 
     @Test
     void can_move_test1() {
-        turn.saveOneThrow(turnUser, Yut.DO);
+        turn = turn.saveOneThrow(turnUser, Yut.DO);
 
         assertThat(turn.canMove(turnUser, Yut.DO)).isTrue();
     }
@@ -73,9 +73,9 @@ class TurnTest extends YutnoriBaseTest {
 
     @Test
     void can_move_test5() {
-        turn.saveOneThrow(turnUser, Yut.MO);
-        turn.saveOneThrow(turnUser, Yut.YUT);
-        turn.saveOneThrow(turnUser, Yut.DO);
+        turn = turn.saveOneThrow(turnUser, Yut.MO);
+        turn = turn.saveOneThrow(turnUser, Yut.YUT);
+        turn = turn.saveOneThrow(turnUser, Yut.DO);
 
         assertThat(turn.canMove(turnUser, Yut.YUT)).isTrue();
     }

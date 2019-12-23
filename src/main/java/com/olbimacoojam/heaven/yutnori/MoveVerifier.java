@@ -4,12 +4,17 @@ import com.olbimacoojam.heaven.yutnori.piece.Piece;
 import com.olbimacoojam.heaven.yutnori.point.Point;
 import com.olbimacoojam.heaven.yutnori.point.PointName;
 import com.olbimacoojam.heaven.yutnori.point.Points;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@EqualsAndHashCode
+@ToString
 public class MoveVerifier {
+
     private final Color color;
     private final Point point;
 

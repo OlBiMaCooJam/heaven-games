@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class RandomYutThrowStrategy implements YutThrowStrategy {
+
     @Override
     public Yut throwYut() {
         List<Yut> yuts = Arrays.asList(Yut.values());

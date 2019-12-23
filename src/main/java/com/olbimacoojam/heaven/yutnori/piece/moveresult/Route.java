@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 
 @EqualsAndHashCode
 public class Route {
+
     private final List<Point> route;
 
     public Route() {
