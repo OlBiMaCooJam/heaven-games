@@ -43,6 +43,10 @@ public class Turn {
     }
 
     boolean canMove(User user, Yut yut) {
+        boolean isRight = isRightTurn(user);
+        boolean canThrow2 = !canThrow;
+        boolean contains = thrownYuts.contains(yut);
+
         return isRightTurn(user) && !canThrow && thrownYuts.contains(yut);
     }
 

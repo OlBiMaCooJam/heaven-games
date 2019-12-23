@@ -45,6 +45,10 @@ public enum PointName {
         this.nextPointName = nextPointName;
     }
 
+    public static PointName get(String pointName) {
+        return valueOf(pointName);
+    }
+
     public Point createPoint() {
         Point currentPoint = this.pointGenerator.apply(this);
         return currentPoint;

@@ -24,9 +24,9 @@ public class MockController {
     public ResponseEntity mockLogin(HttpSession httpSession) {
         long currentOrder = order.getAndIncrement();
         User mockUser = new User(currentOrder, "mockUser" + currentOrder, "abcdef" + currentOrder);
-//        userService.save(mockUser);
-//        UserSession mockUserSession = new UserSession(mockUser.getId(), mockUser.getName(), "zxcvb" + currentOrder);
-        httpSession.setAttribute(UserSession.USER_SESSION, mockUser);
+        mockUser = userService.save(mockUser);
+        UserSession mockUserSession = new UserSession(mockUser.getId(), mockUser.getName(), "zxcvb" + currentOrder);
+        httpSession.setAttribute(UserSession.USER_SESSION, mockUserSession);
         return ResponseEntity.ok().build();
     }
 }

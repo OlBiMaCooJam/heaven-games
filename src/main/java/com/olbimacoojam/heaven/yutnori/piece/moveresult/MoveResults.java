@@ -1,11 +1,13 @@
 package com.olbimacoojam.heaven.yutnori.piece.moveresult;
 
 import com.olbimacoojam.heaven.yutnori.piece.Piece;
+import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+@Getter
 public class MoveResults {
     private final List<MoveResult> moveResults;
 

@@ -1,9 +1,11 @@
 package com.olbimacoojam.heaven.controller.yutnori;
 
 import com.olbimacoojam.heaven.dto.GameStartResponseDtos;
+import com.olbimacoojam.heaven.dto.MoveRequestDto;
 import com.olbimacoojam.heaven.dto.RoomResponseDto;
 import com.olbimacoojam.heaven.dto.YutResponse;
 import com.olbimacoojam.heaven.testhelp.Client;
+import com.olbimacoojam.heaven.yutnori.piece.moveresult.MoveResults;
 import com.olbimacoojam.heaven.yutnori.yut.Yut;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -75,10 +77,11 @@ class YutnoriGameControllerTest {
         CompletableFuture<RoomResponseDto> completableFutureForSecondClient = new CompletableFuture<>();
         firstClient.getStompSession().subscribe(SUBSCRIBE_ROOM_ENDPOINT + roomId, getStompFrameHandlerRoomResponseDto(completableFutureForFirstClient, list));
         secondClient.getStompSession().subscribe(SUBSCRIBE_ROOM_ENDPOINT + roomId, getStompFrameHandlerRoomResponseDto(completableFutureForSecondClient, list));
+
         firstClient.getStompSession().send(SEND_ROOM_ENDPOINT + roomId, null);
         secondClient.getStompSession().send(SEND_ROOM_ENDPOINT + roomId, null);
+        RoomResponseDto roomResponseDto = completableFutureForSecondClient.get(200, SECONDS);
 
-        RoomResponseDto roomResponseDto = completableFutureForFirstClient.get(200, SECONDS);
         assertThat(roomResponseDto.getId()).isEqualTo(roomId);
         assertThat(roomResponseDto.getPlayers()).hasSize(2);
 
@@ -148,6 +151,81 @@ class YutnoriGameControllerTest {
                 .map(yut -> yut.name())
                 .collect(Collectors.toList());
         assertThat(yutNames).contains(yutResponse.getYut());
+    }
+
+    @Test
+    @DisplayName("윷던지기요청 Test")
+    void move_piece() throws InterruptedException, ExecutionException, TimeoutException {
+
+        //두 명의 클라이언트 로그인
+        list = new ArrayList<>();
+        Client firstClient = createClient();
+        Client secondClient = createClient();
+
+        //한 클라이언트가 방을 만든다
+        int roomId = createRoom();
+
+        // 두명의 클라이언트가 방에 입장
+        CompletableFuture<RoomResponseDto> completableFutureForFirstClient = new CompletableFuture<>();
+        CompletableFuture<RoomResponseDto> completableFutureForSecondClient = new CompletableFuture<>();
+        firstClient.getStompSession().subscribe(SUBSCRIBE_ROOM_ENDPOINT + roomId, getStompFrameHandlerRoomResponseDto(completableFutureForFirstClient, list));
+        secondClient.getStompSession().subscribe(SUBSCRIBE_ROOM_ENDPOINT + roomId, getStompFrameHandlerRoomResponseDto(completableFutureForSecondClient, list));
+        firstClient.getStompSession().send(SEND_ROOM_ENDPOINT + roomId, null);
+        secondClient.getStompSession().send(SEND_ROOM_ENDPOINT + roomId, null);
+
+        RoomResponseDto roomResponseDto = completableFutureForFirstClient.get(200, SECONDS);
+        assertThat(roomResponseDto.getId()).isEqualTo(roomId);
+        assertThat(roomResponseDto.getPlayers()).hasSize(2);
+
+
+        //한 클라이언트가 게임을 시작함
+        CompletableFuture<GameStartResponseDtos> completableFutureForFirstClientGameStartResponseDtos = new CompletableFuture<>();
+        CompletableFuture<GameStartResponseDtos> completableFutureForSecondClientGameStartResponseDtos = new CompletableFuture<>();
+        firstClient.getStompSession().subscribe("/topic/yutnori/" + roomId, getStompFrameHandlerGameStartResponse(completableFutureForFirstClientGameStartResponseDtos));
+        secondClient.getStompSession().subscribe("/topic/yutnori/" + roomId, getStompFrameHandlerGameStartResponse(completableFutureForSecondClientGameStartResponseDtos));
+
+        firstClient.getStompSession().send("/app/yutnori/" + roomId, null);
+
+        GameStartResponseDtos gameStartResponseDtos = completableFutureForFirstClientGameStartResponseDtos.get(100, SECONDS);
+        assertThat(gameStartResponseDtos.size()).isEqualTo(2);
+        assertThat(gameStartResponseDtos.containsUser("mockUser0")).isTrue();
+        assertThat(gameStartResponseDtos.containsUser("mockUser1")).isTrue();
+
+        //윷던지기
+        CompletableFuture<YutResponse> completableFutureForFirstClientYutResponse = new CompletableFuture<>();
+        CompletableFuture<YutResponse> completableFutureForSecondClientYutResponse = new CompletableFuture<>();
+        firstClient.getStompSession().subscribe("/topic/yutnori/" + roomId + "/yut-throw", getStompFrameHandlerYutResponse(completableFutureForFirstClientYutResponse));
+        secondClient.getStompSession().subscribe("/topic/yutnori" + roomId + "/yut-throw", getStompFrameHandlerYutResponse(completableFutureForSecondClientYutResponse));
+
+        firstClient.getStompSession().send("/app/yutnori/" + roomId + "/yut-throw", null);
+
+        YutResponse yutResponse = completableFutureForFirstClientYutResponse.get(100, SECONDS);
+
+        //말 움직이기
+        CompletableFuture<MoveResults> completableFutureForFirstClientMoveResults = new CompletableFuture<>();
+        CompletableFuture<MoveResults> completableFutureForFSecondClientMoveResults = new CompletableFuture<>();
+
+        firstClient.getStompSession().subscribe("/topic/yutnori/" + roomId, getStompFramHandlerMoveResults(completableFutureForFirstClientMoveResults));
+        secondClient.getStompSession().subscribe("/topic/yutnori/" + roomId, getStompFramHandlerMoveResults(completableFutureForFSecondClientMoveResults));
+
+        MoveRequestDto moveRequestDto = new MoveRequestDto("STANDBY", "DO");
+        firstClient.getStompSession().send("/app/yutnori/" + roomId + "/move-piece", moveRequestDto);
+
+        MoveResults moveResults = completableFutureForFirstClientMoveResults.get(100, SECONDS);
+    }
+
+    private StompFrameHandler getStompFramHandlerMoveResults(CompletableFuture<MoveResults> completableFutureForFirstClientMoveResults) {
+        return new StompFrameHandler() {
+            @Override
+            public Type getPayloadType(StompHeaders headers) {
+                return MoveResults.class;
+            }
+
+            @Override
+            public void handleFrame(StompHeaders headers, Object payload) {
+                completableFutureForFirstClientMoveResults.complete((MoveResults) payload);
+            }
+        };
     }
 
     private StompFrameHandler getStompFrameHandlerYutResponse(CompletableFuture<YutResponse> completableFutureForFirstClientYutResponse) {

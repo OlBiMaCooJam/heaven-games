@@ -5,10 +5,12 @@ import com.olbimacoojam.heaven.domain.RoomFactory;
 import com.olbimacoojam.heaven.domain.RoomRepository;
 import com.olbimacoojam.heaven.domain.User;
 import com.olbimacoojam.heaven.dto.GameStartResponseDtos;
+import com.olbimacoojam.heaven.dto.MoveRequestDto;
 import com.olbimacoojam.heaven.dto.RoomResponseDto;
 import com.olbimacoojam.heaven.dto.YutResponse;
 import com.olbimacoojam.heaven.game.Game;
-import com.olbimacoojam.heaven.yutnori.YutnoriGame;
+import com.olbimacoojam.heaven.yutnori.piece.moveresult.MoveResults;
+import com.olbimacoojam.heaven.yutnori.point.PointName;
 import com.olbimacoojam.heaven.yutnori.yut.RandomYutThrowStrategy;
 import com.olbimacoojam.heaven.yutnori.yut.Yut;
 import com.olbimacoojam.heaven.yutnori.yut.YutThrowStrategy;
@@ -24,13 +26,15 @@ public class RoomService {
     private final RoomFactory roomFactory;
     private final ModelMapper modelMapper;
     private final RoomRepository roomRepository;
+    private final UserService userService;
     private final YutThrowStrategy yutThrowStrategy;
 
     @Autowired
-    public RoomService(RoomFactory roomFactory, ModelMapper modelMapper, RoomRepository roomRepository) {
+    public RoomService(RoomFactory roomFactory, ModelMapper modelMapper, UserService userService, RoomRepository roomRepository) {
         this.roomFactory = roomFactory;
         this.modelMapper = modelMapper;
         this.roomRepository = roomRepository;
+        this.userService = userService;
         this.yutThrowStrategy = new RandomYutThrowStrategy();
     }
 
@@ -47,8 +51,9 @@ public class RoomService {
                 .collect(Collectors.toList());
     }
 
-    public RoomResponseDto subscribe(int roomId, User user) {
+    public RoomResponseDto subscribe(int roomId, Long userId) {
         Room room = roomRepository.findById(roomId);
+        User user = userService.findById(userId);
         room.join(user);
         return modelMapper.map(room, RoomResponseDto.class);
     }
@@ -79,10 +84,17 @@ public class RoomService {
         return gameStartResponseDtos;
     }
 
-    public YutResponse throwYut(int roomId, User thrower) {
+    public YutResponse throwYut(int roomId, Long userId) {
         Room room = roomRepository.findById(roomId);
-        YutnoriGame yutnoriGame = (YutnoriGame) room.getGame();
-        Yut yut = yutnoriGame.throwYut(thrower, yutThrowStrategy);
-        return new YutResponse(yut.name());
+        User thrower = userService.findById(userId);
+        return room.throwYut(thrower);
+    }
+
+    public MoveResults movePiece(int roomId, Long userId, MoveRequestDto moveRequestDto) {
+        Room room = roomRepository.findById(roomId);
+        User mover = userService.findById(userId);
+        PointName pointName = PointName.get(moveRequestDto.getPointName());
+        Yut yut = Yut.get(moveRequestDto.getYut());
+        return room.movePiece(mover, pointName, yut);
     }
 }
