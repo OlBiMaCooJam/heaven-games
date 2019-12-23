@@ -207,7 +207,7 @@ class YutnoriGameControllerTest {
         MoveRequestDto moveRequestDto = new MoveRequestDto("STANDBY", "DO");
         firstClient.getStompSession().send("/app/yutnori/" + roomId + "/move-piece", moveRequestDto);
 
-        MoveResultDtos moveResultDtos = completableFutureForFirstClientMoveResults.get(100, SECONDS);
+        MoveResultDtos moveResultDtos = completableFutureForFirstClientMoveResults.get(1, SECONDS);
     }
 
     private StompFrameHandler getStompFramHandlerMoveResults(CompletableFuture<MoveResultDtos> completableFutureForFirstClientMoveResults) {
