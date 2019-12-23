@@ -27,10 +27,6 @@ public class BoardSpecification {
         return new BoardSpecification(rows, columns, mines);
     }
 
-    public void checkSpecification() {
-        checkSpecification(this.rows, this.columns, this.mines);
-    }
-
     private void checkSpecification(Integer rows, Integer columns, Integer mines) {
         checkRows(rows);
         checkColumns(columns);
@@ -53,14 +49,5 @@ public class BoardSpecification {
         if (rows * columns <= mines) {
             throw new InvalidNumberOfMinesException();
         }
-    }
-
-    @Override
-    public String toString() {
-        return "BoardSpecification{" +
-                "rows=" + rows +
-                ", columns=" + columns +
-                ", mines=" + mines +
-                '}';
     }
 }

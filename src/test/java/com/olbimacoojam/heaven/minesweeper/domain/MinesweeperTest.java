@@ -1,6 +1,7 @@
 package com.olbimacoojam.heaven.minesweeper.domain;
 
 import com.olbimacoojam.heaven.domain.User;
+import com.olbimacoojam.heaven.minesweeper.domain.exception.GameOverException;
 import com.olbimacoojam.heaven.minesweeper.domain.exception.InvalidNumberOfUsersException;
 import com.olbimacoojam.heaven.minesweeper.domain.exception.UserNotMatchException;
 import org.junit.jupiter.api.BeforeEach;
@@ -113,5 +114,18 @@ class MinesweeperTest {
                 .reduce(ClickedBlocks.newClickedBlocks(), ClickedBlocks::putAll);
 
         assertThat(minesweeper.click(user1, Click.leftClickOn(Position.of(0, 0)))).isEqualTo(expected);
+    }
+
+    @Test
+    void gameOver() {
+        Board board = Board.of(unclickedBlocks);
+
+        Minesweeper minesweeper = Minesweeper.newGame(user1, board);
+        assertThat(minesweeper.getMinesweeperStatus().isGameOver()).isFalse();
+
+        minesweeper.click(user1, Click.leftClickOn(Position.of(2, 2)));
+        assertThat(minesweeper.getMinesweeperStatus().isGameOver()).isTrue();
+
+        assertThrows(GameOverException.class, () -> minesweeper.click(user1, Click.leftClickOn(Position.of(2, 2))));
     }
 }
