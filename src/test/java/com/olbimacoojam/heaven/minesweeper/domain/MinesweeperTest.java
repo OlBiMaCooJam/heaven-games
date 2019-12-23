@@ -83,7 +83,7 @@ class MinesweeperTest {
         Board board = Board.of(new HashMap<>());
 
         Minesweeper minesweeper = Minesweeper.newGame(user1, board);
-        assertDoesNotThrow(() -> minesweeper.initialize(Collections.singletonList(user2)));
+        assertDoesNotThrow(() -> minesweeper.initialize(Collections.singletonList(user1)));
     }
 
     @Test
