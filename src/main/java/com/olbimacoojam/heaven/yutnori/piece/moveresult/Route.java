@@ -2,6 +2,7 @@ package com.olbimacoojam.heaven.yutnori.piece.moveresult;
 
 import com.olbimacoojam.heaven.yutnori.point.Point;
 import com.olbimacoojam.heaven.yutnori.point.PointName;
+import com.olbimacoojam.heaven.yutnori.point.Points;
 import lombok.EqualsAndHashCode;
 
 import java.util.ArrayList;
@@ -12,21 +13,21 @@ import java.util.stream.Collectors;
 @EqualsAndHashCode
 public class Route {
 
-    private final List<Point> route;
+    private final List<PointName> route;
 
     public Route() {
         this.route = new ArrayList<>();
     }
 
-    public Route(List<Point> route) {
+    public Route(List<PointName> route) {
         this.route = route;
     }
 
     public void add(Point point) {
-        route.add(point);
+        route.add(point.getPointName());
     }
 
-    public List<Point> getRoute() {
+    public List<PointName> getRoute() {
         return Collections.unmodifiableList(route);
     }
 
@@ -36,6 +37,7 @@ public class Route {
 
     public boolean hasRightDiagonal() {
         return route.stream()
+                .map(Points::get)
                 .anyMatch(Point::isRightDiagonal);
     }
 
@@ -44,7 +46,7 @@ public class Route {
     }
 
     public Point getDestination() {
-        return route.get(route.size() - 1);
+        return Points.get(route.get(route.size() - 1));
     }
 
     public boolean isDestination(PointName pointName) {
@@ -55,7 +57,6 @@ public class Route {
     @Override
     public String toString() {
         String route = this.route.stream()
-                .map(Point::getPointName)
                 .map(PointName::name)
                 .collect(Collectors.joining(", "));
 

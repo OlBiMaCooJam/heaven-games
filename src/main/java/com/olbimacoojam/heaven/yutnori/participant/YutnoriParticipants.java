@@ -1,6 +1,7 @@
-package com.olbimacoojam.heaven.yutnori;
+package com.olbimacoojam.heaven.yutnori.participant;
 
 import com.olbimacoojam.heaven.domain.User;
+import com.olbimacoojam.heaven.yutnori.Color;
 import com.olbimacoojam.heaven.yutnori.exception.NoSuchColorPlayingException;
 import com.olbimacoojam.heaven.yutnori.exception.NotExistParticipantException;
 

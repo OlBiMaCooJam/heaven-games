@@ -2,11 +2,13 @@ package com.olbimacoojam.heaven.yutnori.piece.moveresult;
 
 import com.olbimacoojam.heaven.yutnori.piece.Piece;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @EqualsAndHashCode
+@Getter
 public class MoveResults {
 
     private final List<MoveResult> moveResults;

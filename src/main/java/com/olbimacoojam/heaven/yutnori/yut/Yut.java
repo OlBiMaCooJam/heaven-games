@@ -17,6 +17,10 @@ public enum Yut {
         this.moveUnit = moveUnit;
     }
 
+    public static Yut get(String pointName) {
+        return valueOf(pointName);
+    }
+
     public boolean isBackDo() {
         return this == BACKDO;
     }

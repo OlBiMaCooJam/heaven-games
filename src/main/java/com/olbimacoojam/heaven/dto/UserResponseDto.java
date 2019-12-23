@@ -9,8 +9,13 @@ import lombok.Setter;
 @NoArgsConstructor
 public class UserResponseDto {
     private Long id;
+    private Long kakaoId;
+    private String name;
+    private String refreshToken;
 
-    public UserResponseDto(Long id) {
-        this.id = id;
+    public UserResponseDto(Long kakaoId, String name, String refreshToken) {
+        this.kakaoId = kakaoId;
+        this.name = name;
+        this.refreshToken = refreshToken;
     }
 }
