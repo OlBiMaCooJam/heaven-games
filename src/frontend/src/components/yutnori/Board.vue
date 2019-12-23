@@ -1,107 +1,146 @@
 <template>
-    <v-container id="board">
-        <v-container id="inner-board">
-        <Row class="absolute-position" v-for='row in rows'
-                  :key="row.names" :row="row"/>
-        </v-container>
-    </v-container>
+    <div id="board">
+        <Point :inc="val.inc" :key="key"
+               :left="val.left" :pieceColor="val.pieceColor" :pointName="key"
+               :top="val.top" @chooseSrcPoint="chooseSrcPoint"
+               v-for='[key, val] in pointsWithMovingResult'/>
+    </div>
 </template>
 
 <script>
-    import Row from "./Row"
+    import Point from "./Point"
 
     export default {
         name: "Board",
-        components: {Row},
+        components: {Point},
+        props: {
+            movingResults: Array
+        },
         data: function () {
-            const weight = 12;
-            const x = 6, y = 5;
-            const weightedX = x * weight, weightedY = y * weight;
-
             return {
-                rows: [
+                points: Map
+            }
+        },
+        computed: {
+            pointsWithMovingResult: function () {
+                let points = this.points;
+                if (this.movingResults != null) {
+                    this.movingResults.forEach(function (movingResult) {
+                        points.get(movingResult.destPoint).pieceColor = movingResult.color;
+                        if (movingResult.destPoint != 'STANDBY') points.get(movingResult.destPoint).inc++;
+                        if (movingResult.srcPoint != 'STANDBY') points.get(movingResult.srcPoint).inc--;
+                    })
+                }
+                window.console.log("points with movingresult")
+                window.console.log(points)
+                return points;
+            }
+        },
+        created() {
+            this.points = this.getPointsFromRows()
+        },
+        methods: {
+            chooseSrcPoint(pointName) {
+                this.$emit('chooseSrcPoint', pointName)
+            },
+            getPointsFromRows() {
+                const weight = 12;
+                const initX = 40, initY = 30;
+                const verticalInterval = 6, diagonalInterval = 5;
+                const weightedVerticalInterval = verticalInterval * weight,
+                    weightedDiagonalInterval = diagonalInterval * weight;
+                const rows = [
                     {
                         names: ["DUITMO", "DUITYUT", "DUITGUL", "DUITGAE", "DUITDO", "MO"],
-                        left: 0,
-                        top: 0,
-                        interval: weightedX
+                        left: initX,
+                        top: initY,
+                        interval: weightedVerticalInterval
                     },
                     {
                         names: ["DUITMODO", "MODO"],
-                        left: weightedY,
-                        top: weightedY,
-                        interval: weightedY * 4
+                        left: weightedDiagonalInterval + initX,
+                        top: weightedDiagonalInterval + initY,
+                        interval: weightedDiagonalInterval * 4
                     },
                     {
                         names: ["ZZIDO", "YUT"],
-                        left: 0,
-                        top: weightedX,
-                        interval: weightedX * 5
+                        left: initX,
+                        top: weightedVerticalInterval + initY,
+                        interval: weightedVerticalInterval * 5
                     },
                     {
                         names: ["DUITMOGAE", "MOGAE"],
-                        left: weightedY * 2,
-                        top: weightedY * 2,
-                        interval: weightedY * 2
+                        left: weightedDiagonalInterval * 2 + initX,
+                        top: weightedDiagonalInterval * 2 + initY,
+                        interval: weightedDiagonalInterval * 2
                     },
                     {
                         names: ["ZZIGAE", "GUL"],
-                        left: 0,
-                        top: weightedX * 2,
-                        interval: weightedX * 5
+                        left: initX,
+                        top: weightedVerticalInterval * 2 + initY,
+                        interval: weightedVerticalInterval * 5
                     },
                     {
                         names: ["BANG"],
-                        left: weightedY * 3,
-                        top: weightedY * 3,
+                        left: weightedDiagonalInterval * 3 + initX,
+                        top: weightedDiagonalInterval * 3 + initY,
                         interval: 0
                     },
                     {
                         names: ["ZZIGUL", "GAE"],
-                        left: 0,
-                        top: weightedX * 3,
-                        interval: weightedX * 5
+                        left: initX,
+                        top: weightedVerticalInterval * 3 + initY,
+                        interval: weightedVerticalInterval * 5
                     },
                     {
                         names: ["SOKYUT", "BANGSUGI"],
-                        left: weightedY * 2,
-                        top: weightedY * 4,
-                        interval: weightedY * 2
+                        left: weightedDiagonalInterval * 2 + initX,
+                        top: weightedDiagonalInterval * 4 + initY,
+                        interval: weightedDiagonalInterval * 2
                     },
                     {
                         names: ["ZZIYUT", "DO"],
-                        left: 0,
-                        top: weightedX * 4,
-                        interval: weightedX * 5
+                        left: initX,
+                        top: weightedVerticalInterval * 4 + initY,
+                        interval: weightedVerticalInterval * 5
                     },
                     {
                         names: ["SOKMO", "ANZZI"],
-                        left: weightedY,
-                        top: weightedY * 5,
-                        interval: weightedY * 4
+                        left: weightedDiagonalInterval + initX,
+                        top: weightedDiagonalInterval * 5 + initY,
+                        interval: weightedDiagonalInterval * 4
                     },
                     {
-                        names: ["ZZIMO", "NALDO", "NALGAE", "NALGUL", "NALYUT", "NALMO"],
-                        left: 0,
-                        top: weightedX * 5,
-                        interval: weightedX
+                        names: ["ZZIMO", "NALDO", "NALGAE", "NALGUL", "NALYUT", "CHAMMUGI"],
+                        left: initX,
+                        top: weightedVerticalInterval * 5 + initY,
+                        interval: weightedVerticalInterval
                     }
                 ]
+
+                let points = new Map();
+                for (let i = 0; i < rows.length; i++) {
+                    for (let k = 0; k < rows[i].names.length; k++) {
+                        const pointName = rows[i].names[k]
+
+                        points.set(pointName, {
+                            top: rows[i].top,
+                            left: rows[i].left + rows[i].interval * k,
+                            inc: 0
+                        })
+                    }
+                }
+                return points;
             }
         }
     }
 </script>
 
-<style scoped lang="scss">
+<style scoped>
     #board {
         height: 450px;
-        width: 450px;
-        background-color: black;
-    }
-    #inner-board {
-        height: 400px;
-        width: 400px;
-        padding-left: 20px;
-        padding-top: 18px;
+        width: 470px;
+        background-color: beige;
+        text-align: center;
     }
 </style>
