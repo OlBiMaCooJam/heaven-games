@@ -3,7 +3,7 @@
     <v-row id="nav">
       <v-col cols="1" id="home">
         <router-link to="/">
-          <img id="btn-home" src="./assets/Logo.jpg">
+          <img id="btn-home" src="./assets/Logo.jpg" alt="Logo">
         </router-link>
       </v-col>
       <v-col cols="11">
