@@ -1,11 +1,7 @@
 package com.olbimacoojam.heaven.controller.yutnori;
 
-import com.olbimacoojam.heaven.dto.GameStartResponseDtos;
-import com.olbimacoojam.heaven.dto.MoveRequestDto;
-import com.olbimacoojam.heaven.dto.RoomResponseDto;
-import com.olbimacoojam.heaven.dto.YutResponse;
+import com.olbimacoojam.heaven.dto.*;
 import com.olbimacoojam.heaven.testhelp.Client;
-import com.olbimacoojam.heaven.yutnori.piece.moveresult.MoveResults;
 import com.olbimacoojam.heaven.yutnori.yut.Yut;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -154,7 +150,7 @@ class YutnoriGameControllerTest {
     }
 
     @Test
-    @DisplayName("윷던지기요청 Test")
+    @DisplayName("말 움직이기 Test")
     void move_piece() throws InterruptedException, ExecutionException, TimeoutException {
 
         //두 명의 클라이언트 로그인
@@ -173,7 +169,7 @@ class YutnoriGameControllerTest {
         firstClient.getStompSession().send(SEND_ROOM_ENDPOINT + roomId, null);
         secondClient.getStompSession().send(SEND_ROOM_ENDPOINT + roomId, null);
 
-        RoomResponseDto roomResponseDto = completableFutureForFirstClient.get(200, SECONDS);
+        RoomResponseDto roomResponseDto = completableFutureForFirstClient.get(1, SECONDS);
         assertThat(roomResponseDto.getId()).isEqualTo(roomId);
         assertThat(roomResponseDto.getPlayers()).hasSize(2);
 
@@ -186,7 +182,7 @@ class YutnoriGameControllerTest {
 
         firstClient.getStompSession().send("/app/yutnori/" + roomId, null);
 
-        GameStartResponseDtos gameStartResponseDtos = completableFutureForFirstClientGameStartResponseDtos.get(100, SECONDS);
+        GameStartResponseDtos gameStartResponseDtos = completableFutureForFirstClientGameStartResponseDtos.get(1, SECONDS);
         assertThat(gameStartResponseDtos.size()).isEqualTo(2);
         assertThat(gameStartResponseDtos.containsUser("mockUser0")).isTrue();
         assertThat(gameStartResponseDtos.containsUser("mockUser1")).isTrue();
@@ -199,31 +195,31 @@ class YutnoriGameControllerTest {
 
         firstClient.getStompSession().send("/app/yutnori/" + roomId + "/yut-throw", null);
 
-        YutResponse yutResponse = completableFutureForFirstClientYutResponse.get(100, SECONDS);
+        YutResponse yutResponse = completableFutureForFirstClientYutResponse.get(10, SECONDS);
 
         //말 움직이기
-        CompletableFuture<MoveResults> completableFutureForFirstClientMoveResults = new CompletableFuture<>();
-        CompletableFuture<MoveResults> completableFutureForFSecondClientMoveResults = new CompletableFuture<>();
+        CompletableFuture<MoveResultDtos> completableFutureForFirstClientMoveResults = new CompletableFuture<>();
+        CompletableFuture<MoveResultDtos> completableFutureForFSecondClientMoveResults = new CompletableFuture<>();
 
-        firstClient.getStompSession().subscribe("/topic/yutnori/" + roomId, getStompFramHandlerMoveResults(completableFutureForFirstClientMoveResults));
-        secondClient.getStompSession().subscribe("/topic/yutnori/" + roomId, getStompFramHandlerMoveResults(completableFutureForFSecondClientMoveResults));
+        firstClient.getStompSession().subscribe("/topic/yutnori/" + roomId + "/playing", getStompFramHandlerMoveResults(completableFutureForFirstClientMoveResults));
+        secondClient.getStompSession().subscribe("/topic/yutnori/" + roomId + "/playing", getStompFramHandlerMoveResults(completableFutureForFSecondClientMoveResults));
 
         MoveRequestDto moveRequestDto = new MoveRequestDto("STANDBY", "DO");
         firstClient.getStompSession().send("/app/yutnori/" + roomId + "/move-piece", moveRequestDto);
 
-        MoveResults moveResults = completableFutureForFirstClientMoveResults.get(100, SECONDS);
+        MoveResultDtos moveResultDtos = completableFutureForFirstClientMoveResults.get(100, SECONDS);
     }
 
-    private StompFrameHandler getStompFramHandlerMoveResults(CompletableFuture<MoveResults> completableFutureForFirstClientMoveResults) {
+    private StompFrameHandler getStompFramHandlerMoveResults(CompletableFuture<MoveResultDtos> completableFutureForFirstClientMoveResults) {
         return new StompFrameHandler() {
             @Override
             public Type getPayloadType(StompHeaders headers) {
-                return MoveResults.class;
+                return MoveResultDtos.class;
             }
 
             @Override
             public void handleFrame(StompHeaders headers, Object payload) {
-                completableFutureForFirstClientMoveResults.complete((MoveResults) payload);
+                completableFutureForFirstClientMoveResults.complete((MoveResultDtos) payload);
             }
         };
     }

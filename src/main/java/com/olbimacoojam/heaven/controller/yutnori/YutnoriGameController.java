@@ -3,9 +3,9 @@ package com.olbimacoojam.heaven.controller.yutnori;
 import com.olbimacoojam.heaven.domain.UserSession;
 import com.olbimacoojam.heaven.dto.GameStartResponseDtos;
 import com.olbimacoojam.heaven.dto.MoveRequestDto;
+import com.olbimacoojam.heaven.dto.MoveResultDtos;
 import com.olbimacoojam.heaven.dto.YutResponse;
 import com.olbimacoojam.heaven.service.RoomService;
-import com.olbimacoojam.heaven.yutnori.piece.moveresult.MoveResults;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
@@ -26,12 +26,18 @@ public class YutnoriGameController {
     }
 
     @MessageMapping("/yutnori/{roomId}/move-piece")
-    @SendTo("/topic/yutnori/{roomId}")
-    public MoveResults movePiece(@DestinationVariable int roomId, @Payload MoveRequestDto moveRequestDto, SimpMessageHeaderAccessor simpMessageHeaderAccessor) {
+    @SendTo("/topic/yutnori/{roomId}/playing")
+    public MoveResultDtos movePiece(@DestinationVariable int roomId, @Payload MoveRequestDto moveRequestDto, SimpMessageHeaderAccessor simpMessageHeaderAccessor) {
+        System.out.println("==movePiece====");
+        System.out.println(moveRequestDto);
+
         HttpSession httpSession = (HttpSession) (simpMessageHeaderAccessor.getSessionAttributes().get(HTTP_SESSION));
         UserSession userSession = (UserSession) httpSession.getAttribute(UserSession.USER_SESSION);
         Long userId = userSession.getId();
-        return roomService.movePiece(roomId, userId, moveRequestDto);
+        MoveResultDtos moveResultDtos = roomService.movePiece(roomId, userId, moveRequestDto);
+        System.out.println(moveResultDtos);
+        System.out.println("===============");
+        return moveResultDtos;
     }
 
     @MessageMapping("/yutnori/{roomId}/yut-throw")

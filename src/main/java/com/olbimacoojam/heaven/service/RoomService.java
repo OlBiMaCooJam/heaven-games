@@ -4,12 +4,8 @@ import com.olbimacoojam.heaven.domain.Room;
 import com.olbimacoojam.heaven.domain.RoomFactory;
 import com.olbimacoojam.heaven.domain.RoomRepository;
 import com.olbimacoojam.heaven.domain.User;
-import com.olbimacoojam.heaven.dto.GameStartResponseDtos;
-import com.olbimacoojam.heaven.dto.MoveRequestDto;
-import com.olbimacoojam.heaven.dto.RoomResponseDto;
-import com.olbimacoojam.heaven.dto.YutResponse;
+import com.olbimacoojam.heaven.dto.*;
 import com.olbimacoojam.heaven.game.Game;
-import com.olbimacoojam.heaven.yutnori.piece.moveresult.MoveResults;
 import com.olbimacoojam.heaven.yutnori.point.PointName;
 import com.olbimacoojam.heaven.yutnori.yut.RandomYutThrowStrategy;
 import com.olbimacoojam.heaven.yutnori.yut.Yut;
@@ -90,7 +86,7 @@ public class RoomService {
         return room.throwYut(thrower);
     }
 
-    public MoveResults movePiece(int roomId, Long userId, MoveRequestDto moveRequestDto) {
+    public MoveResultDtos movePiece(int roomId, Long userId, MoveRequestDto moveRequestDto) {
         Room room = roomRepository.findById(roomId);
         User mover = userService.findById(userId);
         PointName pointName = PointName.get(moveRequestDto.getPointName());

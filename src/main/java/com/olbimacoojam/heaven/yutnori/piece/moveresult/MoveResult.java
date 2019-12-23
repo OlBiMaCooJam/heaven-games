@@ -1,5 +1,6 @@
 package com.olbimacoojam.heaven.yutnori.piece.moveresult;
 
+import com.olbimacoojam.heaven.yutnori.Color;
 import com.olbimacoojam.heaven.yutnori.piece.Piece;
 import com.olbimacoojam.heaven.yutnori.point.PointName;
 import lombok.Getter;
@@ -38,5 +39,9 @@ public class MoveResult {
     @Override
     public int hashCode() {
         return Objects.hash(piece, route);
+    }
+
+    public Color getColor() {
+        return piece.getColor();
     }
 }

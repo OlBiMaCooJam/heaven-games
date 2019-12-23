@@ -1,10 +1,10 @@
 package com.olbimacoojam.heaven.domain;
 
 import com.olbimacoojam.heaven.dto.GameStartResponseDtos;
+import com.olbimacoojam.heaven.dto.MoveResultDtos;
 import com.olbimacoojam.heaven.dto.YutResponse;
 import com.olbimacoojam.heaven.game.Game;
 import com.olbimacoojam.heaven.yutnori.YutnoriGame;
-import com.olbimacoojam.heaven.yutnori.piece.moveresult.MoveResults;
 import com.olbimacoojam.heaven.yutnori.point.PointName;
 import com.olbimacoojam.heaven.yutnori.yut.Yut;
 import lombok.Getter;
@@ -49,7 +49,7 @@ public class Room {
         return new YutResponse(yut.name());
     }
 
-    public MoveResults movePiece(User mover, PointName pointName, Yut yut) {
+    public MoveResultDtos movePiece(User mover, PointName pointName, Yut yut) {
         return ((YutnoriGame) game).move(mover, pointName, yut);
     }
 }
