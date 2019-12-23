@@ -14,13 +14,14 @@ public class Minesweeper implements Game {
     private static final int MINESWEEPER_PLAYER_NUMBER = 1;
 
     @Getter
-    private boolean isGameOver = false;
+    private MinesweeperStatus minesweeperStatus;
     private final Board board;
     private final User user;
 
     private Minesweeper(final User user, final Board board) {
         this.board = board;
         this.user = user;
+        this.minesweeperStatus = MinesweeperStatus.PLAYING;
     }
 
     public static Minesweeper newGame(final User user, final Board board) {
@@ -52,11 +53,15 @@ public class Minesweeper implements Game {
     public ClickedBlocks click(User user, Click click) {
         checkUser(Collections.singletonList(user));
         checkGameOver();
-        Block clickedBlock = board.click(click);
 
-        if (clickedBlock.isMine()) {
-            isGameOver = true;
-        }
+        ClickedBlocks clickedBlocks = clickInternal(click);
+
+        minesweeperStatus = board.getCurrentStatus();
+        return clickedBlocks;
+    }
+
+    private ClickedBlocks clickInternal(Click click) {
+        Block clickedBlock = board.click(click);
 
         ClickedBlocks clickedBlocks = ClickedBlocks.of(click.getPosition(), clickedBlock);
         if (clickedBlock.isBlankBlock() && click.getClickType().isLeftClick()) {
@@ -70,13 +75,13 @@ public class Minesweeper implements Game {
         Position position = click.getPosition();
 
         return position.getAroundPositions().stream()
-                .filter(pos -> board.contains(pos) && !board.isClicked(pos))
-                .map(pos -> click(user, Click.leftClickOn(pos)))
+                .filter(board::canClick)
+                .map(pos -> clickInternal(Click.leftClickOn(pos)))
                 .reduce(ClickedBlocks.newClickedBlocks(), ClickedBlocks::putAll);
     }
 
     private void checkGameOver() {
-        if (isGameOver) {
+        if (minesweeperStatus.isGameOver()) {
             throw new GameOverException();
         }
     }

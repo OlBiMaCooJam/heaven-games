@@ -1,5 +1,5 @@
 <template>
-  <router-link :to="'/rooms'">
+  <router-link :to="game.url">
       <!--  <router-link :to="'/games/' + game.id">-->
 
       <v-card

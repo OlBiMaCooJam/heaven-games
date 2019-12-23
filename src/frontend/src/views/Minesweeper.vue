@@ -123,7 +123,7 @@
             'mdi-numeric-3', 'mdi-numeric-4', 'mdi-numeric-5',
             'mdi-numeric-6', 'mdi-numeric-7', 'mdi-numeric-8']
         },
-        gameOver: false,
+        minesweeperStatus: '',
         dialog: true,
         gameCreated: false,
       }
@@ -147,7 +147,7 @@
       async clickLeft(x, y) {
         const clickResponse = await this.click(x, y, "LEFT");
         const clickedBlocks = clickResponse.clickedBlocks;
-        this.gameOver = clickResponse.gameOver;
+        this.minesweeperStatus = clickResponse.minesweeperStatus;
         for (let i = 0, len = clickedBlocks.length; i < len; i++) {
           const clickedBlock = clickedBlocks[i];
           this.board.blocks = this.changeStatus(clickedBlock.x, clickedBlock.y,
@@ -228,15 +228,18 @@
           });
           return {
             clickedBlocks: this.parseBlocks(response.data.clickedBlocks.clickedBlocks),
-            gameOver: response.data.gameOver
+            minesweeperStatus: response.data.minesweeperStatus
           };
         } catch (error) {
           alert(error)
         }
       },
+      isGameOver() {
+        return "WIN" === this.minesweeperStatus || "LOSE" === this.minesweeperStatus;
+      },
       checkGameOver() {
-        if (this.gameOver) {
-          alert("GameOver");
+        if (this.isGameOver()) {
+          alert(this.minesweeperStatus);
           return true;
         }
         return false;
