@@ -6,7 +6,7 @@ import static com.olbimacoojam.heaven.game.GameType.*;
 
 @Getter
 public enum GameKind {
-    MINE(WIN_LOSE), MAFIA(WIN_LOSE), SONG(SCORE), BASEBALL(NONE), LADDER(NONE), DRAW(NONE);
+    YUTNORI(WIN_LOSE), MINE(WIN_LOSE), MAFIA(WIN_LOSE), SONG(SCORE), BASEBALL(NONE), LADDER(NONE), DRAW(NONE);
 
     private GameType gameType;
 

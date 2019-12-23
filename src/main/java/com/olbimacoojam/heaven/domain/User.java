@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 /**
  * temporary class
@@ -33,5 +34,21 @@ public class User extends BaseEntity {
         this.kakaoId = kakaoId;
         this.name = name;
         this.refreshToken = refreshToken;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        User user = (User) o;
+        return Objects.equals(kakaoId, user.kakaoId) &&
+                Objects.equals(name, user.name) &&
+                Objects.equals(refreshToken, user.refreshToken);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), kakaoId, name, refreshToken);
     }
 }
