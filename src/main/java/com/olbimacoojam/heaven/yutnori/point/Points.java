@@ -14,22 +14,19 @@ import static com.olbimacoojam.heaven.yutnori.point.PointName.*;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class Points {
 
-    private static Map<PointName, Point> points;
+    private static final Map<PointName, Point> points;
 
     static {
         points = initializePoints();
+        connectPoints();
     }
 
     private static Map<PointName, Point> initializePoints() {
-        Map<PointName, Point> map = Arrays.stream(PointName.values())
+        return Arrays.stream(PointName.values())
                 .collect(Collectors.toMap(Function.identity(), PointName::createPoint));
-
-        connectPoints(map);
-
-        return map;
     }
 
-    private static void connectPoints(Map<PointName, Point> points) {
+    private static void connectPoints() {
         for (PointName pointName : PointName.values()) {
             Point prevPoint = points.get(pointName.getPrevPointName());
             Point nextPoint = points.get(pointName.getNextPointName());
