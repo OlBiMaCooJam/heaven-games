@@ -1,11 +1,11 @@
 package com.olbimacoojam.heaven.minesweeper.domain;
 
 import com.olbimacoojam.heaven.minesweeper.domain.exception.PositionOutOfBoardException;
-import lombok.Getter;
+import lombok.EqualsAndHashCode;
 
 import java.util.Map;
 
-@Getter
+@EqualsAndHashCode
 public class Board {
     private final Map<Position, Block> board;
 
