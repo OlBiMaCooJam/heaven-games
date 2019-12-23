@@ -27,7 +27,7 @@ class EdgePointTest {
         Route route = new Route();
         origin.findRoute(route, Yut.GAE);
 
-        Route expectedRoute = new Route(Arrays.asList(origin, passingPoint, destination));
+        Route expectedRoute = new Route(Arrays.asList(PointName.YUT, PointName.MO, PointName.DUITDO));
         assertThat(route).isEqualTo(expectedRoute);
     }
 
@@ -47,7 +47,7 @@ class EdgePointTest {
         Route route = new Route();
         origin.findRoute(route, Yut.GAE);
 
-        Route expectedRoute = new Route(Arrays.asList(origin, passingPoint, destination));
+        Route expectedRoute = new Route(Arrays.asList(PointName.MO, PointName.MODO, PointName.MOGAE));
         assertThat(route).isEqualTo(expectedRoute);
     }
 }
