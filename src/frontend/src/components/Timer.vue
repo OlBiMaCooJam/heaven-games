@@ -7,8 +7,6 @@
 </template>
 
 <script>
-    import SockJS from "sockjs-client"
-    import Stomp from "webstomp-client"
 
     export default {
         name: "Timer",
@@ -19,7 +17,8 @@
         },
         props: {
             date: Number,
-            roomId: Number
+            roomId: Number,
+            client: {},
         },
 
         data() {
@@ -33,8 +32,7 @@
             seconds() {
                 const time = this.limit - this.now;
                 if (time < 0) {
-                    const client = Stomp.over(new SockJS('/websocket'));
-                    client.send('/app/mafia/' + this.roomId + '/vote');
+                    this.client.send('/app/mafia/' + this.roomId + '/vote');
                 }
                 return time > 0 ? time : 0;
             },

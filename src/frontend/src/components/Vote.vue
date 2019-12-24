@@ -24,12 +24,12 @@
         name: "Vote",
         props: {
             citizens: Array,
-            selected: String,
             vote_msg: String,
         },
         data() {
             return {
                 dialog: false,
+                selected: '',
             }
         },
         methods: {

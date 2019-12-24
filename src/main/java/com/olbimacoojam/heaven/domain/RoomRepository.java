@@ -1,9 +1,7 @@
 package com.olbimacoojam.heaven.domain;
 
-import com.olbimacoojam.heaven.mafia.MafiaGame;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -19,7 +17,6 @@ public class RoomRepository {
 
     public RoomRepository() {
         rooms = new ConcurrentHashMap<>();
-        rooms.put(1L, new Room(1L, new MafiaGame()));
     }
 
     public Room save(Room room) {

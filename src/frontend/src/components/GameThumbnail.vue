@@ -1,5 +1,5 @@
 <template>
-    <router-link :to="'/games/' + game.id + '/rooms'">
+    <router-link :to="'/' + game.gameTitle + '/rooms'" :gameTitle="game.gameTitle">
       <v-card
         class="mx-auto ma-3"
         max-width="400"
@@ -10,7 +10,7 @@
           class="white--text align-end"
           height="400px"
       >
-        <v-card-title>{{game.title}}</v-card-title>
+          <v-card-title class="yellow black--text">{{game.title}}</v-card-title>
       </v-img>
     </v-card>
   </router-link>
@@ -25,8 +25,9 @@
           src: String,
           url: String,
           link: String,
-          id: Number
-      }
+          id: Number,
+          gameTitle: String,
+      },
     }
   }
 </script>

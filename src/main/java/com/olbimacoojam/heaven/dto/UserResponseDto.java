@@ -9,8 +9,10 @@ import lombok.Setter;
 @NoArgsConstructor
 public class UserResponseDto {
     private Long id;
+    private String name;
 
-    public UserResponseDto(Long id) {
+    public UserResponseDto(Long id, String name) {
         this.id = id;
+        this.name = name;
     }
 }

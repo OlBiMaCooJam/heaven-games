@@ -1,5 +1,5 @@
 <template>
-    <v-container id="mafia-app" fluid>
+    <v-container class="mafia-app" fluid>
         <v-row>
             <v-col cols="6">
                 <v-row align='center' justify='center'>
@@ -8,7 +8,7 @@
             </v-col>
             <v-col cols="3">
                 <v-row align='center' justify='center'>
-                    <Timer :date=date :roomId=id></Timer>
+                    <Timer :date=date :roomId=id :client="client"></Timer>
                 </v-row>
             </v-col>
             <v-col cols="3">
@@ -83,10 +83,10 @@
                 vote_message: "누가 마피아일까?",
                 roomId: this.$route.params.id,
                 client: {},
-                userId: ''
+                userId: '',
+                id: 1,
             }
         },
-        id: 1,
         created() {
             this.client = Stomp.over(new SockJS('/websocket'));
             const game = this;
@@ -171,15 +171,13 @@
         border-radius: 15px;
     }
 
-    #mafia-app {
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-        text-align: center;
-        height: 100%;
+    .mafia-app {
         background: url('../assets/mafia-bg.jpg') no-repeat center center fixed;
         -webkit-background-size: cover;
         -moz-background-size: cover;
         -o-background-size: cover;
         background-size: cover;
+        height: 100%;
     }
+
 </style>

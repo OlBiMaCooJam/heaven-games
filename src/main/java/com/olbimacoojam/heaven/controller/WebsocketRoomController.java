@@ -49,4 +49,12 @@ public class WebsocketRoomController {
         roomService.findById(roomId).getGame().initialize(room.getPlayers());
         return new RoomResponseDto();
     }
+//
+//    @MessageMapping("/rooms/{roomId}")
+//    @SendTo("/topic/rooms/{roomId}")
+//    public List<String> showUserList(@DestinationVariable Long roomId) {
+//        Room room = roomService.findById(roomId);
+//        List<User> players = room.getPlayers();
+//        return players.stream().map(User::getName).collect(Collectors.toList());
+//    }
 }

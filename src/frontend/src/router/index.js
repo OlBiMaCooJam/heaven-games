@@ -10,19 +10,16 @@ const routes = [
     component: () => import('../views/Home.vue')
   },
   {
-    path: '/games/:id',
+      path: '/:gameTitle/rooms/:id',
     name: 'game',
-    component: () => import('../views/Game.vue')
+      component: () => import('../views/Game.vue'),
+      props: true,
   },
   {
-      path: '/games/:gameId/rooms',
+      path: '/:gameTitle/rooms',
     name: 'RoomList',
-    component: () => import('../views/RoomList.vue')
-  },
-  {
-      path: '/games/:gameId/rooms/:roomId',
-    name: 'game',
-    component: () => import('../views/Game.vue')
+      component: () => import('../views/RoomList.vue'),
+      props: true,
   },
   {
     path: '/login',
@@ -35,9 +32,10 @@ const routes = [
     component: () => import('../views/Minesweeper.vue')
   },
     {
-        path: '/games/:gameId/rooms/:roomId/start',
+        path: '/MAFIA/rooms/:id/start',
         name: 'mafia',
-        component: () => import('../views/Mafia.vue')
+        component: () => import('../views/Mafia.vue'),
+        props: true,
     },
 ];
 
