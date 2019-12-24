@@ -41,4 +41,12 @@ public class YutnoriParticipant {
     public GameStartResponseDto getGameStartResponseDto() {
         return new GameStartResponseDto(participant.getId(), participant.getName(), color.name());
     }
+
+    public Long getId() {
+        return participant.getId();
+    }
+
+    public String getColorName() {
+        return this.color.name();
+    }
 }

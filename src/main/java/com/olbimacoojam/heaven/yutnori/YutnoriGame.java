@@ -7,6 +7,7 @@ import com.olbimacoojam.heaven.game.Game;
 import com.olbimacoojam.heaven.yutnori.board.Board;
 import com.olbimacoojam.heaven.yutnori.board.BoardCreateStrategy;
 import com.olbimacoojam.heaven.yutnori.exception.IllegalTurnException;
+import com.olbimacoojam.heaven.yutnori.participant.YutnoriParticipant;
 import com.olbimacoojam.heaven.yutnori.participant.YutnoriParticipants;
 import com.olbimacoojam.heaven.yutnori.piece.moveresult.MoveResults;
 import com.olbimacoojam.heaven.yutnori.point.PointName;
@@ -68,5 +69,9 @@ public class YutnoriGame implements Game {
                 .map(yutnoriParticipant -> yutnoriParticipant.getGameStartResponseDto())
                 .collect(Collectors.toList());
         return new GameStartResponseDtos(gameStartResponseDtos);
+    }
+
+    public List<YutnoriParticipant> getYutnoriParticipants() {
+        return yutnoriParticipants.getYutnoriParticipants();
     }
 }

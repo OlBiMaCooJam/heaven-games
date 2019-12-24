@@ -7,6 +7,7 @@ import com.olbimacoojam.heaven.yutnori.exception.NotExistParticipantException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -69,5 +70,9 @@ public class YutnoriParticipants {
 
     public boolean isPlaying(YutnoriParticipant yutnoriParticipant) {
         return !finishedYutnoriParticipants.contains(yutnoriParticipant);
+    }
+
+    public List<YutnoriParticipant> getYutnoriParticipants() {
+        return Collections.unmodifiableList(allYutnoriParticipants);
     }
 }
