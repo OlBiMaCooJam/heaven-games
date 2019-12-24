@@ -1,27 +1,27 @@
 <template>
     <v-container id="mafia-app" fluid>
         <v-row>
-            <v-col cols="6">
+            <v-col cols="5">
                 <v-row align='center' justify='center'>
-                    <MafiaCitizen :citizen="citizen" :key="citizen.name" v-for='citizen in citizens'/>
+                    <MafiaCitizen :key="citizen.name" v-for='citizen in citizens'/>
                 </v-row>
             </v-col>
-            <v-col cols="3">
-                <v-row align='center' justify='center'>
-                    <Timer :date=date :roomId=id></Timer>
-                </v-row>
-            </v-col>
-            <v-col cols="3">
-                <Vote :dialog=false :citizens="citizens" :vote_msg="vote_message"></Vote>
-            </v-col>
-            <div>
+            <v-col cols="5">
                 <div id="message-area">
                 </div>
                 <div id="message-footer">
                     <input type="text" id="message-content">
                     <input type="submit" id="send-message" value="전송">
                 </div>
-            </div>
+            </v-col>
+            <v-col cols="1">
+                <v-row align='center' justify='center'>
+                    <Timer :date=date :roomId=$route.params.roomId :client="client" :day="day" :occupation="occupation" :dialog="dialog"></Timer>
+                </v-row>
+                <v-row>
+                    <Vote :selected="selected" :dialog="dialog" :citizens="citizens" :vote_msg="vote_message" :client="client" :roomId= $route.params.roomId :day="day" :occupation="occupation"></Vote>
+                </v-row>
+            </v-col>
         </v-row>
     </v-container>
 </template>
@@ -55,7 +55,11 @@
           sendMessage: function() {
               const game = this;
               const content = document.getElementById("message-content").value;
-              game.client.send('/app/rooms/' + this.roomId + '/mafia/chat', content);
+              if(this.day){
+                  game.client.send('/app/rooms/' + this.roomId + '/mafia/chat', content);
+              }else{
+                  game.client.send('/app/rooms/' + this.roomId + '/mafia/chat/mafiaOnly', content);
+              }
               if (content.length != 0) {
                   document.getElementById("message-content").value = "";
               }
@@ -64,47 +68,87 @@
                 const messageArea = document.getElementById("message-area");
                 messageArea.insertAdjacentHTML("beforeend", this.messageTemplate(mafiaChatMessage));
                 messageArea.scrollTop = messageArea.scrollHeight;
-              }
+              },
+            newArray(i, name){
+                let newArray = [...this.citizens];
+                newArray.splice(i, 1, name);
+                return newArray;
+            }
+
         },
         data() {
             return {
-                citizens: [{name: '비모', occupation: '마피아', src: require('../assets/p1.png')},
-                    {name: '쿠기', occupation: '마피아', src: require('../assets/p2.png')},
-                    {name: '제이엠', occupation: '마피아', src: require('../assets/p3.png')},
-                    {name: '올라프', occupation: '마피아', src: require('../assets/p4.png')},
-                    {name: '코맥', occupation: '마피아', src: require('../assets/p5.png')},
-                    {name: '맥코', occupation: '마피아', src: require('../assets/p6.png')},
-                    {name: '코맥코', occupation: '마피아', src: require('../assets/p7.png')},
-                    {name: '맥코맥', occupation: '마피아', src: require('../assets/p8.png')},
-                    {name: '쿠기쿠', occupation: '마피아', src: require('../assets/p9.png')},
-                    {name: '모비', occupation: '마피아', src: require('../assets/p10.png')}, // 테스트 데이터
-                ],
-                date: 234, // 테스트 데이터
-                vote_message: "누가 마피아일까?",
-                roomId: this.$route.params.id,
+                citizens: [],
+                dialog: false,
+                date: 15, // 테스트 데이터
+                vote_message: "선택해주세요",
+                roomId: '',
                 client: {},
-                userId: ''
+                userId: '',
+                selected: '',
+                day: true,
+                occupation: ''
             }
         },
         id: 1,
         created() {
+            this.roomId = this.$route.params.roomId
             this.client = Stomp.over(new SockJS('/websocket'));
             const game = this;
             game.client.connect({}, function() {
+                window.console.log(game.roomId);
                 game.client.send('/app/rooms/' + game.roomId + '/mafia' );
                 game.client.subscribe('/user/queue/rooms/' + game.roomId + '/mafia/occupation', function (response) {
                     const mafiaOccupationMessage = JSON.parse(response.body);
                     game.userId = mafiaOccupationMessage.userId;
-                    alert(mafiaOccupationMessage.occupation);
+                    game.occupation = mafiaOccupationMessage.occupation;
+                    alert('당신은 ' + game.occupation + ' 입니다.');
+
+                    if(game.occupation == 'MAFIA') {
+                        game.client.subscribe('/topic/rooms/' + game.roomId + '/mafia/chat/mafiaOnly', function (response) {
+                            const mafiaChatMessage = JSON.parse(response.body);
+                            game.addMessage(mafiaChatMessage);
+                        });
+                    }
+                    if(game.occupation == 'POLICE' || game.occupation == 'DETECTIVE') {
+                        game.client.subscribe('/user/queue/rooms/' + game.roomId + '/' + game.occupation, function (response) {
+                            const mafiaChatMessage = JSON.parse(response.body);
+                            game.addMessage(mafiaChatMessage);
+                        });
+                    }
                 });
                 game.client.subscribe('/topic/rooms/' + game.roomId + '/mafia/chat', function (response) {
                     const mafiaChatMessage = JSON.parse(response.body);
-
-                    window.console.log(mafiaChatMessage);
                     game.addMessage(mafiaChatMessage);
+                });
+                game.client.subscribe('/topic/rooms/' + game.roomId + '/vote', function(response){
+                    const responseCitizens = JSON.parse(response.body);
+                    for(let i=0;i<responseCitizens.length;i++){
+                        game.citizens = game.newArray(i, responseCitizens[i].name);
+                        game.dialog = true;
+                    }
+                });
+                game.client.subscribe('/topic/rooms/' + game.roomId + '/dayResult', function (response) {
+                    const resultMessage = response.body;
+                    alert(resultMessage);
+                    game.day = false;
+
+                    alert('15초 안에 각 직업의 능력이 발동합니다.');
+                    this.date = 15;
+
+                    game.client.send('/app/rooms/' + game.roomId + '/' + game.occupation);
+                });
+                game.client.subscribe('/topic/rooms/' + game.roomId + '/dayResult', function (response) {
+                    const resultMessage = response.body;
+                    alert(resultMessage);
+                    game.day = true;
+
+                    alert('낮이 되었습니다. 15초 동안 떠들어보세요.');
+                    this.date = 15;
                 });
             });
         },
+
         mounted() {
             const game = this;
             document.querySelector('#send-message').addEventListener("click", game.sendMessage);

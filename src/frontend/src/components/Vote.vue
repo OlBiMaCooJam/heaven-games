@@ -19,26 +19,37 @@
 </template>
 
 <script>
-
     export default {
         name: "Vote",
         props: {
+            roomId: Number,
+            vote_msg: String,
+            client: {},
+            dialog:Boolean,
             citizens: Array,
             selected: String,
-            vote_msg: String,
-        },
-        data() {
-            return {
-                dialog: false,
-            }
+            day: Boolean,
+            occupation: String,
+            date: Number
         },
         methods: {
             select() {
                 this.dialog = false;
-                window.console.log(this.selected);
+                if(this.day){
+                    this.client.send('/app/rooms/' + this.roomId + '/select', JSON.stringify({ "name" : this.selected}));
+                }else{
+                    this.client.send('/app/rooms/' + this.roomId + '/' + this.occupation, JSON.stringify({ "name" : this.selected}));
+                }
             }
         },
-    };
+
+        computed() {
+            if(this.day === false && this.date === 0) {
+                this.dialog = false;
+                this.client.send('/app/rooms/' + this.roomId + '/nightResult');
+            }
+        },
+    }
 </script>
 
 <style scoped>

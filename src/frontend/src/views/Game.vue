@@ -21,7 +21,7 @@
     data() {
       return {
         userId: '',
-        roomId: this.$route.params.id,
+        roomId: '',
         client: {}
       }
     },
@@ -31,6 +31,7 @@
       }
     },
     created() {
+        this.roomId = this.$route.params.roomId;
       const game = this;
       game.client = Stomp.over(new SockJS('/websocket'));
 
@@ -46,7 +47,7 @@
           }
         });
         game.client.subscribe('/topic/rooms/' + game.roomId + '/start', function(){
-            router.push('/game/mafia/' + game.roomId);
+            router.push('/games/' + game.roomId + '/rooms/' + game.roomId + '/start');
         });
       });
     },
