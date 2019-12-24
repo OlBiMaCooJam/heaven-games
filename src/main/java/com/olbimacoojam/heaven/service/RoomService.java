@@ -4,11 +4,10 @@ import com.olbimacoojam.heaven.domain.Room;
 import com.olbimacoojam.heaven.domain.RoomFactory;
 import com.olbimacoojam.heaven.domain.RoomRepository;
 import com.olbimacoojam.heaven.domain.User;
-import com.olbimacoojam.heaven.dto.*;
+import com.olbimacoojam.heaven.dto.GameStartResponseDtos;
+import com.olbimacoojam.heaven.dto.RoomResponseDto;
 import com.olbimacoojam.heaven.game.Game;
-import com.olbimacoojam.heaven.yutnori.point.PointName;
 import com.olbimacoojam.heaven.yutnori.yut.RandomYutThrowStrategy;
-import com.olbimacoojam.heaven.yutnori.yut.Yut;
 import com.olbimacoojam.heaven.yutnori.yut.YutThrowStrategy;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -80,17 +79,19 @@ public class RoomService {
         return gameStartResponseDtos;
     }
 
-    public YutResponse throwYut(int roomId, Long userId) {
-        Room room = roomRepository.findById(roomId);
-        User thrower = userService.findById(userId);
-        return room.throwYut(thrower);
-    }
-
-    public MoveResultDtos movePiece(int roomId, Long userId, MoveRequestDto moveRequestDto) {
-        Room room = roomRepository.findById(roomId);
-        User mover = userService.findById(userId);
-        PointName pointName = PointName.get(moveRequestDto.getPointName());
-        Yut yut = Yut.get(moveRequestDto.getYut());
-        return room.movePiece(mover, pointName, yut);
-    }
+//    public YutResponse throwYut(int roomId, Long userId) {
+//        Room room = roomRepository.findById(roomId);
+//        User thrower = userService.findById(userId);
+//        Yut yut = room.throwYut(thrower);
+//        return new YutResponse(yut.name());
+//    }
+//
+//    public MoveResultDtos movePiece(int roomId, Long userId, MoveRequestDto moveRequestDto) {
+//        Room room = roomRepository.findById(roomId);
+//        User mover = userService.findById(userId);
+//        PointName pointName = PointName.get(moveRequestDto.getPointName());
+//        Yut yut = Yut.get(moveRequestDto.getYut());
+//        MoveResults moveResults = room.movePiece(mover, pointName, yut);
+//        return new MoveResultDtos(moveResults);
+//    }
 }

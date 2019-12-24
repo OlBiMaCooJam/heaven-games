@@ -1,10 +1,9 @@
 package com.olbimacoojam.heaven.domain;
 
 import com.olbimacoojam.heaven.dto.GameStartResponseDtos;
-import com.olbimacoojam.heaven.dto.MoveResultDtos;
-import com.olbimacoojam.heaven.dto.YutResponse;
 import com.olbimacoojam.heaven.game.Game;
 import com.olbimacoojam.heaven.yutnori.YutnoriGame;
+import com.olbimacoojam.heaven.yutnori.piece.moveresult.MoveResults;
 import com.olbimacoojam.heaven.yutnori.point.PointName;
 import com.olbimacoojam.heaven.yutnori.yut.Yut;
 import lombok.Getter;
@@ -44,12 +43,12 @@ public class Room {
         return ((YutnoriGame) game).getStartingStatus();
     }
 
-    public YutResponse throwYut(User thrower) {
+    public Yut throwYut(User thrower) {
         Yut yut = ((YutnoriGame) game).throwYut(thrower, () -> Yut.DO);
-        return new YutResponse(yut.name());
+        return yut;
     }
 
-    public MoveResultDtos movePiece(User mover, PointName pointName, Yut yut) {
+    public MoveResults movePiece(User mover, PointName pointName, Yut yut) {
         return ((YutnoriGame) game).move(mover, pointName, yut);
     }
 }
