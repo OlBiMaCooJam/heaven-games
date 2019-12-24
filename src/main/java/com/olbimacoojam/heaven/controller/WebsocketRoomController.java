@@ -45,6 +45,7 @@ public class WebsocketRoomController {
     @MessageMapping("/rooms/{roomId}/start")
     @SendTo("/topic/rooms/{roomId}/start")
     public RoomResponseDto startGame(@DestinationVariable Long roomId) {
+        LOGGER.info("roomId : {}", roomId);
         Room room = roomService.findById(roomId);
         roomService.findById(roomId).getGame().initialize(room.getPlayers());
         return new RoomResponseDto();
