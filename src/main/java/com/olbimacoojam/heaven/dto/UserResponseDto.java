@@ -18,4 +18,14 @@ public class UserResponseDto {
         this.name = name;
         this.refreshToken = refreshToken;
     }
+
+    @Override
+    public String toString() {
+        return "UserResponseDto{" +
+                "id=" + id +
+                ", kakaoId=" + kakaoId +
+                ", name='" + name + '\'' +
+                ", refreshToken='" + refreshToken + '\'' +
+                '}';
+    }
 }

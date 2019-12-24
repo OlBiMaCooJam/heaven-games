@@ -21,4 +21,12 @@ public class RoomResponseDto {
     public List<UserResponseDto> getPlayers() {
         return players;
     }
+
+    @Override
+    public String toString() {
+        return "RoomResponseDto{" +
+                "id=" + id +
+                ", players=" + players +
+                '}';
+    }
 }

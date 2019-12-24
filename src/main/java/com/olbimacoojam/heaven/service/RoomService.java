@@ -7,8 +7,6 @@ import com.olbimacoojam.heaven.domain.User;
 import com.olbimacoojam.heaven.dto.GameStartResponseDtos;
 import com.olbimacoojam.heaven.dto.RoomResponseDto;
 import com.olbimacoojam.heaven.game.Game;
-import com.olbimacoojam.heaven.yutnori.yut.RandomYutThrowStrategy;
-import com.olbimacoojam.heaven.yutnori.yut.YutThrowStrategy;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,7 +20,7 @@ public class RoomService {
     private final ModelMapper modelMapper;
     private final RoomRepository roomRepository;
     private final UserService userService;
-    private final YutThrowStrategy yutThrowStrategy;
+
 
     @Autowired
     public RoomService(RoomFactory roomFactory, ModelMapper modelMapper, UserService userService, RoomRepository roomRepository) {
@@ -30,7 +28,6 @@ public class RoomService {
         this.modelMapper = modelMapper;
         this.roomRepository = roomRepository;
         this.userService = userService;
-        this.yutThrowStrategy = new RandomYutThrowStrategy();
     }
 
     public RoomResponseDto createRoom() {
@@ -53,9 +50,10 @@ public class RoomService {
         return modelMapper.map(room, RoomResponseDto.class);
     }
 
-    public RoomResponseDto unsubscribe(int roomId) {
+    public RoomResponseDto unsubscribe(int roomId, Long userId) {
         Room room = roomRepository.findById(roomId);
-        room.leave();
+        User user = userService.findById(userId);
+        room.leave(user);
         return modelMapper.map(room, RoomResponseDto.class);
     }
 

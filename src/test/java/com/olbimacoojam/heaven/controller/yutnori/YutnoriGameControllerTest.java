@@ -44,6 +44,8 @@ class YutnoriGameControllerTest {
     private static final String ROOMS_URL = "/rooms";
     private static final String SUBSCRIBE_ROOM_ENDPOINT = "/topic/rooms/";
     private static final String SEND_ROOM_ENDPOINT = "/app/rooms/";
+    private static final String SEND_ENTER_ROOM_ENDPOINT = "/app/rooms/";
+    private static final String SUBSCRIBE_ENTER_ROOM_ENDPOINT = "/topic/rooms/";
 
 
     @LocalServerPort
@@ -79,6 +81,30 @@ class YutnoriGameControllerTest {
         Thread.sleep(2000);
     }
 
+    @Test
+    @DisplayName("방 나가기 Test")
+    void leave_room_test() throws InterruptedException, ExecutionException, TimeoutException {
+        Client client = createClient(15L);
+        int roomId = createRoom();
+        System.err.println("roomId =>" + roomId);
+        CompletableFuture<RoomResponseDto> completableFutureForClient = new CompletableFuture<>();
+
+        client.getStompSession().subscribe(SUBSCRIBE_ENTER_ROOM_ENDPOINT + roomId, getStompFrameHandlerRoomResponseDto(completableFutureForClient));
+        client.getStompSession().send(SEND_ENTER_ROOM_ENDPOINT + roomId, null);
+
+        RoomResponseDto roomResponseDto = completableFutureForClient.get(1, SECONDS);
+        assertThat(roomResponseDto.getId()).isEqualTo(roomId);
+        assertThat(roomResponseDto.getPlayers()).hasSize(1);
+
+        CompletableFuture<RoomResponseDto> completableFuture2 = new CompletableFuture<>();
+        client.getStompSession().subscribe(SUBSCRIBE_ENTER_ROOM_ENDPOINT + roomId + "/leave", getStompFrameHandlerRoomResponseDto(completableFuture2));
+        client.getStompSession().send(SEND_ENTER_ROOM_ENDPOINT + roomId + "/leave", null);
+        RoomResponseDto roomResponseDto2 = completableFuture2.get(10, SECONDS);
+        assertThat(roomResponseDto2.getId()).isEqualTo(roomId);
+        assertThat(roomResponseDto2.getPlayers()).hasSize(0);
+        Thread.sleep(2000);
+    }
+
     private int startGame(Long userId1, Long userId2) throws InterruptedException, ExecutionException, TimeoutException {
         //두 명의 클라이언트 로그인
         firstClient = createClient(userId1);
@@ -86,6 +112,7 @@ class YutnoriGameControllerTest {
 
         //한 클라이언트가 방을 만든다
         int roomId = createRoom();
+        System.err.println("roomId =>" + roomId);
 
         // 두명의 클라이언트가 방에 입장
         CompletableFuture<RoomResponseDto> completableFutureForFirstClient = new CompletableFuture<>();
@@ -94,12 +121,20 @@ class YutnoriGameControllerTest {
         secondClient.getStompSession().subscribe(SUBSCRIBE_ROOM_ENDPOINT + roomId, getStompFrameHandlerRoomResponseDto(completableFutureForSecondClient));
 
         firstClient.getStompSession().send(SEND_ROOM_ENDPOINT + roomId, null);
+//        System.err.println("=====first room response dto=====");
+//        System.err.println(roomResponseDto);
         secondClient.getStompSession().send(SEND_ROOM_ENDPOINT + roomId, null);
-        RoomResponseDto roomResponseDto = completableFutureForSecondClient.get(200, SECONDS);
 
+//        RoomResponseDto roomResponseDto2 = completableFutureForSecondClient.get(200, SECONDS);
+//        System.err.println("=====second room response dto=====");
+//        System.err.println(roomResponseDto2);
+        RoomResponseDto roomResponseDto = completableFutureForFirstClient.get(200, SECONDS);
         assertThat(roomResponseDto.getId()).isEqualTo(roomId);
         assertThat(roomResponseDto.getPlayers()).hasSize(2);
 
+//        RoomResponseDto roomResponseDto1 = completableFutureForSecondClient.get(200, SECONDS);
+//        System.out.println("----roomresponsedto----");
+//        System.out.println(roomResponseDto1);
 
         //한 클라이언트가 게임을 시작함
         CompletableFuture<GameStartResponseDtos> completableFutureForFirstClientGameStartResponseDtos = new CompletableFuture<>();
@@ -115,6 +150,7 @@ class YutnoriGameControllerTest {
         assertThat(gameStartResponseDtos.getSecondId()).isEqualTo(userId2);
         return roomId;
     }
+
 
     private void throwYut(int roomId) throws InterruptedException, ExecutionException, TimeoutException {
         CompletableFuture<YutResponse> completableFutureForFirstClientYutResponse = new CompletableFuture<>();

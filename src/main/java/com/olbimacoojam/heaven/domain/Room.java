@@ -30,8 +30,8 @@ public class Room {
         players.sort(Comparator.comparing(User::getName));
     }
 
-    public void leave() {
-        players.remove(0);
+    public void leave(User user) {
+        players.remove(user);
     }
 
     public void startGame() {

@@ -32,8 +32,11 @@ public class WebsocketRoomController {
 
 
     @MessageMapping("/rooms/{roomId}/leave")
-    @SendTo("/topic/rooms/{roomId}")
-    public RoomResponseDto leaveRoom(@DestinationVariable int roomId) {
-        return roomService.unsubscribe(roomId);
+    @SendTo("/topic/rooms/{roomId}/leave")
+    public RoomResponseDto leaveRoom(@DestinationVariable int roomId, SimpMessageHeaderAccessor simpMessageHeaderAccessor) {
+        HttpSession httpSession = (HttpSession) (simpMessageHeaderAccessor.getSessionAttributes().get(HTTP_SESSION));
+        UserSession userSession = (UserSession) httpSession.getAttribute(UserSession.USER_SESSION);
+        Long userId = userSession.getId();
+        return roomService.unsubscribe(roomId, userId);
     }
 }
