@@ -22,12 +22,6 @@ public class GameStartResponseDto {
         this.pieceLocations = Arrays.asList(PointName.STANDBY.name(), PointName.STANDBY.name(), PointName.STANDBY.name(), PointName.STANDBY.name());
     }
 
-//    public GameStartResponseDto(String userName, String color) {
-//        this.userName = userName;
-//        this.color = color;
-//        this.pieceLocations = Arrays.asList(PointName.STANDBY.name(), PointName.STANDBY.name(), PointName.STANDBY.name(), PointName.STANDBY.name());
-//    }
-
     public boolean isName(String userName) {
         return this.userName.equals(userName);
     }
