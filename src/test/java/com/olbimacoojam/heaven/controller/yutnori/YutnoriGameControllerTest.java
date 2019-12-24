@@ -22,6 +22,7 @@ import org.springframework.web.socket.messaging.WebSocketStompClient;
 import org.springframework.web.socket.sockjs.client.SockJsClient;
 import org.springframework.web.socket.sockjs.client.Transport;
 import org.springframework.web.socket.sockjs.client.WebSocketTransport;
+import reactor.core.publisher.Mono;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -56,29 +57,32 @@ class YutnoriGameControllerTest {
     @Test
     @DisplayName("게임시작요청 Test")
     void start_game() throws InterruptedException, ExecutionException, TimeoutException {
-        startGame();
+        startGame(1L, 2L);
+        Thread.sleep(2000);
     }
 
     @Test
     @DisplayName("윷던지기요청 Test")
     void throw_yut() throws InterruptedException, ExecutionException, TimeoutException {
-        int roomId = startGame();
+        int roomId = startGame(3L, 4L);
         throwYut(roomId);
+        Thread.sleep(2000);
     }
 
 
     @Test
     @DisplayName("말 움직이기 Test")
     void move_piece() throws InterruptedException, ExecutionException, TimeoutException {
-        int roomId = startGame();
+        int roomId = startGame(5L, 6L);
         throwYut(roomId);
         movePiece(roomId);
+        Thread.sleep(2000);
     }
 
-    private int startGame() throws InterruptedException, ExecutionException, TimeoutException {
+    private int startGame(Long userId1, Long userId2) throws InterruptedException, ExecutionException, TimeoutException {
         //두 명의 클라이언트 로그인
-        firstClient = createClient();
-        secondClient = createClient();
+        firstClient = createClient(userId1);
+        secondClient = createClient(userId2);
 
         //한 클라이언트가 방을 만든다
         int roomId = createRoom();
@@ -107,8 +111,8 @@ class YutnoriGameControllerTest {
 
         GameStartResponseDtos gameStartResponseDtos = completableFutureForFirstClientGameStartResponseDtos.get(100, SECONDS);
         assertThat(gameStartResponseDtos.size()).isEqualTo(2);
-        assertThat(gameStartResponseDtos.containsUser("mockUser0")).isTrue();
-        assertThat(gameStartResponseDtos.containsUser("mockUser1")).isTrue();
+        assertThat(gameStartResponseDtos.getFirstId()).isEqualTo(userId1);
+        assertThat(gameStartResponseDtos.getSecondId()).isEqualTo(userId2);
         return roomId;
     }
 
@@ -138,6 +142,7 @@ class YutnoriGameControllerTest {
         firstClient.getStompSession().send("/app/yutnori/" + roomId + "/move-piece", moveRequestDto);
 
         MoveResultDtos moveResultDtos = completableFutureForFirstClientMoveResults.get(1, SECONDS);
+        System.out.println(moveResultDtos);
     }
 
     private StompFrameHandler getStompFramHandlerMoveResults(CompletableFuture<MoveResultDtos> completableFutureForFirstClientMoveResults) {
@@ -208,11 +213,11 @@ class YutnoriGameControllerTest {
         return Integer.parseInt(location.substring(ROOMS_URL.length()));
     }
 
-    private Client createClient() throws InterruptedException, ExecutionException, TimeoutException {
+    private Client createClient(Long userId) throws InterruptedException, ExecutionException, TimeoutException {
         WebSocketStompClient webSocketStompClient = new WebSocketStompClient(new SockJsClient(createTransportClient()));
         webSocketStompClient.setMessageConverter(new MappingJackson2MessageConverter());
 
-        String mockJsessionId = mockLogin();
+        String mockJsessionId = mockLogin(userId);
 
         WebSocketHttpHeaders webSocketHttpHeaders = new WebSocketHttpHeaders();
         webSocketHttpHeaders.set(HttpHeaders.COOKIE, JSESSIONID + " = " + mockJsessionId);
@@ -223,9 +228,10 @@ class YutnoriGameControllerTest {
         return new Client(stompSession, mockJsessionId);
     }
 
-    private String mockLogin() {
-        return webTestClient.get()
+    private String mockLogin(Long userId) {
+        return webTestClient.post()
                 .uri("/mock/login")
+                .body(Mono.just(userId), Long.class)
                 .exchange()
                 .returnResult(String.class)
                 .getResponseCookies()

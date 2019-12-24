@@ -28,15 +28,10 @@ public class YutnoriGameController {
     @MessageMapping("/yutnori/{roomId}/move-piece")
     @SendTo("/topic/yutnori/{roomId}/playing")
     public MoveResultDtos movePiece(@DestinationVariable int roomId, @Payload MoveRequestDto moveRequestDto, SimpMessageHeaderAccessor simpMessageHeaderAccessor) {
-        System.out.println("==movePiece====");
-        System.out.println(moveRequestDto);
-
         HttpSession httpSession = (HttpSession) (simpMessageHeaderAccessor.getSessionAttributes().get(HTTP_SESSION));
         UserSession userSession = (UserSession) httpSession.getAttribute(UserSession.USER_SESSION);
         Long userId = userSession.getId();
         MoveResultDtos moveResultDtos = roomService.movePiece(roomId, userId, moveRequestDto);
-        System.out.println(moveResultDtos);
-        System.out.println("===============");
         return moveResultDtos;
     }
 
