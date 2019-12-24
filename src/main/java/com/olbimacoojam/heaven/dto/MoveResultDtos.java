@@ -1,5 +1,6 @@
 package com.olbimacoojam.heaven.dto;
 
+import com.olbimacoojam.heaven.yutnori.piece.YutnoriGameResult;
 import com.olbimacoojam.heaven.yutnori.piece.moveresult.MoveResult;
 import com.olbimacoojam.heaven.yutnori.piece.moveresult.MoveResults;
 import lombok.Getter;
@@ -14,12 +15,14 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 public class MoveResultDtos {
     private List<MoveResultDto> moverResultDtos;
+    private YutnoriGameResult yutnoriGameResult;
 
-    public MoveResultDtos(MoveResults moveResults) {
+    public MoveResultDtos(MoveResults moveResults, YutnoriGameResult yutnoriGameResult) {
         List<MoveResult> moverResults = moveResults.getMoveResults();
-        moverResultDtos = moverResults.stream()
+        this.moverResultDtos = moverResults.stream()
                 .map(moveResult -> new MoveResultDto(moveResult.getColor(), moveResult.getRoute()))
                 .collect(Collectors.toList());
+        this.yutnoriGameResult = yutnoriGameResult;
     }
 
     public List<MoveResultDto> getMoverResultDtos() {

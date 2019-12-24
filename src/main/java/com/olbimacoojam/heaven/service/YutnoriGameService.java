@@ -6,6 +6,7 @@ import com.olbimacoojam.heaven.dto.MoveRequestDto;
 import com.olbimacoojam.heaven.dto.MoveResultDtos;
 import com.olbimacoojam.heaven.dto.YutResponse;
 import com.olbimacoojam.heaven.yutnori.YutnoriGame;
+import com.olbimacoojam.heaven.yutnori.piece.YutnoriGameResult;
 import com.olbimacoojam.heaven.yutnori.piece.moveresult.MoveResults;
 import com.olbimacoojam.heaven.yutnori.point.PointName;
 import com.olbimacoojam.heaven.yutnori.yut.Yut;
@@ -36,6 +37,7 @@ public class YutnoriGameService {
         PointName pointName = PointName.get(moveRequestDto.getPointName());
         Yut yut = Yut.get(moveRequestDto.getYut());
         MoveResults moveResults = yutnoriGame.move(mover, pointName, yut);
-        return new MoveResultDtos(moveResults);
+        YutnoriGameResult yutnoriGameResult = yutnoriGame.isGameOver();
+        return new MoveResultDtos(moveResults, yutnoriGameResult);
     }
 }
