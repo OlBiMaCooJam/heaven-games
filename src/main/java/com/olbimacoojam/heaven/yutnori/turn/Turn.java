@@ -1,7 +1,11 @@
-package com.olbimacoojam.heaven.yutnori;
+package com.olbimacoojam.heaven.yutnori.turn;
 
 import com.olbimacoojam.heaven.domain.User;
-import com.olbimacoojam.heaven.yutnori.exception.IllegalTurnException;
+import com.olbimacoojam.heaven.yutnori.Color;
+import com.olbimacoojam.heaven.yutnori.turn.exception.MoveImpossibleException;
+import com.olbimacoojam.heaven.yutnori.turn.exception.NotHaveYutException;
+import com.olbimacoojam.heaven.yutnori.turn.exception.ThrowImpossibleException;
+import com.olbimacoojam.heaven.yutnori.turn.exception.WrongUserTurnException;
 import com.olbimacoojam.heaven.yutnori.participant.YutnoriParticipant;
 import com.olbimacoojam.heaven.yutnori.participant.YutnoriParticipants;
 import com.olbimacoojam.heaven.yutnori.piece.moveresult.MoveResults;
@@ -15,8 +19,8 @@ import lombok.ToString;
 public class Turn {
 
     private final YutnoriParticipant yutnoriParticipant;
-    private final Yuts thrownYuts;
     private final boolean canThrow;
+    private Yuts thrownYuts;
 
     private Turn(YutnoriParticipant yutnoriParticipant, Yuts thrownYuts, boolean canThrow) {
         this.yutnoriParticipant = yutnoriParticipant;
@@ -29,27 +33,41 @@ public class Turn {
     }
 
     public Turn saveOneThrow(User thrower, Yut yut) {
-        if (canThrow(thrower)) {
-            thrownYuts.add(yut);
-            return new Turn(yutnoriParticipant, thrownYuts, thrownYuts.isThrowAvailable());
+        checkUser(thrower);
+        checkCanThrow();
+
+        Yuts thrownYuts = this.thrownYuts.add(yut);
+        return new Turn(yutnoriParticipant, thrownYuts, thrownYuts.isThrowAvailable());
+    }
+
+    private void checkCanThrow() {
+        if (!canThrow) {
+            throw new ThrowImpossibleException();
         }
-        throw new IllegalTurnException();
     }
 
-    private boolean canThrow(User thrower) {
-        return isRightTurn(thrower) && canThrow;
+    private void checkUser(User user) {
+        if (!yutnoriParticipant.isRightThrower(user)) {
+            throw new WrongUserTurnException(yutnoriParticipant.getName(), user.getName());
+        }
     }
 
-    private boolean isRightTurn(User user) {
-        return yutnoriParticipant.isRightThrower(user);
+    public void checkMove(User user, Yut yut) {
+        checkUser(user);
+        checkCanMove();
+        checkHaveYut(yut);
     }
 
-    boolean canMove(User user, Yut yut) {
-        boolean isRight = isRightTurn(user);
-        boolean canThrow2 = !canThrow;
-        boolean contains = thrownYuts.contains(yut);
+    private void checkCanMove() {
+        if (canThrow) {
+            throw new MoveImpossibleException();
+        }
+    }
 
-        return isRightTurn(user) && !canThrow && thrownYuts.contains(yut);
+    private void checkHaveYut(Yut yut) {
+        if (thrownYuts.notHave(yut)) {
+            throw new NotHaveYutException(yut);
+        }
     }
 
     public Color getTeamColor() {
@@ -73,6 +91,6 @@ public class Turn {
     }
 
     public void removeYut(Yut yut) {
-        thrownYuts.remove(yut);
+        thrownYuts = thrownYuts.remove(yut);
     }
 }

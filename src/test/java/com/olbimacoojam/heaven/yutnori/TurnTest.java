@@ -1,13 +1,16 @@
 package com.olbimacoojam.heaven.yutnori;
 
 import com.olbimacoojam.heaven.domain.User;
-import com.olbimacoojam.heaven.yutnori.exception.IllegalTurnException;
+import com.olbimacoojam.heaven.yutnori.turn.exception.NotHaveYutException;
+import com.olbimacoojam.heaven.yutnori.turn.exception.ThrowImpossibleException;
+import com.olbimacoojam.heaven.yutnori.turn.exception.WrongUserTurnException;
 import com.olbimacoojam.heaven.yutnori.participant.YutnoriParticipants;
 import com.olbimacoojam.heaven.yutnori.piece.Piece;
 import com.olbimacoojam.heaven.yutnori.piece.moveresult.MoveResult;
 import com.olbimacoojam.heaven.yutnori.piece.moveresult.MoveResults;
 import com.olbimacoojam.heaven.yutnori.piece.moveresult.Route;
 import com.olbimacoojam.heaven.yutnori.point.PointName;
+import com.olbimacoojam.heaven.yutnori.turn.Turn;
 import com.olbimacoojam.heaven.yutnori.yut.Yut;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -36,40 +39,40 @@ class TurnTest extends YutnoriBaseTest {
     void save_one_throw() {
         turn = turn.saveOneThrow(turnUser, Yut.MO);
         assertDoesNotThrow(() -> turn = turn.saveOneThrow(turnUser, Yut.DO));
-        assertThrows(IllegalTurnException.class, () -> turn.saveOneThrow(turnUser, Yut.DO));
+        assertThrows(ThrowImpossibleException.class, () -> turn.saveOneThrow(turnUser, Yut.DO));
     }
 
     @Test
     void fail_save_one_throw() {
-        assertThrows(IllegalTurnException.class, () -> turn.saveOneThrow(other, Yut.DO));
+        assertThrows(WrongUserTurnException.class, () -> turn.saveOneThrow(other, Yut.DO));
     }
 
     @Test
     void can_move_test1() {
         turn = turn.saveOneThrow(turnUser, Yut.DO);
 
-        assertThat(turn.canMove(turnUser, Yut.DO)).isTrue();
+        assertDoesNotThrow(() -> turn.checkMove(turnUser, Yut.DO));
     }
 
     @Test
     void can_move_test2() {
-        turn.saveOneThrow(turnUser, Yut.DO);
+        turn = turn.saveOneThrow(turnUser, Yut.DO);
 
-        assertThat(turn.canMove(turnUser, Yut.GAE)).isFalse();
+        assertThrows(NotHaveYutException.class, () -> turn.checkMove(turnUser, Yut.GAE));
     }
 
     @Test
     void can_move_test3() {
-        turn.saveOneThrow(turnUser, Yut.DO);
+        turn = turn.saveOneThrow(turnUser, Yut.DO);
 
-        assertThat(turn.canMove(other, Yut.DO)).isFalse();
+        assertThrows(WrongUserTurnException.class, () -> turn.checkMove(other, Yut.DO));
     }
 
     @Test
     void can_move_test4() {
-        turn.saveOneThrow(turnUser, Yut.MO);
+        turn = turn.saveOneThrow(turnUser, Yut.MO);
 
-        assertThat(turn.canMove(turnUser, Yut.MO)).isFalse();
+        assertThrows(WrongUserTurnException.class, () -> turn.checkMove(other, Yut.MO));
     }
 
     @Test
@@ -78,7 +81,7 @@ class TurnTest extends YutnoriBaseTest {
         turn = turn.saveOneThrow(turnUser, Yut.YUT);
         turn = turn.saveOneThrow(turnUser, Yut.DO);
 
-        assertThat(turn.canMove(turnUser, Yut.YUT)).isTrue();
+        assertDoesNotThrow(() -> turn.checkMove(turnUser, Yut.YUT));
     }
 
     @Test
@@ -95,9 +98,9 @@ class TurnTest extends YutnoriBaseTest {
 
     @Test
     void next_test2() {
-        turn.saveOneThrow(turnUser, Yut.MO);
-        turn.saveOneThrow(turnUser, Yut.YUT);
-        turn.saveOneThrow(turnUser, Yut.DO);
+        turn = turn.saveOneThrow(turnUser, Yut.MO);
+        turn = turn.saveOneThrow(turnUser, Yut.YUT);
+        turn = turn.saveOneThrow(turnUser, Yut.DO);
         turn.removeYut(Yut.DO);
 
         Route route = createRoute(PointName.DO, PointName.GAE);

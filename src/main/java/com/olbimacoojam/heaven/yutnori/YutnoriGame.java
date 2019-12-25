@@ -4,17 +4,19 @@ import com.olbimacoojam.heaven.domain.User;
 import com.olbimacoojam.heaven.game.Game;
 import com.olbimacoojam.heaven.yutnori.board.Board;
 import com.olbimacoojam.heaven.yutnori.board.BoardCreateStrategy;
-import com.olbimacoojam.heaven.yutnori.exception.IllegalTurnException;
 import com.olbimacoojam.heaven.yutnori.participant.YutnoriParticipant;
 import com.olbimacoojam.heaven.yutnori.participant.YutnoriParticipants;
 import com.olbimacoojam.heaven.yutnori.piece.YutnoriGameResult;
 import com.olbimacoojam.heaven.yutnori.piece.moveresult.MoveResults;
 import com.olbimacoojam.heaven.yutnori.point.PointName;
+import com.olbimacoojam.heaven.yutnori.turn.Turn;
 import com.olbimacoojam.heaven.yutnori.yut.Yut;
 import com.olbimacoojam.heaven.yutnori.yut.YutThrowStrategy;
+import lombok.Getter;
 
 import java.util.List;
 
+@Getter
 public class YutnoriGame implements Game {
 
     private final BoardCreateStrategy boardCreateStrategy;
@@ -40,7 +42,7 @@ public class YutnoriGame implements Game {
     }
 
     public MoveResults move(User user, PointName pointName, Yut yut) {
-        checkTurn(user, yut);
+        turn.checkMove(user, yut);
 
         Color teamColor = turn.getTeamColor();
 
@@ -57,12 +59,6 @@ public class YutnoriGame implements Game {
         return moveResults;
     }
 
-    private void checkTurn(User user, Yut yut) {
-        if (!turn.canMove(user, yut)) {
-            throw new IllegalTurnException();
-        }
-    }
-
     public List<YutnoriParticipant> getYutnoriParticipants() {
         return yutnoriParticipants.getYutnoriParticipants();
     }
@@ -72,9 +68,5 @@ public class YutnoriGame implements Game {
             return new YutnoriGameResult("게임이 끝났습니다!", yutnoriParticipants.getWinners());
         }
         return new YutnoriGameResult("게임이 진행중입니다!", yutnoriParticipants.getWinners());
-    }
-
-    public Board getBoard() {
-        return board;
     }
 }
