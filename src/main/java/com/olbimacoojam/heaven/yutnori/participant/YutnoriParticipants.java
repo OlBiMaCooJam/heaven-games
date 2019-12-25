@@ -83,4 +83,15 @@ public class YutnoriParticipants {
     public List<YutnoriParticipant> getYutnoriParticipants() {
         return Collections.unmodifiableList(allYutnoriParticipants);
     }
+
+    public boolean isGameOver() {
+        return allYutnoriParticipants.size() == finishedYutnoriParticipants.size() + 1;
+    }
+
+    public List<String> getWinners() {
+        return finishedYutnoriParticipants
+                .stream()
+                .map(YutnoriParticipant::getName)
+                .collect(Collectors.toList());
+    }
 }

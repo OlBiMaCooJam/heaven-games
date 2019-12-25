@@ -7,6 +7,7 @@ import com.olbimacoojam.heaven.yutnori.board.BoardCreateStrategy;
 import com.olbimacoojam.heaven.yutnori.exception.IllegalTurnException;
 import com.olbimacoojam.heaven.yutnori.participant.YutnoriParticipant;
 import com.olbimacoojam.heaven.yutnori.participant.YutnoriParticipants;
+import com.olbimacoojam.heaven.yutnori.piece.YutnoriGameResult;
 import com.olbimacoojam.heaven.yutnori.piece.moveresult.MoveResults;
 import com.olbimacoojam.heaven.yutnori.point.PointName;
 import com.olbimacoojam.heaven.yutnori.yut.Yut;
@@ -64,5 +65,12 @@ public class YutnoriGame implements Game {
 
     public List<YutnoriParticipant> getYutnoriParticipants() {
         return yutnoriParticipants.getYutnoriParticipants();
+    }
+
+    public YutnoriGameResult isGameOver() {
+        if (yutnoriParticipants.isGameOver()) {
+            return new YutnoriGameResult("게임이 끝났습니다!", yutnoriParticipants.getWinners());
+        }
+        return new YutnoriGameResult("게임이 진행중입니다!", yutnoriParticipants.getWinners());
     }
 }

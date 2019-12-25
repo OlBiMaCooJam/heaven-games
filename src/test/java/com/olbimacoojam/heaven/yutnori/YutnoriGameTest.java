@@ -13,6 +13,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
+import java.util.Collections;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -246,4 +247,34 @@ class YutnoriGameTest extends YutnoriBaseTest {
         assertDoesNotThrow(() -> yutnoriGame.throwYut(user2, () -> Yut.DO));
     }
 
+    @Test
+    @DisplayName("승리했을 때 테스트, 게임 오버 테스트")
+    void move_test13() {
+        Piece piece = Piece.of(Color.BLACK, PointName.CHAMMUGI);
+        Piece piece2 = Piece.of(Color.RED, PointName.DO);
+
+        YutnoriGame yutnoriGame = new YutnoriGame(yutnoriParticipants -> new Board(Arrays.asList(piece, piece2)));
+        yutnoriGame.initialize(Arrays.asList(user1, user2));
+
+        yutnoriGame.throwYut(user1, () -> Yut.MO);
+        yutnoriGame.throwYut(user1, () -> Yut.GAE);
+        yutnoriGame.move(user1, PointName.CHAMMUGI, Yut.GAE);
+
+        assertDoesNotThrow(() -> yutnoriGame.throwYut(user2, () -> Yut.DO));
+        assertThat(yutnoriGame.isGameOver().getWinners()).isEqualTo(Arrays.asList("user1"));
+    }
+
+    @Test
+    @DisplayName("승리하지 않았을 때 게임 오버 테스트")
+    void move_test14() {
+        Piece piece = Piece.of(Color.BLACK, PointName.STANDBY);
+
+        YutnoriGame yutnoriGame = new YutnoriGame(yutnoriParticipants -> new Board(Arrays.asList(piece)));
+        yutnoriGame.initialize(Arrays.asList(user1, user2));
+
+        yutnoriGame.throwYut(user1, () -> Yut.DO);
+        MoveResults moveResults = yutnoriGame.move(user1, PointName.STANDBY, Yut.DO);
+
+        assertThat(yutnoriGame.isGameOver().getWinners()).isEqualTo(Collections.emptyList());
+    }
 }
