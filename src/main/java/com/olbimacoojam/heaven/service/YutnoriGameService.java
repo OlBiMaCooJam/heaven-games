@@ -35,8 +35,13 @@ public class YutnoriGameService {
         YutnoriGame yutnoriGame = getYutnoriGame(roomId);
 
         return new YutnoriStateResponse(
-                getYutnoriParticipantsResponse(yutnoriGame),
-                getBoardResponse(yutnoriGame));
+                getYutnoriParticipantResponses(yutnoriGame),
+                getBoardResponse(yutnoriGame),
+                getTurnResposne(yutnoriGame));
+    }
+
+    private TurnResponse getTurnResposne(YutnoriGame yutnoriGame) {
+        return modelMapper.map(yutnoriGame.getTurn(), TurnResponse.class);
     }
 
     private BoardResponse getBoardResponse(YutnoriGame yutnoriGame) {
@@ -44,7 +49,7 @@ public class YutnoriGameService {
         return modelMapper.map(board, BoardResponse.class);
     }
 
-    private List<YutnoriParticipantResponse> getYutnoriParticipantsResponse(YutnoriGame yutnoriGame) {
+    private List<YutnoriParticipantResponse> getYutnoriParticipantResponses(YutnoriGame yutnoriGame) {
         return yutnoriGame.getYutnoriParticipants().stream()
                 .map(participant -> modelMapper.map(participant, YutnoriParticipantResponse.class))
                 .collect(Collectors.toList());
@@ -55,8 +60,7 @@ public class YutnoriGameService {
         User thrower = userService.findById(userId);
 
         Yut yut = yutnoriGame.throwYut(thrower, yutThrowStrategy);
-        TurnResponse turnResponse = modelMapper.map(yutnoriGame.getTurn(), TurnResponse.class);
-        return new YutResponse(yut, turnResponse);
+        return new YutResponse(yut, getTurnResposne(yutnoriGame));
     }
 
     public MoveResponse movePiece(int roomId, Long userId, MoveRequestDto moveRequestDto) {
@@ -70,8 +74,7 @@ public class YutnoriGameService {
 
         MoveResultsDto moveResultsDto = modelMapper.map(moveResults, MoveResultsDto.class);
         YutnoriGameResult yutnoriGameResult = yutnoriGame.isGameOver();
-        TurnResponse turnResponse = modelMapper.map(yutnoriGame.getTurn(), TurnResponse.class);
-        return new MoveResponse(moveResultsDto, yutnoriGameResult, turnResponse);
+        return new MoveResponse(moveResultsDto, yutnoriGameResult, getTurnResposne(yutnoriGame));
     }
 
     private YutnoriGame getYutnoriGame(int roomId) {

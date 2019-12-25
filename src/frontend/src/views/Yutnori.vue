@@ -7,10 +7,10 @@
         </div>
         <div class="board-con right-margin-100">
             <Board :pieces="pieces" @chooseSrcPoint="chooseSrcPoint"></Board>
-            <YutThrow :yut="yut" @throwYut="throwYut"></YutThrow>
+            <YutThrow :yut="yut" @throwYut="throwYut" :disabled="!turn.canThrow"></YutThrow>
             <ThrownYuts :yuts="yuts" @chooseYut="chooseYut"></ThrownYuts>
         </div>
-        <v-btn @click="requestMove" color="primary" large>말 움직이기</v-btn>
+        <v-btn @click="requestMove" color="primary" :disabled="turn.canThrow" large >말 움직이기</v-btn>
         <div class="space"></div>
     </v-container>
 </template>
@@ -34,6 +34,7 @@
                 yut: "",
                 yuts: [],
 
+                turn:Object,
                 moveRequest: {
                     sourcePoint: "",
                     yut: ""
@@ -53,6 +54,7 @@
                     YUTNORI.yut = yutResponse.yut;
                     YUTNORI.moveRequest.yut = YUTNORI.yut;
                     YUTNORI.yuts = yutResponse.turn.thrownYuts.yuts;
+                    YUTNORI.turn = YUTNORI.getTurn(yutResponse.turn)
                 })
 
                 YUTNORI.stompClient.subscribe("/topic/yutnori/" + YUTNORI.roomId + "/playing", function (response) { //말 움직이기
@@ -60,10 +62,11 @@
 
                     YUTNORI.applyMoveResults(moveResponse.moveResultsDto)
 
-                    YUTNORI.yuts = moveResponse.turnResponse.thrownYuts.yuts;
+                    YUTNORI.yuts = moveResponse.turn.thrownYuts.yuts;
                     YUTNORI.yut = "";
                     YUTNORI.moveRequest.sourcePoint = ""
                     YUTNORI.moveRequest.yut = ""
+                    YUTNORI.turn = YUTNORI.getTurn(moveResponse.turn)
                 })
             })
         },
@@ -76,6 +79,7 @@
                     stompClient.subscribe("/topic/yutnori/" + YUTNORI.roomId, function (response) {  //판 초기화
                         const yutnoriStateResponse = JSON.parse(response.body)
                         const pieces = yutnoriStateResponse.boardResponse.pieces
+                        YUTNORI.turn = YUTNORI.getTurn(yutnoriStateResponse.turn)
 
                         YUTNORI.yutnoriUsers = YUTNORI.getYutnoriUsers(yutnoriStateResponse.yutnoriParticipants, pieces)
                         YUTNORI.pieces = YUTNORI.initializePieces(pieces)
@@ -123,6 +127,9 @@
                     return obj;
                 }, {});
             },
+            getTurn(turnResponse) {
+                return {canThrow: turnResponse.canThrow}
+            },
             throwYut() {
                 this.stompClient.send("/app/yutnori/" + this.roomId + "/yut-throw");
             },
@@ -137,7 +144,7 @@
                 else if (this.moveRequest.sourcePoint == "") alert("말 선택 하세요")
                 else {
                     this.stompClient.send("/app/yutnori/" + this.roomId + "/move-piece", JSON.stringify(this.moveRequest));
-                    alert(this.moveRequest)
+                    alert(this.moveRequest.toString())
                 }
             },
             applyMoveResults(moveResultsDto) {

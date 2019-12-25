@@ -4,7 +4,7 @@
             <p>{{yut}}</p>
         </div>
         <div>
-            <v-btn @click="throwYut" color="primary" large>윷 던지기</v-btn>
+            <v-btn @click="throwYut" color="primary" :disabled="disabled" large>윷 던지기</v-btn>
         </div>
     </div>
 </template>
@@ -13,7 +13,8 @@
     export default {
         name: "YutThrow",
         props: {
-            yut: String
+            yut: String,
+            disabled: Boolean
         },
         methods: {
             throwYut() {
