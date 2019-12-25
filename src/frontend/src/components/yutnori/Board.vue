@@ -1,7 +1,7 @@
 <template>
     <div id="board">
-        <Point v-for='[key, val] in pointsWithMovingResult' :key="key" @chooseSrcPoint="chooseSrcPoint"
-               :pointName="key" :left="val.left" :top="val.top" :pieceColor="val.pieceColor" :inc="val.inc"/>
+        <Point v-for='[key, val] in points' :key="key" @chooseSrcPoint="chooseSrcPoint"
+               :pointName="key" :left="val.left" :top="val.top" :piece="pieces[key]"/>
     </div>
 </template>
 
@@ -11,26 +11,13 @@
     export default {
         name: "Board",
         components: {Point},
-        props: {
-            movingResults: Array
-        },
         data: function () {
             return {
-                points: Map
+                points: Map //key: pointName, val: left, top
             }
         },
-        computed: {
-            pointsWithMovingResult: function () {
-                let points = this.points;
-                if (this.movingResults != null) {
-                    this.movingResults.forEach(function (movingResult) {
-                        points.get(movingResult.destPoint).pieceColor = movingResult.color;
-                        if (movingResult.destPoint != 'STANDBY') points.get(movingResult.destPoint).inc++;
-                        if (movingResult.srcPoint != 'STANDBY') points.get(movingResult.srcPoint).inc--;
-                    })
-                }
-                return points;
-            }
+        props: {
+            pieces: {}
         },
         created() {
             this.points = this.getPointsFromRows()
@@ -122,7 +109,6 @@
                         points.set(pointName, {
                             top: rows[i].top,
                             left: rows[i].left + rows[i].interval * k,
-                            inc: 0
                         })
                     }
                 }

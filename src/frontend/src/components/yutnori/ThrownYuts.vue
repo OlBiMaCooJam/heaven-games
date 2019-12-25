@@ -12,7 +12,7 @@
         },
         methods: {
             chooseYut(event) {
-                this.$emit('chooseYut', event.target);
+                this.$emit('chooseYut', event.target.innerText);
             }
         }
     }

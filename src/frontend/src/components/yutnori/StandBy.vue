@@ -1,6 +1,6 @@
 <template>
     <div class="standby">
-        <Piece :count="1" :key="index" :pieceColor="pieceColor"
+        <Piece :count="1" :key="index" :color="pieceColor"
                @pieceClick="pieceClick" v-for="index in count"></Piece>
     </div>
 </template>
