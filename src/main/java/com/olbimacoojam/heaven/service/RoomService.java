@@ -4,9 +4,11 @@ import com.olbimacoojam.heaven.domain.Room;
 import com.olbimacoojam.heaven.domain.RoomFactory;
 import com.olbimacoojam.heaven.domain.RoomRepository;
 import com.olbimacoojam.heaven.domain.User;
+import com.olbimacoojam.heaven.dto.GameStartResponseDto;
 import com.olbimacoojam.heaven.dto.GameStartResponseDtos;
 import com.olbimacoojam.heaven.dto.RoomResponseDto;
 import com.olbimacoojam.heaven.game.Game;
+import com.olbimacoojam.heaven.yutnori.participant.YutnoriParticipant;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -73,7 +75,10 @@ public class RoomService {
 
     public GameStartResponseDtos initiateGame(int roomId) {
         Room room = roomRepository.findById(roomId);
-        GameStartResponseDtos gameStartResponseDtos = room.initiateGame();
-        return gameStartResponseDtos;
+        List<YutnoriParticipant> yutnoriParticipants = room.initiateGame();
+        List<GameStartResponseDto> gameStartResponseDtos = yutnoriParticipants.stream()
+                .map(yutnoriParticipant -> new GameStartResponseDto(yutnoriParticipant.getId(), yutnoriParticipant.getName(), yutnoriParticipant.getColorName()))
+                .collect(Collectors.toList());
+        return new GameStartResponseDtos(gameStartResponseDtos);
     }
 }

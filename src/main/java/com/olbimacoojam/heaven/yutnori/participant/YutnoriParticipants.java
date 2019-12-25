@@ -1,13 +1,12 @@
 package com.olbimacoojam.heaven.yutnori.participant;
 
 import com.olbimacoojam.heaven.domain.User;
-import com.olbimacoojam.heaven.dto.GameStartResponseDto;
-import com.olbimacoojam.heaven.dto.GameStartResponseDtos;
 import com.olbimacoojam.heaven.yutnori.Color;
 import com.olbimacoojam.heaven.yutnori.exception.NoSuchColorPlayingException;
 import com.olbimacoojam.heaven.yutnori.exception.NotExistParticipantException;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -81,10 +80,7 @@ public class YutnoriParticipants {
                 .collect(Collectors.toList());
     }
 
-    public GameStartResponseDtos getDto() {
-        List<GameStartResponseDto> gameStartResponseDtos = allYutnoriParticipants.stream()
-                .map(YutnoriParticipant::getGameStartResponseDto)
-                .collect(Collectors.toList());
-        return new GameStartResponseDtos(gameStartResponseDtos);
+    public List<YutnoriParticipant> getYutnoriParticipants() {
+        return Collections.unmodifiableList(allYutnoriParticipants);
     }
 }

@@ -121,20 +121,11 @@ class YutnoriGameControllerTest {
         secondClient.getStompSession().subscribe(SUBSCRIBE_ROOM_ENDPOINT + roomId, getStompFrameHandlerRoomResponseDto(completableFutureForSecondClient));
 
         firstClient.getStompSession().send(SEND_ROOM_ENDPOINT + roomId, null);
-//        System.err.println("=====first room response dto=====");
-//        System.err.println(roomResponseDto);
         secondClient.getStompSession().send(SEND_ROOM_ENDPOINT + roomId, null);
 
-//        RoomResponseDto roomResponseDto2 = completableFutureForSecondClient.get(200, SECONDS);
-//        System.err.println("=====second room response dto=====");
-//        System.err.println(roomResponseDto2);
         RoomResponseDto roomResponseDto = completableFutureForFirstClient.get(200, SECONDS);
         assertThat(roomResponseDto.getId()).isEqualTo(roomId);
         assertThat(roomResponseDto.getPlayers()).hasSize(2);
-
-//        RoomResponseDto roomResponseDto1 = completableFutureForSecondClient.get(200, SECONDS);
-//        System.out.println("----roomresponsedto----");
-//        System.out.println(roomResponseDto1);
 
         //한 클라이언트가 게임을 시작함
         CompletableFuture<GameStartResponseDtos> completableFutureForFirstClientGameStartResponseDtos = new CompletableFuture<>();
