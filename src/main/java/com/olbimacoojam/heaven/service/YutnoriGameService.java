@@ -9,6 +9,7 @@ import com.olbimacoojam.heaven.yutnori.piece.YutnoriGameResult;
 import com.olbimacoojam.heaven.yutnori.piece.moveresult.MoveResults;
 import com.olbimacoojam.heaven.yutnori.point.PointName;
 import com.olbimacoojam.heaven.yutnori.yut.Yut;
+import com.olbimacoojam.heaven.yutnori.yut.YutThrowStrategy;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
@@ -21,11 +22,13 @@ public class YutnoriGameService {
     private final RoomService roomService;
     private final UserService userService;
     private final ModelMapper modelMapper;
+    private final YutThrowStrategy yutThrowStrategy;
 
-    public YutnoriGameService(RoomService roomService, UserService userService, ModelMapper modelMapper) {
+    public YutnoriGameService(RoomService roomService, UserService userService, ModelMapper modelMapper, YutThrowStrategy yutThrowStrategy) {
         this.roomService = roomService;
         this.userService = userService;
         this.modelMapper = modelMapper;
+        this.yutThrowStrategy = yutThrowStrategy;
     }
 
     public YutnoriStateResponse gameState(int roomId) {
@@ -48,7 +51,14 @@ public class YutnoriGameService {
     }
 
     public YutResponse throwYut(int roomId, Long userId) {
+        YutnoriGame yutnoriGame = getYutnoriGame(roomId);
         User thrower = userService.findById(userId);
+
+        Yut yut = yutnoriGame.throwYut(thrower, yutThrowStrategy);
+        return new YutResponse(yut);
+    }
+
+    public MoveResultDtos movePiece(int roomId, Long userId, MoveRequestDto moveRequestDto) {
         YutnoriGame yutnoriGame = getYutnoriGame(roomId);
         Yut yut = yutnoriGame.throwYut(thrower, () -> Yut.DO);
         return new YutResponse(yut.name());

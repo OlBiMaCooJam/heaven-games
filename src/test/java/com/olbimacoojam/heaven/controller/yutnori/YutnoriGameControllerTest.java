@@ -2,6 +2,8 @@ package com.olbimacoojam.heaven.controller.yutnori;
 
 import com.olbimacoojam.heaven.dto.*;
 import com.olbimacoojam.heaven.testhelp.Client;
+import com.olbimacoojam.heaven.yutnori.TestYutThrowConfiguration;
+import com.olbimacoojam.heaven.yutnori.point.PointName;
 import com.olbimacoojam.heaven.yutnori.yut.Yut;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -9,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpHeaders;
 import org.springframework.messaging.converter.MappingJackson2MessageConverter;
 import org.springframework.messaging.simp.stomp.StompFrameHandler;
@@ -26,17 +29,16 @@ import reactor.core.publisher.Mono;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
-import java.util.stream.Collectors;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.assertj.core.api.Assertions.assertThat;
 
+@Import(TestYutThrowConfiguration.class)
 @AutoConfigureWebTestClient
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class YutnoriGameControllerTest {
@@ -159,60 +161,55 @@ class YutnoriGameControllerTest {
         firstClient.getStompSession().subscribe("/topic/yutnori/" + roomId + "/yut-throw", getStompFrameHandlerYutResponse(completableFutureForFirstClientYutResponse));
         secondClient.getStompSession().subscribe("/topic/yutnori" + roomId + "/yut-throw", getStompFrameHandlerYutResponse(completableFutureForSecondClientYutResponse));
 
+        YutResponse yutResponse;
         if (turn == 1) {
             System.out.println("first turn");
             firstClient.getStompSession().send("/app/yutnori/" + roomId + "/yut-throw", null);
 
-            YutResponse yutResponse = completableFutureForFirstClientYutResponse.get(100, SECONDS);
-            List<String> yutNames = Arrays.stream(Yut.values())
-                    .map(yut -> yut.name())
-                    .collect(Collectors.toList());
-            assertThat(yutNames).contains(yutResponse.getYut());
+            yutResponse = completableFutureForFirstClientYutResponse.get(100, SECONDS);
+            assertThat(Yut.values()).contains(yutResponse.getYut());
         }
 
         if (turn == 2) {
             System.out.println("second turn");
             secondClient.getStompSession().send("/app/yutnori/" + roomId + "/yut-throw", null);
 
-            YutResponse yutResponse = completableFutureForSecondClientYutResponse.get(100, SECONDS);
-            List<String> yutNames = Arrays.stream(Yut.values())
-                    .map(yut -> yut.name())
-                    .collect(Collectors.toList());
-            assertThat(yutNames).contains(yutResponse.getYut());
+            yutResponse = completableFutureForSecondClientYutResponse.get(100, SECONDS);
+            assertThat(Yut.values()).contains(yutResponse.getYut());
         }
     }
 
     private void movePiece(int roomId, int turn) throws InterruptedException, ExecutionException, TimeoutException {
-        CompletableFuture<MoveResultDtos> completableFutureForFirstClientMoveResults = new CompletableFuture<>();
-        CompletableFuture<MoveResultDtos> completableFutureForSecondClientMoveResults = new CompletableFuture<>();
+        CompletableFuture<MoveResponse> completableFutureForFirstClientMoveResults = new CompletableFuture<>();
+        CompletableFuture<MoveResponse> completableFutureForSecondClientMoveResults = new CompletableFuture<>();
 
         firstClient.getStompSession().subscribe("/topic/yutnori/" + roomId + "/playing", getStompFramHandlerMoveResults(completableFutureForFirstClientMoveResults));
         secondClient.getStompSession().subscribe("/topic/yutnori/" + roomId + "/playing", getStompFramHandlerMoveResults(completableFutureForSecondClientMoveResults));
 
-        MoveRequestDto moveRequestDto = new MoveRequestDto("STANDBY", "DO");
+        MoveRequestDto moveRequestDto = new MoveRequestDto(PointName.STANDBY, Yut.DO);
         if (turn == 1) {
             firstClient.getStompSession().send("/app/yutnori/" + roomId + "/move-piece", moveRequestDto);
-            MoveResultDtos moveResultDtos = completableFutureForFirstClientMoveResults.get(1, SECONDS);
-            System.out.println(moveResultDtos);
-            assertThat(moveResultDtos.getYutnoriGameResult().getWinners()).isEmpty();
+            MoveResponse moveResponse = completableFutureForFirstClientMoveResults.get(1, SECONDS);
+            System.out.println(moveResponse);
+            assertThat(moveResponse.getYutnoriGameResult().getWinners()).isEmpty();
         }
         if (turn == 2) {
             secondClient.getStompSession().send("/app/yutnori/" + roomId + "/move-piece", moveRequestDto);
-            MoveResultDtos moveResultDtos = completableFutureForSecondClientMoveResults.get(1, SECONDS);
-            System.out.println(moveResultDtos);
+            MoveResponse moveResponse = completableFutureForSecondClientMoveResults.get(1, SECONDS);
+            System.out.println(moveResponse);
         }
     }
 
-    private StompFrameHandler getStompFramHandlerMoveResults(CompletableFuture<MoveResultDtos> completableFutureForFirstClientMoveResults) {
+    private StompFrameHandler getStompFramHandlerMoveResults(CompletableFuture<MoveResponse> completableFutureForFirstClientMoveResults) {
         return new StompFrameHandler() {
             @Override
             public Type getPayloadType(StompHeaders headers) {
-                return MoveResultDtos.class;
+                return MoveResponse.class;
             }
 
             @Override
             public void handleFrame(StompHeaders headers, Object payload) {
-                completableFutureForFirstClientMoveResults.complete((MoveResultDtos) payload);
+                completableFutureForFirstClientMoveResults.complete((MoveResponse) payload);
             }
         };
     }
