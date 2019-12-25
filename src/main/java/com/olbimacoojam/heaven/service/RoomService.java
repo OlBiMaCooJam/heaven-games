@@ -50,9 +50,10 @@ public class RoomService {
         return modelMapper.map(room, RoomResponseDto.class);
     }
 
-    public RoomResponseDto unsubscribe(int roomId) {
+    public RoomResponseDto unsubscribe(int roomId, Long userId) {
         Room room = roomRepository.findById(roomId);
-        room.leave();
+        User user = userService.findById(userId);
+        room.leave(user);
         return modelMapper.map(room, RoomResponseDto.class);
     }
 

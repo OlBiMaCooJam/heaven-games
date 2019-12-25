@@ -54,7 +54,7 @@
 
                 YUTNORI.stompClient.subscribe("/topic/yutnori/" + YUTNORI.roomId + "/playing", function (response) { //말 움직이기
                     const moveResultDtos = JSON.parse(response.body)
-                    YUTNORI.applyMoveResults(moveResultDtos.moverResultDtos)
+                    YUTNORI.applyMoveResults(moveResultDtos.moveResultDtos)
 
                     YUTNORI.moveYutCon.parentNode.removeChild(YUTNORI.moveYutCon)
                     YUTNORI.moveYutCon = ""

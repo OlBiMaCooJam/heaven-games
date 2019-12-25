@@ -15,12 +15,10 @@ import org.springframework.stereotype.Service;
 public class YutnoriGameService {
     private final RoomService roomService;
     private final UserService userService;
-    private final YutnoriGameService yutnoriGameService;
 
-    public YutnoriGameService(RoomService roomService, UserService userService, YutnoriGameService yutnoriGameService) {
+    public YutnoriGameService(RoomService roomService, UserService userService) {
         this.roomService = roomService;
         this.userService = userService;
-        this.yutnoriGameService = yutnoriGameService;
     }
 
     public YutResponse throwYut(int roomId, Long userId) {

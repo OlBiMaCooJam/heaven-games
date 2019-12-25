@@ -3,11 +3,13 @@ package com.olbimacoojam.heaven.dto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.util.List;
 
 @Getter
 @Setter
+@ToString
 @NoArgsConstructor
 public class RoomResponseDto {
     private int id;
