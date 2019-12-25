@@ -7,6 +7,7 @@ import com.olbimacoojam.heaven.draw.application.DrawService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,10 +26,18 @@ public class DrawApiController {
     }
 
     @PostMapping
+    public ResponseEntity<DrawResponse> initGame(HttpSession httpSession, @PathVariable Long roomId) {
+        UserSession userSession = (UserSession) httpSession.getAttribute(UserSession.USER_SESSION);
+
+        return ResponseEntity.ok()
+                .body(drawService.initGame(userSession.getId(), roomId));
+    }
+
+    @PutMapping
     public ResponseEntity<DrawResponse> updateGame(HttpSession httpSession, @PathVariable Long roomId, @RequestBody DrawCreateRequest drawCreateRequest) {
         UserSession userSession = (UserSession) httpSession.getAttribute(UserSession.USER_SESSION);
 
         return ResponseEntity.ok()
-                .body(drawService.initialize(userSession.getId(), roomId, drawCreateRequest));
+                .body(drawService.updateGame(userSession.getId(), roomId, drawCreateRequest));
     }
 }

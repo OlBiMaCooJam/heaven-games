@@ -40,7 +40,7 @@
                         </v-row>
                     </v-card-text>
                 </v-card>
-                <v-btn @click="start">섞기</v-btn>
+                <v-btn @click="update">섞기</v-btn>
             </v-col>
             <v-col cols="8">
                 <v-row align='center' justify='center'>
@@ -60,7 +60,7 @@
         data() {
             return {
                 personCount: 4,
-                currentWhack: 4,
+                currentWhack: 1,
                 lot: [],
                 min: 1,
                 max: 10,
@@ -76,9 +76,9 @@
                     this.currentWhack = maxWhack;
                 }
             },
-            async start() {
+            async update() {
                 try {
-                    const response = await this.$axios.post('/rooms/0/draw', {
+                    const response = await this.$axios.put('/rooms/0/draw', {
                         personCount: this.personCount,
                         whackCount: this.currentWhack,
                     });
@@ -87,6 +87,17 @@
                     alert(e);
                 }
             },
+        },
+        async created() {
+            try {
+                const response = await this.$axios.post('/rooms/0/draw', {
+                    personCount: this.personCount,
+                    whackCount: this.currentWhack,
+                });
+                this.lot = response.data;
+            } catch (e) {
+                alert(e);
+            }
         }
     }
 </script>
