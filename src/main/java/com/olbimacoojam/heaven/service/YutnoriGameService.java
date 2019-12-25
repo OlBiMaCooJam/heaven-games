@@ -60,18 +60,17 @@ public class YutnoriGameService {
 
     public MoveResultDtos movePiece(int roomId, Long userId, MoveRequestDto moveRequestDto) {
         YutnoriGame yutnoriGame = getYutnoriGame(roomId);
-        Yut yut = yutnoriGame.throwYut(thrower, () -> Yut.DO);
-        return new YutResponse(yut.name());
-    }
 
-    public MoveResultDtos movePiece(int roomId, Long userId, MoveRequestDto moveRequestDto) {
         User mover = userService.findById(userId);
-        YutnoriGame yutnoriGame = getYutnoriGame(roomId);
-        PointName pointName = PointName.get(moveRequestDto.getPointName());
-        Yut yut = Yut.get(moveRequestDto.getYut());
-        MoveResults moveResults = yutnoriGame.move(mover, pointName, yut);
+        PointName sourcePointName = moveRequestDto.getSourcePoint();
+        Yut yut = moveRequestDto.getYut();
+
+        MoveResults moveResults = yutnoriGame.move(mover, sourcePointName, yut);
+
+        MoveResultsDto moveResultsDto = modelMapper.map(moveResults, MoveResultsDto.class);
         YutnoriGameResult yutnoriGameResult = yutnoriGame.isGameOver();
-        return new MoveResultDtos(moveResults, yutnoriGameResult);
+        TurnResponse turnResponse = modelMapper.map(yutnoriGame.getTurn(), TurnResponse.class);
+        return new MoveResponse(moveResultsDto, yutnoriGameResult, turnResponse);
     }
 
     private YutnoriGame getYutnoriGame(int roomId) {

@@ -1,5 +1,7 @@
 package com.olbimacoojam.heaven.dto;
 
+import com.olbimacoojam.heaven.yutnori.point.PointName;
+import com.olbimacoojam.heaven.yutnori.yut.Yut;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -8,11 +10,12 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 public class MoveRequestDto {
-    private String pointName;
-    private String yut;
 
-    public MoveRequestDto(String pointName, String yut) {
-        this.pointName = pointName;
+    private PointName sourcePoint;
+    private Yut yut;
+
+    public MoveRequestDto(PointName sourcePoint, Yut yut) {
+        this.sourcePoint = sourcePoint;
         this.yut = yut;
     }
 }

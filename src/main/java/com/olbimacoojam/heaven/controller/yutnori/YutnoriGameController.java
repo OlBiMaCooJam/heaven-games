@@ -2,7 +2,7 @@ package com.olbimacoojam.heaven.controller.yutnori;
 
 import com.olbimacoojam.heaven.domain.UserSession;
 import com.olbimacoojam.heaven.dto.MoveRequestDto;
-import com.olbimacoojam.heaven.dto.MoveResultDtos;
+import com.olbimacoojam.heaven.dto.MoveResponse;
 import com.olbimacoojam.heaven.dto.YutResponse;
 import com.olbimacoojam.heaven.dto.YutnoriStateResponse;
 import com.olbimacoojam.heaven.service.YutnoriGameService;
@@ -33,7 +33,7 @@ public class YutnoriGameController {
 
     @MessageMapping("/yutnori/{roomId}/move-piece")
     @SendTo("/topic/yutnori/{roomId}/playing")
-    public MoveResultDtos movePiece(@DestinationVariable int roomId, MoveRequestDto moveRequestDto, SimpMessageHeaderAccessor simpMessageHeaderAccessor) {
+    public MoveResponse movePiece(@DestinationVariable int roomId, MoveRequestDto moveRequestDto, SimpMessageHeaderAccessor simpMessageHeaderAccessor) {
         Long userId = getUserId(simpMessageHeaderAccessor);
         return yutnoriGameService.movePiece(roomId, userId, moveRequestDto);
     }
