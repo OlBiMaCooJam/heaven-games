@@ -1,4 +1,4 @@
-package com.olbimacoojam.heaven.yutnori.piece;
+package com.olbimacoojam.heaven.yutnori;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

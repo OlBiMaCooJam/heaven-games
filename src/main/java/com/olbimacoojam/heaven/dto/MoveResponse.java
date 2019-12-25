@@ -1,6 +1,6 @@
 package com.olbimacoojam.heaven.dto;
 
-import com.olbimacoojam.heaven.yutnori.piece.YutnoriGameResult;
+import com.olbimacoojam.heaven.yutnori.YutnoriGameResult;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;

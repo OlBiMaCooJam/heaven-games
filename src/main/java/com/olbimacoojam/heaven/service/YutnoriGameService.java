@@ -5,7 +5,7 @@ import com.olbimacoojam.heaven.domain.User;
 import com.olbimacoojam.heaven.dto.*;
 import com.olbimacoojam.heaven.yutnori.YutnoriGame;
 import com.olbimacoojam.heaven.yutnori.board.Board;
-import com.olbimacoojam.heaven.yutnori.piece.YutnoriGameResult;
+import com.olbimacoojam.heaven.yutnori.YutnoriGameResult;
 import com.olbimacoojam.heaven.yutnori.piece.moveresult.MoveResults;
 import com.olbimacoojam.heaven.yutnori.point.PointName;
 import com.olbimacoojam.heaven.yutnori.yut.Yut;

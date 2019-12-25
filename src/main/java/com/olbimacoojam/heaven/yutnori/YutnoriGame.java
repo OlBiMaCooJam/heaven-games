@@ -6,7 +6,6 @@ import com.olbimacoojam.heaven.yutnori.board.Board;
 import com.olbimacoojam.heaven.yutnori.board.BoardCreateStrategy;
 import com.olbimacoojam.heaven.yutnori.participant.YutnoriParticipant;
 import com.olbimacoojam.heaven.yutnori.participant.YutnoriParticipants;
-import com.olbimacoojam.heaven.yutnori.piece.YutnoriGameResult;
 import com.olbimacoojam.heaven.yutnori.piece.moveresult.MoveResults;
 import com.olbimacoojam.heaven.yutnori.point.PointName;
 import com.olbimacoojam.heaven.yutnori.turn.Turn;
