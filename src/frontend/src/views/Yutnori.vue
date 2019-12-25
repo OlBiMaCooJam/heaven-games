@@ -36,10 +36,11 @@
                 srcPoint: "",
                 moveYutCon: "",
 
+                board: Array,  // standby는 yutnoriUsers에서 관리
+
                 movingResults: []
             }
         },
-
         created() {
             this.initializeGame();
             const YUTNORI = this;
@@ -69,32 +70,44 @@
                 const stompClient = Stomp.over(new SockJS('/websocket'));
                 stompClient.connect({}, function () {
                     stompClient.subscribe("/topic/yutnori/" + YUTNORI.roomId, function (response) {  //판 초기화
-                        const gameStartResponseDtos = JSON.parse(response.body)
-                        YUTNORI.loadYutnoriUsers(gameStartResponseDtos.gameStartResponseDtos)
+                        const yutnoriStateResponse = JSON.parse(response.body)
+                        const pieces = yutnoriStateResponse.boardResponse.pieces;
+
+                        YUTNORI.yutnoriUsers = YUTNORI.getYutnoriUsers(yutnoriStateResponse.yutnoriParticipants, pieces)
+                        YUTNORI.board = YUTNORI.createBoard(pieces)
+
                         stompClient.disconnect()
                     })
 
                     stompClient.send('/app/yutnori/' + YUTNORI.roomId)
                 })
             },
-            loadYutnoriUsers(gameStartResponseDtos) {
-                this.yutnoriUsers = new Map();
-                for (let i = 0; i < gameStartResponseDtos.length; i++) {
-                    const gameStartResponseDto = gameStartResponseDtos[i];
-                    this.yutnoriUsers.set(gameStartResponseDto.color, {
-                        name: gameStartResponseDto.userName,
-                        standby: this.pointCount(gameStartResponseDto.pieceLocations, 'STANDBY')
+            getYutnoriUsers(yutnoriParticipants, pieces) { //list to map
+                let yutnoriUsers = new Map();
+                for (let i = 0; i < yutnoriParticipants.length; i++) {
+                    const yutnoriParticipant = yutnoriParticipants[i];
+                    yutnoriUsers.set(yutnoriParticipant.color, {
+                        name: yutnoriParticipant.participant.name,
+                        standby: 0
                     })
                 }
+
+                pieces.forEach(piece => {
+                    if (piece.pointName == 'STANDBY') {
+                        yutnoriUsers.get(piece.color).standby++;
+                    }
+                })
+                return yutnoriUsers
             },
-            pointCount(points, position) {
-                let cnt = 0;
-
-                points.forEach((point) => {
-                    if (point == position) cnt++;
-                });
-
-                return cnt;
+            createBoard(pieces) {
+                const board = new Map();
+                for (let i = 0; i < pieces.length; i++) {
+                    const piece = pieces[i];
+                        board.set(piece.pointName, {
+                            color: piece.color,
+                            count: 1
+                        })
+                }
             },
             throwYut() {
                 this.stompClient.send("/app/yutnori/" + this.roomId + "/yut-throw");

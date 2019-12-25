@@ -5,10 +5,9 @@ import com.olbimacoojam.heaven.domain.RoomFactory;
 import com.olbimacoojam.heaven.domain.RoomRepository;
 import com.olbimacoojam.heaven.domain.User;
 import com.olbimacoojam.heaven.dto.GameStartResponseDto;
-import com.olbimacoojam.heaven.dto.GameStartResponseDtos;
 import com.olbimacoojam.heaven.dto.RoomResponseDto;
 import com.olbimacoojam.heaven.game.Game;
-import com.olbimacoojam.heaven.yutnori.participant.YutnoriParticipant;
+import com.olbimacoojam.heaven.game.GameKind;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,16 +19,16 @@ import java.util.stream.Collectors;
 public class RoomService {
 
     private final RoomFactory roomFactory;
-    private final ModelMapper modelMapper;
     private final RoomRepository roomRepository;
     private final UserService userService;
+    private final ModelMapper modelMapper;
 
     @Autowired
-    public RoomService(RoomFactory roomFactory, ModelMapper modelMapper, UserService userService, RoomRepository roomRepository) {
+    public RoomService(RoomFactory roomFactory, RoomRepository roomRepository, UserService userService, ModelMapper modelMapper) {
         this.roomFactory = roomFactory;
-        this.modelMapper = modelMapper;
         this.roomRepository = roomRepository;
         this.userService = userService;
+        this.modelMapper = modelMapper;
     }
 
     public RoomResponseDto createRoom() {
@@ -73,12 +72,10 @@ public class RoomService {
         return players.size();
     }
 
-    public GameStartResponseDtos initiateGame(int roomId) {
+    public GameStartResponseDto startGame2(int roomId) {
         Room room = roomRepository.findById(roomId);
-        List<YutnoriParticipant> yutnoriParticipants = room.initiateGame();
-        List<GameStartResponseDto> gameStartResponseDtos = yutnoriParticipants.stream()
-                .map(yutnoriParticipant -> new GameStartResponseDto(yutnoriParticipant.getId(), yutnoriParticipant.getName(), yutnoriParticipant.getColorName()))
-                .collect(Collectors.toList());
-        return new GameStartResponseDtos(gameStartResponseDtos);
+        boolean isGameStart = room.startGame();
+
+        return new GameStartResponseDto(isGameStart, room.countPlayers(), room.getGameKind());
     }
 }

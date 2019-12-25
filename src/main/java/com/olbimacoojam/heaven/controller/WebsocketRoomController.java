@@ -1,7 +1,7 @@
 package com.olbimacoojam.heaven.controller;
 
 import com.olbimacoojam.heaven.domain.UserSession;
-import com.olbimacoojam.heaven.dto.GameStartResponseDtos;
+import com.olbimacoojam.heaven.dto.GameStartResponseDto;
 import com.olbimacoojam.heaven.dto.RoomResponseDto;
 import com.olbimacoojam.heaven.service.RoomService;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
@@ -43,10 +43,7 @@ public class WebsocketRoomController {
 
     @MessageMapping("/rooms/{roomId}/start")
     @SendTo("/topic/rooms/{roomId}/start")
-    public GameStartResponseDtos startGame(@DestinationVariable int roomId) {
-        System.out.println("=======here");
-        GameStartResponseDtos dto = roomService.initiateGame(roomId);
-        System.out.println(dto);
-        return dto;
+    public GameStartResponseDto startGame(@DestinationVariable int roomId) {
+        return roomService.startGame2(roomId);
     }
 }

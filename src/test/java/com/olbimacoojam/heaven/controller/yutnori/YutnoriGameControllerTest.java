@@ -40,13 +40,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 @AutoConfigureWebTestClient
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class YutnoriGameControllerTest {
+
     private static final String JSESSIONID = "JSESSIONID";
     private static final String ROOMS_URL = "/rooms";
     private static final String SUBSCRIBE_ROOM_ENDPOINT = "/topic/rooms/";
     private static final String SEND_ROOM_ENDPOINT = "/app/rooms/";
     private static final String SEND_ENTER_ROOM_ENDPOINT = "/app/rooms/";
     private static final String SUBSCRIBE_ENTER_ROOM_ENDPOINT = "/topic/rooms/";
-
 
     @LocalServerPort
     private Long port;
@@ -139,17 +139,16 @@ class YutnoriGameControllerTest {
         assertThat(roomResponseDto.getPlayers()).hasSize(2);
 
         //한 클라이언트가 게임을 시작함
-        CompletableFuture<GameStartResponseDtos> completableFutureForFirstClientGameStartResponseDtos = new CompletableFuture<>();
-        CompletableFuture<GameStartResponseDtos> completableFutureForSecondClientGameStartResponseDtos = new CompletableFuture<>();
-        firstClient.getStompSession().subscribe("/topic/yutnori/" + roomId, getStompFrameHandlerGameStartResponse(completableFutureForFirstClientGameStartResponseDtos));
-        secondClient.getStompSession().subscribe("/topic/yutnori/" + roomId, getStompFrameHandlerGameStartResponse(completableFutureForSecondClientGameStartResponseDtos));
+        CompletableFuture<GameStartResponseDto> completableFutureForFirstClientGameStartResponseDto = new CompletableFuture<>();
+        CompletableFuture<GameStartResponseDto> completableFutureForSecondClientGameStartResponseDto = new CompletableFuture<>();
+        firstClient.getStompSession().subscribe(SUBSCRIBE_ROOM_ENDPOINT + roomId + "/start", getStompFrameHandlerGameStartResponse(completableFutureForFirstClientGameStartResponseDto));
+        secondClient.getStompSession().subscribe(SUBSCRIBE_ROOM_ENDPOINT + roomId + "/start", getStompFrameHandlerGameStartResponse(completableFutureForSecondClientGameStartResponseDto));
 
-        firstClient.getStompSession().send("/app/yutnori/" + roomId, null);
+        firstClient.getStompSession().send(SEND_ROOM_ENDPOINT + roomId + "/start", null);
 
-        GameStartResponseDtos gameStartResponseDtos = completableFutureForFirstClientGameStartResponseDtos.get(100, SECONDS);
-        assertThat(gameStartResponseDtos.size()).isEqualTo(2);
-        assertThat(gameStartResponseDtos.getFirstId()).isEqualTo(userId1);
-        assertThat(gameStartResponseDtos.getSecondId()).isEqualTo(userId2);
+        GameStartResponseDto gameStartResponseDto = completableFutureForFirstClientGameStartResponseDto.get(100, SECONDS);
+        assertThat(gameStartResponseDto.isGameStart()).isTrue();
+        assertThat(gameStartResponseDto.getNumberOfPlayers()).isEqualTo(2);
         return roomId;
     }
 
@@ -232,16 +231,16 @@ class YutnoriGameControllerTest {
         };
     }
 
-    private StompFrameHandler getStompFrameHandlerGameStartResponse(CompletableFuture<GameStartResponseDtos> completableFutureForGameStartResponseDtos) {
+    private StompFrameHandler getStompFrameHandlerGameStartResponse(CompletableFuture<GameStartResponseDto> completableFutureForGameStartResponseDtos) {
         return new StompFrameHandler() {
             @Override
             public Type getPayloadType(StompHeaders headers) {
-                return GameStartResponseDtos.class;
+                return GameStartResponseDto.class;
             }
 
             @Override
             public void handleFrame(StompHeaders headers, Object payload) {
-                completableFutureForGameStartResponseDtos.complete((GameStartResponseDtos) payload);
+                completableFutureForGameStartResponseDtos.complete((GameStartResponseDto) payload);
             }
         };
     }

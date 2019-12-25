@@ -4,6 +4,7 @@ import com.olbimacoojam.heaven.domain.User;
 import com.olbimacoojam.heaven.yutnori.Color;
 import com.olbimacoojam.heaven.yutnori.exception.NoSuchColorPlayingException;
 import com.olbimacoojam.heaven.yutnori.exception.NotExistParticipantException;
+import com.olbimacoojam.heaven.yutnori.participant.exception.IllegalYutnoriParticipantsException;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -26,9 +27,17 @@ public class YutnoriParticipants {
     }
 
     public static YutnoriParticipants of(List<User> players) {
+        checkPlayers(players);
         return IntStream.range(0, players.size())
                 .mapToObj(i -> new YutnoriParticipant(players.get(i), Color.get(i)))
                 .collect(Collectors.collectingAndThen(Collectors.toList(), YutnoriParticipants::new));
+    }
+
+    private static void checkPlayers(List<User> players) {
+        if (players == null || players.size() != 2) {
+            int num = players == null ? 0 : players.size();
+            throw new IllegalYutnoriParticipantsException(num);
+        }
     }
 
     public YutnoriParticipant getFirst() {

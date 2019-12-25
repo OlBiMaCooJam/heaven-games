@@ -1,30 +1,26 @@
 package com.olbimacoojam.heaven.dto;
 
-import com.olbimacoojam.heaven.yutnori.point.PointName;
+import com.olbimacoojam.heaven.game.GameKind;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import java.util.Arrays;
-import java.util.List;
-
-@Getter
 @NoArgsConstructor
+@Getter
 @ToString
 public class GameStartResponseDto {
-    private Long id;
-    private String userName;
-    private String color;
-    private List<String> pieceLocations;
 
-    public GameStartResponseDto(Long id, String userName, String color) {
-        this.id = id;
-        this.userName = userName;
-        this.color = color;
-        this.pieceLocations = Arrays.asList(PointName.STANDBY.name(), PointName.STANDBY.name(), PointName.STANDBY.name(), PointName.STANDBY.name());
+    private Boolean isGameStart;
+    private int numberOfPlayers;
+    private GameKind gameKind;
+
+    public GameStartResponseDto(boolean isGameStart, int numberOfPlayers, GameKind gameKind) {
+        this.isGameStart = isGameStart;
+        this.numberOfPlayers = numberOfPlayers;
+        this.gameKind = gameKind;
     }
 
-    public boolean isName(String userName) {
-        return this.userName.equals(userName);
+    public boolean isGameStart() {
+        return isGameStart;
     }
 }

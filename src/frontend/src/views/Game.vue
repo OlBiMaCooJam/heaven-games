@@ -45,8 +45,15 @@
                         join = false;
                     }
                 });
-                game.client.subscribe('/topic/rooms/' + game.id + '/start', function () {
-                    router.push('/' + game.gameKind + '/' + game.id);
+                game.client.subscribe('/topic/rooms/' + game.id + '/start', function (response) {
+                    const gameStartResponseDto = JSON.parse(response.body);
+
+                    if (gameStartResponseDto.isGameStart) {
+                        router.push('/' + gameStartResponseDto.gameKind + '/' + game.id);
+                    }
+                    else {
+                        alert("게임 시작 불가")
+                    }
                 });
             });
         },

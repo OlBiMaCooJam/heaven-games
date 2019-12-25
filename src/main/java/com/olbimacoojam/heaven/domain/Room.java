@@ -1,9 +1,13 @@
 package com.olbimacoojam.heaven.domain;
 
 import com.olbimacoojam.heaven.game.Game;
+import com.olbimacoojam.heaven.game.GameKind;
+import com.olbimacoojam.heaven.mafia.MafiaGame;
+import com.olbimacoojam.heaven.minesweeper.domain.Minesweeper;
 import com.olbimacoojam.heaven.yutnori.YutnoriGame;
-import com.olbimacoojam.heaven.yutnori.participant.YutnoriParticipant;
 import lombok.Getter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Comparator;
 import java.util.List;
@@ -12,6 +16,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
 //todo : input 유효성 체크하기
 @Getter
 public class Room {
+
+    private static final Logger log = LoggerFactory.getLogger(Room.class);
 
     private final int id;
     private final Game game;
@@ -33,12 +39,34 @@ public class Room {
         players.remove(user);
     }
 
-    public void startGame() {
-        game.initialize(players);
+    public boolean startGame() {
+        try {
+            game.initialize(players);
+            return true;
+        } catch (RuntimeException e) {
+            log.error("fail to start game", e);
+            return false;
+        }
     }
 
-    public List<YutnoriParticipant> initiateGame() {
-        game.initialize(players);
-        return ((YutnoriGame) game).getYutnoriParticipants();
+    public int countPlayers() {
+        return players.size();
+    }
+
+    public GameKind getGameKind() {
+        if (game instanceof YutnoriGame) {
+            return GameKind.YUTNORI;
+        }
+        if (game instanceof MafiaGame) {
+            return GameKind.MAFIA;
+        }
+        if (game instanceof Minesweeper) {
+            return GameKind.MINE;
+        }
+        throw new IllegalStateException();
+    }
+
+    public boolean isGameKind(GameKind gameKind) {
+        return getGameKind().equals(gameKind);
     }
 }
