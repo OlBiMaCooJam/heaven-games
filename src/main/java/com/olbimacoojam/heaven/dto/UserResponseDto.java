@@ -10,6 +10,7 @@ import lombok.ToString;
 @ToString
 @NoArgsConstructor
 public class UserResponseDto {
+
     private Long id;
     private Long kakaoId;
     private String name;

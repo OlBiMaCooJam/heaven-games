@@ -1,9 +1,6 @@
 package com.olbimacoojam.heaven.yutnori;
 
 import com.olbimacoojam.heaven.domain.User;
-import com.olbimacoojam.heaven.yutnori.turn.exception.NotHaveYutException;
-import com.olbimacoojam.heaven.yutnori.turn.exception.ThrowImpossibleException;
-import com.olbimacoojam.heaven.yutnori.turn.exception.WrongUserTurnException;
 import com.olbimacoojam.heaven.yutnori.participant.YutnoriParticipants;
 import com.olbimacoojam.heaven.yutnori.piece.Piece;
 import com.olbimacoojam.heaven.yutnori.piece.moveresult.MoveResult;
@@ -11,6 +8,9 @@ import com.olbimacoojam.heaven.yutnori.piece.moveresult.MoveResults;
 import com.olbimacoojam.heaven.yutnori.piece.moveresult.Route;
 import com.olbimacoojam.heaven.yutnori.point.PointName;
 import com.olbimacoojam.heaven.yutnori.turn.Turn;
+import com.olbimacoojam.heaven.yutnori.turn.exception.NotHaveYutException;
+import com.olbimacoojam.heaven.yutnori.turn.exception.ThrowImpossibleException;
+import com.olbimacoojam.heaven.yutnori.turn.exception.WrongUserTurnException;
 import com.olbimacoojam.heaven.yutnori.yut.Yut;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

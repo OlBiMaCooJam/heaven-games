@@ -2,13 +2,13 @@ package com.olbimacoojam.heaven.yutnori.turn;
 
 import com.olbimacoojam.heaven.domain.User;
 import com.olbimacoojam.heaven.yutnori.Color;
+import com.olbimacoojam.heaven.yutnori.participant.YutnoriParticipant;
+import com.olbimacoojam.heaven.yutnori.participant.YutnoriParticipants;
+import com.olbimacoojam.heaven.yutnori.piece.moveresult.MoveResults;
 import com.olbimacoojam.heaven.yutnori.turn.exception.MoveImpossibleException;
 import com.olbimacoojam.heaven.yutnori.turn.exception.NotHaveYutException;
 import com.olbimacoojam.heaven.yutnori.turn.exception.ThrowImpossibleException;
 import com.olbimacoojam.heaven.yutnori.turn.exception.WrongUserTurnException;
-import com.olbimacoojam.heaven.yutnori.participant.YutnoriParticipant;
-import com.olbimacoojam.heaven.yutnori.participant.YutnoriParticipants;
-import com.olbimacoojam.heaven.yutnori.piece.moveresult.MoveResults;
 import com.olbimacoojam.heaven.yutnori.yut.Yut;
 import com.olbimacoojam.heaven.yutnori.yut.Yuts;
 import lombok.EqualsAndHashCode;

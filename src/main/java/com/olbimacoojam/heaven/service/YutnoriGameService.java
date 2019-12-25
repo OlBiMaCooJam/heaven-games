@@ -55,10 +55,11 @@ public class YutnoriGameService {
         User thrower = userService.findById(userId);
 
         Yut yut = yutnoriGame.throwYut(thrower, yutThrowStrategy);
-        return new YutResponse(yut);
+        TurnResponse turnResponse = modelMapper.map(yutnoriGame.getTurn(), TurnResponse.class);
+        return new YutResponse(yut, turnResponse);
     }
 
-    public MoveResultDtos movePiece(int roomId, Long userId, MoveRequestDto moveRequestDto) {
+    public MoveResponse movePiece(int roomId, Long userId, MoveRequestDto moveRequestDto) {
         YutnoriGame yutnoriGame = getYutnoriGame(roomId);
 
         User mover = userService.findById(userId);

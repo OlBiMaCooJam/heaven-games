@@ -40,7 +40,7 @@ class PieceTest extends YutnoriBaseTest {
     @DisplayName("말 움직임 테스트 (대기에서 => 모)")
     void move_test3() {
         Piece piece = Piece.of(Color.BLACK, PointName.MO);
-        MoveResult moveResult = piece.move(Yut.GAE );
+        MoveResult moveResult = piece.move(Yut.GAE);
 
         Route checkRoute = createRoute(PointName.MO, PointName.MODO, PointName.MOGAE);
         MoveResult checkMoveResult = new MoveResult(piece, checkRoute);

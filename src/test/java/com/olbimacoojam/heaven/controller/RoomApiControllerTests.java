@@ -23,11 +23,13 @@ import static org.springframework.restdocs.webtestclient.WebTestClientRestDocume
 @ExtendWith({RestDocumentationExtension.class, SpringExtension.class})
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class RoomApiControllerTests {
+
     public static final String ROOMS_URL = "/rooms";
     private final FieldDescriptor[] roomResponseFields = {
             fieldWithPath("id").description("room 고유 식별자"),
             fieldWithPath("players").description("room에 참여하고 있는 user 목록")
     };
+
     private WebTestClient webTestClient;
     @LocalServerPort
     private String port;

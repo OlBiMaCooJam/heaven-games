@@ -12,15 +12,12 @@ import java.util.List;
 @ToString
 @NoArgsConstructor
 public class RoomResponseDto {
+
     private int id;
     private List<UserResponseDto> players;
 
     public RoomResponseDto(int id, List<UserResponseDto> players) {
         this.id = id;
         this.players = players;
-    }
-
-    public List<UserResponseDto> getPlayers() {
-        return players;
     }
 }
