@@ -83,7 +83,7 @@ public class MafiaGameController {
     }
 
     @MessageMapping("/rooms/{roomId}/vote")
-    @SendTo("/topic/rooms/{roomId}/vote")
+    @SendToUser("/queue/rooms/{roomId}/vote")
     public List<MafiaParticipantName> vote(@DestinationVariable Long roomId, SimpMessageHeaderAccessor simpMessageHeaderAccessor) {
         HttpSession httpSession = (HttpSession) (simpMessageHeaderAccessor.getSessionAttributes().get(HTTP_SESSION));
         UserSession userSession = (UserSession) httpSession.getAttribute(UserSession.USER_SESSION);
@@ -107,7 +107,7 @@ public class MafiaGameController {
     public String daySelect(@DestinationVariable Long roomId, MafiaParticipantName mafiaParticipantName) {
         MafiaGame game = (MafiaGame) roomService.findById(roomId).getGame();
 
-        List<MafiaParticipant> mafiaParticipants = game.getMafiaParticipants();
+        List<MafiaParticipant> mafiaParticipants = game.findAliveMafiaParticipants();
         MafiaParticipant selectedMafiaParticipant = mafiaParticipants.stream()
                 .filter(mafiaParticipant -> mafiaParticipant.getPlayer().getName().equals(mafiaParticipantName.getName()))
                 .findFirst()
@@ -115,7 +115,7 @@ public class MafiaGameController {
 
         boolean IsFinish = game.voteParticipant(selectedMafiaParticipant);
         if (IsFinish) {
-            return game.showVoteResult() + "\n\n" + game.showResult();
+            return game.showDayResult();
         }
         return null;
     }
@@ -131,6 +131,10 @@ public class MafiaGameController {
 
         MafiaParticipant selectedMafiaParticipant = getSelectedParticipant(selector, game, mafiaParticipantName);
         game.voteParticipant(selectedMafiaParticipant);
+
+        if (game.isAllPerform()) {
+            simpMessagingTemplate.convertAndSend("/topic/rooms/" + roomId + "/nightResult", game.showNightResult());
+        }
     }
 
     @MessageMapping("/rooms/{roomId}/DOCTOR")
@@ -144,6 +148,10 @@ public class MafiaGameController {
 
         MafiaParticipant selectedMafiaParticipant = getSelectedParticipant(selector, game, mafiaParticipantName);
         selectedMafiaParticipant.applyShield();
+
+        if (game.isAllPerform()) {
+            simpMessagingTemplate.convertAndSend("/topic/rooms/" + roomId + "/nightResult", game.showNightResult());
+        }
     }
 
     @MessageMapping("/rooms/{roomId}/POLICE")
@@ -157,6 +165,11 @@ public class MafiaGameController {
         MafiaParticipant selector = game.findMafiaParticipantByUserId(userSession.getId());
 
         MafiaParticipant selectedMafiaParticipant = getSelectedParticipant(selector, game, mafiaParticipantName);
+
+        if (game.isAllPerform()) {
+            simpMessagingTemplate.convertAndSend("/topic/rooms/" + roomId + "/nightResult", game.showNightResult());
+        }
+
         return selectedMafiaParticipant.getOccupationType().equals(OccupationType.MAFIA) ? "마피아 O" : "마피아 X";
     }
 
@@ -164,6 +177,11 @@ public class MafiaGameController {
     @SendToUser("/queue/rooms/{roomId}/DETECTIVE")
     public String detectivePerform(@DestinationVariable Long roomId, MafiaParticipantName mafiaParticipantName) {
         MafiaGame game = (MafiaGame) roomService.findById(roomId).getGame();
+
+        if (game.isAllPerform()) {
+            simpMessagingTemplate.convertAndSend("/topic/rooms/" + roomId + "/nightResult", game.showNightResult());
+        }
+
         return game.getSelectData(mafiaParticipantName.getName());
     }
 
@@ -176,9 +194,9 @@ public class MafiaGameController {
 
 
     //TODO: 중복이름 처리
-    private MafiaParticipant getSelectedParticipant(MafiaParticipant selector, MafiaGame game, MafiaParticipantName selectedName){
-        List<MafiaParticipant> mafiaParticipants = game.getMafiaParticipants();
-        MafiaParticipant selected =  mafiaParticipants.stream()
+    private MafiaParticipant getSelectedParticipant(MafiaParticipant selector, MafiaGame game, MafiaParticipantName selectedName) {
+        List<MafiaParticipant> mafiaParticipants = game.findAliveMafiaParticipants();
+        MafiaParticipant selected = mafiaParticipants.stream()
                 .filter(mafiaParticipant -> mafiaParticipant.getPlayer().getName().equals(selectedName.getName()))
                 .findFirst()
                 .orElseThrow(NotFoundMafiaParticipantException::new);

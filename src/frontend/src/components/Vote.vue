@@ -19,13 +19,15 @@
 </template>
 
 <script>
+    import {eventBus} from "../main";
+
     export default {
         name: "Vote",
         props: {
             roomId: Number,
             vote_msg: String,
             client: {},
-            dialog:Boolean,
+            dialog: Boolean,
             citizens: Array,
             selected: String,
             day: Boolean,
@@ -34,19 +36,12 @@
         },
         methods: {
             select() {
-                this.dialog = false;
+                eventBus.$emit('closeModal');
                 if(this.day){
                     this.client.send('/app/rooms/' + this.roomId + '/select', JSON.stringify({ "name" : this.selected}));
                 }else{
                     this.client.send('/app/rooms/' + this.roomId + '/' + this.occupation, JSON.stringify({ "name" : this.selected}));
                 }
-            }
-        },
-
-        computed() {
-            if(this.day === false && this.date === 0) {
-                this.dialog = false;
-                this.client.send('/app/rooms/' + this.roomId + '/nightResult');
             }
         },
     }

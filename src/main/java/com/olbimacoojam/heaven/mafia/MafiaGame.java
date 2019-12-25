@@ -7,7 +7,6 @@ import com.olbimacoojam.heaven.mafia.Initializer.MafiaMaximumInitializer;
 import com.olbimacoojam.heaven.mafia.Initializer.MafiaMiddleInitializer;
 import com.olbimacoojam.heaven.mafia.Initializer.MafiaMinimumInitializer;
 import com.olbimacoojam.heaven.mafia.Occupation.OccupationType;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 
 import java.util.Comparator;
 import java.util.HashMap;
@@ -45,6 +44,7 @@ public class MafiaGame implements Game {
         for (MafiaParticipant mafiaParticipant : findAliveMafiaParticipants()) {
             voteResult.put(mafiaParticipant, 0);
         }
+        selectData = new HashMap<>();
     }
 
     public boolean isEnd() {
@@ -78,7 +78,7 @@ public class MafiaGame implements Game {
         for (Integer voteValue : voteResult.values()) {
             voteSum += voteValue;
         }
-        if (voteSum == mafiaParticipants.size()) {
+        if (voteSum == findAliveMafiaParticipants().size()) {
             return true;
         }
         return false;
@@ -93,7 +93,7 @@ public class MafiaGame implements Game {
 
         if (maxVoteNumber >= 2) {
             voteResult = new HashMap<>();
-            return "투표결과가 과반수가 넘지 않아 무효가 되었습니다";
+            return "투표결과가 과반수가 넘지 않아 무효가 되었습니다\n";
         }
 
         MafiaParticipant selectedMafiaParticipant = voteResult.keySet().stream()
@@ -101,21 +101,34 @@ public class MafiaGame implements Game {
                 .findFirst()
                 .orElseThrow(NotFoundMafiaParticipantException::new);
 
-        selectedMafiaParticipant.dead();
-        String distinction = selectedMafiaParticipant.getOccupationType().equals(OccupationType.MAFIA) ? "마피아" : "시민";
+        boolean isDead = selectedMafiaParticipant.dead();
 
-        voteResult = new HashMap<>();
-        return selectedMafiaParticipant.getPlayer().getName() + "님이 죽었습니다.\n" + distinction + " 입니다.";
+        if (!isDead) {
+            return "죽은 사람이 없습니다.\n";
+        }
+
+        StringBuilder stringBuilder = new StringBuilder();
+
+        stringBuilder.append(selectedMafiaParticipant.getPlayer().getName() + "님이 죽었습니다.\n");
+
+        voteResult.remove(selectedMafiaParticipant);
+
+        if (day) {
+            stringBuilder.append(
+                    selectedMafiaParticipant.getOccupationType().equals(OccupationType.MAFIA) ?
+                            "마피아입니다.\n" : "시민입니다.\n");
+        }
+        return stringBuilder.toString();
     }
 
     public String showResult() {
-        day = false;
-
         int numberOfMafia = (int) findAliveMafiaParticipants().stream()
                 .filter(mafiaParticipant -> mafiaParticipant.getOccupationType().equals(OccupationType.MAFIA))
                 .count();
 
-        if (numberOfMafia >= mafiaParticipants.size() - numberOfMafia) {
+        voteResultInitialize();
+
+        if (numberOfMafia >= findAliveMafiaParticipants().size() - numberOfMafia) {
             return ("게임이 종료되었습니다.\n마피아팀의 승리입니다.");
         }
 
@@ -123,12 +136,19 @@ public class MafiaGame implements Game {
             return ("게임이 종료되었습니다.\n시민팀의 승리입니다.");
         }
 
-        return day ? "밤이 되었습니다." : "낮이 되었습니다.";
+        changeDay();
+        return day ? "낮이 되었습니다." : "밤이 되었습니다.";
     }
 
     public String showNightResult() {
-        day = true;
+        StringBuilder stringBuilder = new StringBuilder();
 
+        return stringBuilder.append(showVoteResult())
+                .append(showResult())
+                .toString();
+    }
+
+    public String showDayResult() {
         StringBuilder stringBuilder = new StringBuilder();
 
         return stringBuilder.append(showVoteResult())
@@ -140,7 +160,7 @@ public class MafiaGame implements Game {
         return day;
     }
 
-    public void changeDay() {
+    private void changeDay() {
         if (this.day) {
             this.day = false;
             return;
@@ -158,5 +178,14 @@ public class MafiaGame implements Game {
                 .findFirst()
                 .orElseThrow(NotFoundMafiaParticipantException::new)
                 .getOccupationType().name();
+    }
+
+    public boolean isAllPerform() {
+        int numberOfCompetence = (int) findAliveMafiaParticipants().stream()
+                .filter(mafiaParticipant -> !mafiaParticipant.getOccupationType().equals(OccupationType.CITIZEN)
+                        && !mafiaParticipant.getOccupationType().equals(OccupationType.SOLDIER))
+                .count();
+
+        return numberOfCompetence == selectData.size();
     }
 }

@@ -19,8 +19,13 @@ public class MafiaParticipant {
         shield = occupationType.equals(OccupationType.SOLDIER);
     }
 
-    public void dead() {
+    public boolean dead() {
+        if (shield) {
+            shield = false;
+            return false;
+        }
         alive = false;
+        return true;
     }
 
     public void applyShield() {

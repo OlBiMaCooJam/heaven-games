@@ -16,7 +16,7 @@
             </v-col>
             <v-col cols="1">
                 <v-row align='center' justify='center'>
-                    <Timer :date=date :roomId=$route.params.roomId :client="client" :day="day" :occupation="occupation" :dialog="dialog"></Timer>
+                    <Timer :date="date" :roomId=$route.params.roomId :client="client" :day="day" :occupation="occupation" :dialog="dialog"></Timer>
                 </v-row>
                 <v-row>
                     <Vote :selected="selected" :dialog="dialog" :citizens="citizens" :vote_msg="vote_message" :client="client" :roomId= $route.params.roomId :day="day" :occupation="occupation"></Vote>
@@ -33,6 +33,7 @@
     import Stomp from "webstomp-client";
     import Timer from "../components/Timer";
     import Vote from "../components/Vote";
+    import {eventBus} from "../main";
 
     export default {
         name: 'Mafia',
@@ -104,13 +105,13 @@
                     game.occupation = mafiaOccupationMessage.occupation;
                     alert('당신은 ' + game.occupation + ' 입니다.');
 
-                    if(game.occupation == 'MAFIA') {
+                    if(game.occupation === 'MAFIA') {
                         game.client.subscribe('/topic/rooms/' + game.roomId + '/mafia/chat/mafiaOnly', function (response) {
                             const mafiaChatMessage = JSON.parse(response.body);
                             game.addMessage(mafiaChatMessage);
                         });
                     }
-                    if(game.occupation == 'POLICE' || game.occupation == 'DETECTIVE') {
+                    if(game.occupation === 'POLICE' || game.occupation === 'DETECTIVE') {
                         game.client.subscribe('/user/queue/rooms/' + game.roomId + '/' + game.occupation, function (response) {
                             const mafiaChatMessage = JSON.parse(response.body);
                             game.addMessage(mafiaChatMessage);
@@ -121,7 +122,7 @@
                     const mafiaChatMessage = JSON.parse(response.body);
                     game.addMessage(mafiaChatMessage);
                 });
-                game.client.subscribe('/topic/rooms/' + game.roomId + '/vote', function(response){
+                game.client.subscribe('/user/queue/rooms/' + game.roomId + '/vote', function(response){
                     const responseCitizens = JSON.parse(response.body);
                     for(let i=0;i<responseCitizens.length;i++){
                         game.citizens = game.newArray(i, responseCitizens[i].name);
@@ -129,22 +130,33 @@
                     }
                 });
                 game.client.subscribe('/topic/rooms/' + game.roomId + '/dayResult', function (response) {
+                    eventBus.$emit('initTime');
                     const resultMessage = response.body;
                     alert(resultMessage);
+
+                    window.console.log(resultMessage.includes("종료"));
+                    if(resultMessage.includes("종료")) {
+                        game.$router.push("/games/" + game.roomId + "/rooms/" + game.roomId);
+                        return;
+                    }
                     game.day = false;
 
-                    alert('15초 안에 각 직업의 능력이 발동합니다.');
-                    this.date = 15;
 
-                    game.client.send('/app/rooms/' + game.roomId + '/' + game.occupation);
+                    alert('15초 안에 각 직업의 능력이 발동합니다.');//
                 });
-                game.client.subscribe('/topic/rooms/' + game.roomId + '/dayResult', function (response) {
+                game.client.subscribe('/topic/rooms/' + game.roomId + '/nightResult', function (response) {
+                    eventBus.$emit('initTime');
                     const resultMessage = response.body;
                     alert(resultMessage);
+
+                    window.console.log(resultMessage.includes("종료"));
+                    if(resultMessage.includes("종료")) {
+                        game.$router.push("/games/" + game.roomId + "/rooms/" + game.roomId);
+                        return;
+                    }
                     game.day = true;
 
                     alert('낮이 되었습니다. 15초 동안 떠들어보세요.');
-                    this.date = 15;
                 });
             });
         },
@@ -157,9 +169,14 @@
                     game.sendMessage();
                 }
             });
+
+            eventBus.$on(`closeModal`, () => this.dialog = false);
         },
         destroyed() {
             this.client.disconnect();
+            eventBus.$off(`Timeout`);
+            eventBus.$emit('closeModal');
+
             //TODO: 마피아 참가자 나가는 경우
         }
     }
