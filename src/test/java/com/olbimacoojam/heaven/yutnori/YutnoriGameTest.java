@@ -196,7 +196,7 @@ class YutnoriGameTest extends YutnoriBaseTest {
         MoveResults moveResults = yutnoriGame.move(user1, PointName.DO, Yut.BACKDO);
 
         MoveResults expectedMoveResults = new MoveResults(Arrays.asList(
-                new MoveResult(piece, createRoute(PointName.DO, PointName.STANDBY))
+                new MoveResult(piece, createRoute(PointName.DO, PointName.CHAMMUGI))
         ));
 
         assertThat(moveResults).isEqualTo(expectedMoveResults);

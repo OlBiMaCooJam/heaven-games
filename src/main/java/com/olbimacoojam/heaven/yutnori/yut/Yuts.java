@@ -3,6 +3,7 @@ package com.olbimacoojam.heaven.yutnori.yut;
 import lombok.EqualsAndHashCode;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -48,5 +49,9 @@ public class Yuts {
 
     public boolean isRemaining() {
         return !yuts.isEmpty();
+    }
+
+    public List<Yut> getYuts() {
+        return Collections.unmodifiableList(yuts);
     }
 }

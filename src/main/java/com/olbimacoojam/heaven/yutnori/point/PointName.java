@@ -6,7 +6,7 @@ public enum PointName {
 
     STANDBY(StandByPoint::new, null, "DO"),
     COMPLETE(CompletePoint::new, null, null),
-    DO(NormalPoint::new, "STANDBY", "GAE"),
+    DO(NormalPoint::new, "CHAMMUGI", "GAE"),
     GAE(NormalPoint::new, "DO", "GUL"),
     GUL(NormalPoint::new, "GAE", "YUT"),
     YUT(NormalPoint::new, "GUL", "MO"),
@@ -27,7 +27,7 @@ public enum PointName {
     NALYUT(NormalPoint::new, "NALGUL", "CHAMMUGI"),
     CHAMMUGI(NormalPoint::new, "NALYUT", "COMPLETE"),
     MODO(NormalPoint::new, "MO", "MOGAE"),
-    MOGAE(CenterRightDiagonalPoint::new, "BANG", "MODO"),
+    MOGAE(CenterRightDiagonalPoint::new, "MODO", "BANG"),
     BANG(CenterPoint::new, "MOGAE", "BANGSUGI"),
     DUITMODO(NormalPoint::new, "DUITMO", "DUITMOGAE"),
     DUITMOGAE(NormalPoint::new, "DUITMODO", "BANG"),
