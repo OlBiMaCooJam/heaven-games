@@ -16,6 +16,9 @@
         <router-link to="/minesweeper">
           <v-btn>gg</v-btn>
         </router-link>
+        <router-link to="/draw">
+          <v-btn>Draw</v-btn>
+        </router-link>
       </v-col>
     </v-row>
     <router-view/>

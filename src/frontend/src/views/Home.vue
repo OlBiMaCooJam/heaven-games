@@ -25,7 +25,7 @@
           {title: '지뢰찾기', src: require('../assets/minesweeper_thumbnail.jpeg'), gameTitle: 'MINE'},
           {title: '사다리타기', src: require('../assets/ladder_thumbnail.png'), gameTitle: 'LADDER'},
           {title: '노래맞추기', src: 'https://cdn.vuetifyjs.com/images/cards/docks.jpg', gameTitle: 'SONG'},
-          {title: '맞고', src: 'https://cdn.vuetifyjs.com/images/cards/docks.jpg', gameTitle: 'MATGO'}],
+          {title: '제비뽑기', src: 'https://cdn.vuetifyjs.com/images/cards/docks.jpg', gameTitle: 'DRAW'}],
       }
     }
   }

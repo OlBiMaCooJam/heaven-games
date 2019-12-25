@@ -37,6 +37,11 @@ const routes = [
         component: () => import('../views/Mafia.vue'),
         props: true,
     },
+    {
+        path: '/draw',
+        name: 'draw',
+        component: () => import('../views/Draw.vue'),
+    },
 ];
 
 const router = new VueRouter({
