@@ -1,6 +1,5 @@
 package com.olbimacoojam.heaven.dto;
 
-import com.olbimacoojam.heaven.yutnori.YutnoriGameResult;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -11,12 +10,12 @@ import lombok.ToString;
 public class MoveResponse {
 
     private MoveResultsDto moveResultsDto;
-    private YutnoriGameResult yutnoriGameResult;
+    private Boolean finish;
     private TurnResponse turnResponse;
 
-    public MoveResponse(MoveResultsDto moveResultsDto, YutnoriGameResult yutnoriGameResult, TurnResponse turnResponse) {
+    public MoveResponse(MoveResultsDto moveResultsDto, Boolean finish, TurnResponse turnResponse) {
         this.moveResultsDto = moveResultsDto;
-        this.yutnoriGameResult = yutnoriGameResult;
+        this.finish = finish;
         this.turnResponse = turnResponse;
     }
 }

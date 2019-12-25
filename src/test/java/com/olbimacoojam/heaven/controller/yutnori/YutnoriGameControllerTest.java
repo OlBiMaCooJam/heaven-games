@@ -191,7 +191,7 @@ class YutnoriGameControllerTest {
             firstClient.getStompSession().send("/app/yutnori/" + roomId + "/move-piece", moveRequestDto);
             MoveResponse moveResponse = completableFutureForFirstClientMoveResults.get(1, SECONDS);
             System.out.println(moveResponse);
-            assertThat(moveResponse.getYutnoriGameResult().getWinners()).isEmpty();
+            assertThat(moveResponse.getFinish()).isFalse();
         }
         if (turn == 2) {
             secondClient.getStompSession().send("/app/yutnori/" + roomId + "/move-piece", moveRequestDto);

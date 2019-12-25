@@ -47,7 +47,7 @@ public class Turn {
     }
 
     private void checkUser(User user) {
-        if (!yutnoriParticipant.isRightThrower(user)) {
+        if (!yutnoriParticipant.is(user)) {
             throw new WrongUserTurnException(yutnoriParticipant.getName(), user.getName());
         }
     }

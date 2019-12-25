@@ -1,16 +1,16 @@
 <template>
     <v-container>
         <div class="board-con">
-            <YutnoriUser :color="key" :key="key"
-                         :name="val.name" :standby="val.standby" @chooseSrcPoint="chooseSrcPoint"
-                         v-for='[key, val] in yutnoriUsers'></YutnoriUser>
+            <YutnoriUser v-for='[key, val] in yutnoriUsers' :color="key" :key="key"
+                         :name="val.name" :standby="val.standby" :selectedPoint="moveRequest.sourcePoint"
+                         :turnColor="turnColor" @chooseSrcPoint="chooseSrcPoint"></YutnoriUser>
         </div>
         <div class="board-con right-margin-100">
-            <Board :pieces="pieces" @chooseSrcPoint="chooseSrcPoint"></Board>
+            <Board :turnColor="turnColor" :pieces="pieces" @chooseSrcPoint="chooseSrcPoint" :selectedPoint="moveRequest.sourcePoint"></Board>
             <YutThrow :yut="yut" @throwYut="throwYut" :disabled="!turn.canThrow"></YutThrow>
-            <ThrownYuts :yuts="yuts" @chooseYut="chooseYut"></ThrownYuts>
+            <ThrownYuts :yuts="turn.thrownYuts.yuts" @chooseYut="chooseYut"></ThrownYuts>
         </div>
-        <v-btn @click="requestMove" color="primary" :disabled="turn.canThrow" large >말 움직이기</v-btn>
+        <v-btn @click="requestMove" color="primary" :disabled="turn.canThrow" large>말 움직이기</v-btn>
         <div class="space"></div>
     </v-container>
 </template>
@@ -32,16 +32,22 @@
                 stompClient: Object,
                 yutnoriUsers: Map,
                 yut: "",
-                yuts: [],
 
-                turn:Object,
+                turn: Object,
                 moveRequest: {
-                    sourcePoint: "",
-                    yut: ""
+                    sourcePoint: String,
+                    yut: String
                 },
 
                 pieces: {} //{pointName, count, color}
             }
+        },
+        computed: {
+          turnColor() {
+              window.console.log(this.turn)
+              window.console.log("turnColor : " + this.turn.yutnoriParticipant.color)
+              return this.turn.yutnoriParticipant.color
+          }
         },
         created() {
             this.initializeGame();
@@ -53,20 +59,20 @@
 
                     YUTNORI.yut = yutResponse.yut;
                     YUTNORI.moveRequest.yut = YUTNORI.yut;
-                    YUTNORI.yuts = yutResponse.turn.thrownYuts.yuts;
-                    YUTNORI.turn = YUTNORI.getTurn(yutResponse.turn)
+                    YUTNORI.turn = yutResponse.turnResponse
                 })
 
                 YUTNORI.stompClient.subscribe("/topic/yutnori/" + YUTNORI.roomId + "/playing", function (response) { //말 움직이기
                     const moveResponse = JSON.parse(response.body)
 
                     YUTNORI.applyMoveResults(moveResponse.moveResultsDto)
-
-                    YUTNORI.yuts = moveResponse.turn.thrownYuts.yuts;
+                    if (moveResponse.finish) {
+                        alert("성공!")
+                    }
                     YUTNORI.yut = "";
                     YUTNORI.moveRequest.sourcePoint = ""
                     YUTNORI.moveRequest.yut = ""
-                    YUTNORI.turn = YUTNORI.getTurn(moveResponse.turn)
+                    YUTNORI.turn = moveResponse.turnResponse
                 })
             })
         },
@@ -79,7 +85,7 @@
                     stompClient.subscribe("/topic/yutnori/" + YUTNORI.roomId, function (response) {  //판 초기화
                         const yutnoriStateResponse = JSON.parse(response.body)
                         const pieces = yutnoriStateResponse.boardResponse.pieces
-                        YUTNORI.turn = YUTNORI.getTurn(yutnoriStateResponse.turn)
+                        YUTNORI.turn = yutnoriStateResponse.turnResponse
 
                         YUTNORI.yutnoriUsers = YUTNORI.getYutnoriUsers(yutnoriStateResponse.yutnoriParticipants, pieces)
                         YUTNORI.pieces = YUTNORI.initializePieces(pieces)
@@ -115,7 +121,7 @@
 
                     if (pointName == 'STANDBY') return obj;
 
-                    if(obj.hasOwnProperty(pointName)) {
+                    if (!obj.hasOwnProperty(pointName)) {
                         obj[pointName] = {
                             count: 0,
                             color: ""
@@ -126,9 +132,6 @@
 
                     return obj;
                 }, {});
-            },
-            getTurn(turnResponse) {
-                return {canThrow: turnResponse.canThrow}
             },
             throwYut() {
                 this.stompClient.send("/app/yutnori/" + this.roomId + "/yut-throw");
@@ -144,7 +147,6 @@
                 else if (this.moveRequest.sourcePoint == "") alert("말 선택 하세요")
                 else {
                     this.stompClient.send("/app/yutnori/" + this.roomId + "/move-piece", JSON.stringify(this.moveRequest));
-                    alert(this.moveRequest.toString())
                 }
             },
             applyMoveResults(moveResultsDto) {

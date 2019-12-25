@@ -13,13 +13,13 @@ public class YutnoriStateResponse {
 
     private List<YutnoriParticipantResponse> yutnoriParticipants;
     private BoardResponse boardResponse;
-    private TurnResponse turn;
+    private TurnResponse turnResponse;
 
     public YutnoriStateResponse(List<YutnoriParticipantResponse> yutnoriParticipants,
                                 BoardResponse boardResponse,
-                                TurnResponse turn) {
+                                TurnResponse turnResponse) {
         this.yutnoriParticipants = yutnoriParticipants;
         this.boardResponse = boardResponse;
-        this.turn = turn;
+        this.turnResponse = turnResponse;
     }
 }

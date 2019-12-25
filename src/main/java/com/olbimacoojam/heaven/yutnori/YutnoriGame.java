@@ -68,4 +68,8 @@ public class YutnoriGame implements Game {
         }
         return new YutnoriGameResult("게임이 진행중입니다!", yutnoriParticipants.getWinners());
     }
+
+    public Boolean isFinish(User user) {
+        return yutnoriParticipants.isFinish(user);
+    }
 }

@@ -19,8 +19,8 @@ public class YutnoriParticipant {
         this.color = color;
     }
 
-    public boolean isRightThrower(User thrower) {
-        return participant.equals(thrower);
+    public boolean is(User user) {
+        return participant.equals(user);
     }
 
     public String getName() {

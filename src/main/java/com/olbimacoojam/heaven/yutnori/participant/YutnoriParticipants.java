@@ -98,9 +98,13 @@ public class YutnoriParticipants {
     }
 
     public List<String> getWinners() {
-        return finishedYutnoriParticipants
-                .stream()
+        return finishedYutnoriParticipants.stream()
                 .map(YutnoriParticipant::getName)
                 .collect(Collectors.toList());
+    }
+
+    public Boolean isFinish(User user) {
+        return finishedYutnoriParticipants.stream()
+                .anyMatch(yutnoriParticipant -> yutnoriParticipant.is(user));
     }
 }

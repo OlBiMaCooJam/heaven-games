@@ -25,7 +25,7 @@ public class MoveResult {
     }
 
     public boolean areYouCaught() {
-        return route.isDestination(PointName.STANDBY);
+        return route.isCaught();
     }
 
     public Color getColor() {

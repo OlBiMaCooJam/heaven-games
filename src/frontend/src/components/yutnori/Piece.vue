@@ -1,6 +1,6 @@
 <template>
     <div @click="pieceClick" class="piece">
-        <v-icon :style="{color: color}" class="margin-0-auto">mdi-emoticon-devil</v-icon>
+        <v-icon :style="{color: color}" class="margin-0-auto" :size="getSize">mdi-emoticon-devil</v-icon>
         <span class="piece-count" v-if="count > 1">x{{count}}</span>
     </div>
 </template>
@@ -13,11 +13,26 @@
             count: {
                 type: Number,
                 default: 0
+            },
+            selected: {
+                type: Boolean,
+                default: false
+            },
+            turnColor: String
+        },
+        computed: {
+            getSize() {
+                return (this.selected && this.checkTurn) ? 40 : 20;
             }
         },
         methods: {
             pieceClick() {
-                this.$emit('pieceClick')
+                if (this.checkTurn) {
+                    this.$emit('pieceClick')
+                }
+            },
+            checkTurn() {
+                return this.turnColor == this.color;
             }
         }
     }

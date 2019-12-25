@@ -1,7 +1,8 @@
 <template>
     <div id="board">
         <Point v-for='[key, val] in points' :key="key" @chooseSrcPoint="chooseSrcPoint"
-               :pointName="key" :left="val.left" :top="val.top" :piece="pieces[key]"/>
+               :pointName="key" :left="val.left" :top="val.top" :piece="pieces[key]"
+               :selected="isSelected(key)" :turnColor="turnColor"/>
     </div>
 </template>
 
@@ -17,7 +18,17 @@
             }
         },
         props: {
-            pieces: {}
+            pieces: {},
+            selectedPoint: String,
+            turnColor: String
+        },
+        computed: {
+            isSelected() {
+                const BOARD = this;
+                return (pointName) => {
+                    return BOARD.selectedPoint == pointName;
+                };
+            }
         },
         created() {
             this.points = this.getPointsFromRows()

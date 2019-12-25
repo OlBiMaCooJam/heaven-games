@@ -1,7 +1,8 @@
 <template>
-    <div :id="pointName" :style="{marginLeft: left + 'px', marginTop: top + 'px'}" class="point"
+    <div :id="name" :style="{marginLeft: left + 'px', marginTop: top + 'px'}" class="point"
          color="#f0f8ff">
-        <Piece :count="piece.count" :color="piece.color" @pieceClick="pieceClick" v-if="piece.count > 0"></Piece>
+        <Piece :turnColor="turnColor" :count="piece.count" :color="piece.color" @pieceClick="pieceClick"
+               v-if="piece.count > 0" :selected="selected"></Piece>
     </div>
 </template>
 
@@ -20,15 +21,25 @@
                 default: () => {
                     return {color: "", count: 0}
                 }
+            },
+            selected: Boolean,
+            turnColor: String
+        },
+        data() {
+            return {
+                name: this.pointName,
             }
         },
+
         methods: {
             pieceClick() {
-                this.$emit('chooseSrcPoint', this.pointName)
+                window.console.log("here5")
+
+                this.$emit('chooseSrcPoint', this.name)
+                window.console.log("here6")
+
             },
         },
-        created() {
-        }
     };
 </script>
 

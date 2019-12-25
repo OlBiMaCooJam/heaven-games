@@ -40,21 +40,6 @@ public class YutnoriGameService {
                 getTurnResposne(yutnoriGame));
     }
 
-    private TurnResponse getTurnResposne(YutnoriGame yutnoriGame) {
-        return modelMapper.map(yutnoriGame.getTurn(), TurnResponse.class);
-    }
-
-    private BoardResponse getBoardResponse(YutnoriGame yutnoriGame) {
-        Board board = yutnoriGame.getBoard();
-        return modelMapper.map(board, BoardResponse.class);
-    }
-
-    private List<YutnoriParticipantResponse> getYutnoriParticipantResponses(YutnoriGame yutnoriGame) {
-        return yutnoriGame.getYutnoriParticipants().stream()
-                .map(participant -> modelMapper.map(participant, YutnoriParticipantResponse.class))
-                .collect(Collectors.toList());
-    }
-
     public YutResponse throwYut(int roomId, Long userId) {
         YutnoriGame yutnoriGame = getYutnoriGame(roomId);
         User thrower = userService.findById(userId);
@@ -73,12 +58,27 @@ public class YutnoriGameService {
         MoveResults moveResults = yutnoriGame.move(mover, sourcePointName, yut);
 
         MoveResultsDto moveResultsDto = modelMapper.map(moveResults, MoveResultsDto.class);
-        YutnoriGameResult yutnoriGameResult = yutnoriGame.isGameOver();
-        return new MoveResponse(moveResultsDto, yutnoriGameResult, getTurnResposne(yutnoriGame));
+        TurnResponse turnResponse = getTurnResposne(yutnoriGame);
+        return new MoveResponse(moveResultsDto, yutnoriGame.isFinish(mover), turnResponse);
     }
 
     private YutnoriGame getYutnoriGame(int roomId) {
         Room room = roomService.findById(roomId);
         return (YutnoriGame) room.getGame();
+    }
+
+    private TurnResponse getTurnResposne(YutnoriGame yutnoriGame) {
+        return modelMapper.map(yutnoriGame.getTurn(), TurnResponse.class);
+    }
+
+    private BoardResponse getBoardResponse(YutnoriGame yutnoriGame) {
+        Board board = yutnoriGame.getBoard();
+        return modelMapper.map(board, BoardResponse.class);
+    }
+
+    private List<YutnoriParticipantResponse> getYutnoriParticipantResponses(YutnoriGame yutnoriGame) {
+        return yutnoriGame.getYutnoriParticipants().stream()
+                .map(participant -> modelMapper.map(participant, YutnoriParticipantResponse.class))
+                .collect(Collectors.toList());
     }
 }

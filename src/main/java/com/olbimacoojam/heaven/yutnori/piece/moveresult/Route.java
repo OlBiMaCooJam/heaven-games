@@ -49,9 +49,17 @@ public class Route {
         return Points.get(route.get(route.size() - 1));
     }
 
-    public boolean isDestination(PointName pointName) {
+    public boolean isCaught() {
+        return !isSource(PointName.STANDBY) && isDestination(PointName.STANDBY);
+    }
+
+    private boolean isDestination(PointName pointName) {
         Point destination = getDestination();
         return destination.isName(pointName);
+    }
+
+    private boolean isSource(PointName pointName) {
+        return route.get(0).equals(pointName);
     }
 
     @Override
@@ -64,4 +72,5 @@ public class Route {
                 "route=" + route +
                 '}';
     }
+
 }

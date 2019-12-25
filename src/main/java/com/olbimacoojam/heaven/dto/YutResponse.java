@@ -11,10 +11,10 @@ import lombok.ToString;
 public class YutResponse {
 
     private Yut yut;
-    private TurnResponse turn;
+    private TurnResponse turnResponse;
 
-    public YutResponse(Yut yut, TurnResponse turn) {
+    public YutResponse(Yut yut, TurnResponse turnResponse) {
         this.yut = yut;
-        this.turn = turn;
+        this.turnResponse = turnResponse;
     }
 }
