@@ -1,31 +1,25 @@
 <template>
     <v-app>
-        <v-card
-                width="800"
-                style="margin: 0 auto"
-        >
-            <v-toolbar
-                    color="#4682B4"
-                    dark
-            >
+        <v-card width="800" style="margin: 0 auto">
+            <v-toolbar color="#4682B4" dark>
                 <v-row align="center" justify="start" class="ma-3">
                     <v-btn v-on:click="refresh" icon>
                         <v-icon>mdi-refresh</v-icon>
                     </v-btn>
                 </v-row>
                 <v-row align="center" justify="center">
-                    <v-toolbar-title>게임 {{$route.params.id}}</v-toolbar-title>
+                    <v-toolbar-title>{{gameKind}}</v-toolbar-title>
                 </v-row>
                 <v-row align="center" justify="end" class="ma-5">
-                    <v-btn v-on:click="createRoom" icon>
+                    <v-btn @click="createRoom" icon>
                         방 만들기
                     </v-btn>
                 </v-row>
 
             </v-toolbar>
             <v-list>
-                <RoomPreview class="bottom-line" v-for='room in rooms' :key="room.id" :room="room"
-                             :game-logo="gameLogo"/>
+                <RoomPreview v-for='room in rooms' :key="room.id" class="bottom-line"
+                             :room="room" :game-logo="gameLogo" :gameKind="gameKind"/>
             </v-list>
         </v-card>
     </v-app>
@@ -37,6 +31,9 @@
 
     export default {
         components: {RoomPreview},
+        props: {
+            gameKind: String
+        },
         data() {
             return {
                 rooms: [],
@@ -55,11 +52,14 @@
             createRoom() {
                 axios.post('/rooms')
                     .then(response => {
-                        this.rooms.push(response.data)
+                        window.console.log("new room : " + response.data)
                     })
             },
             refresh() {
-
+                axios.get('/rooms')
+                    .then(response => {
+                        this.rooms = response.data;
+                    })
             }
         }
     }

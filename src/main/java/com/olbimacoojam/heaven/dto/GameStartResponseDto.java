@@ -3,13 +3,16 @@ package com.olbimacoojam.heaven.dto;
 import com.olbimacoojam.heaven.yutnori.point.PointName;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.util.Arrays;
 import java.util.List;
 
 @Getter
 @NoArgsConstructor
+@ToString
 public class GameStartResponseDto {
+
     private String userName;
     private String color;
     private List<String> pieceLocations;

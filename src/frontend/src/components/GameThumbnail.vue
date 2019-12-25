@@ -1,7 +1,5 @@
 <template>
-  <router-link :to="'/rooms'">
-      <!--  <router-link :to="'/games/' + game.id">-->
-
+  <router-link :to="{name: 'rooms', params: {gameKind:game.gameKind}}">
       <v-card
         class="mx-auto ma-3"
         max-width="400"
@@ -26,7 +24,8 @@
         title: String,
         src: String,
         url: String,
-        link: String
+        link: String,
+        gameKind: String
       }
     }
   }

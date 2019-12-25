@@ -10,8 +10,7 @@
             <YutThrow :yut="yut" @throwYut="throwYut"></YutThrow>
             <ThrownYuts :yuts="yuts" @chooseYut="chooseYut"></ThrownYuts>
         </div>
-        <v-btn @click="testApplyRoute" color="primary" large>routes test</v-btn>
-        <v-btn @click="requestMove" color="primary" large>request move</v-btn>
+        <v-btn @click="requestMove" color="primary" large>말 움직이기</v-btn>
         <div class="space"></div>
     </v-container>
 </template>
@@ -42,16 +41,10 @@
         },
 
         created() {
+            this.initializeGame();
             const YUTNORI = this;
-            window.console.log("roomId = " + YUTNORI.roomId)
             YUTNORI.stompClient = Stomp.over(new SockJS('/websocket'));
             YUTNORI.stompClient.connect({}, function () {
-
-                YUTNORI.stompClient.subscribe("/topic/yutnori/" + YUTNORI.roomId, function (response) {  //판 초기화
-                    const gameStartResponseDtos = JSON.parse(response.body)
-                    YUTNORI.yutnoriUsers = YUTNORI.getYutnoriUsers(gameStartResponseDtos)
-                })
-
                 YUTNORI.stompClient.subscribe("/topic/yutnori/" + YUTNORI.roomId + "/yut-throw", function (response) { //윷 던지기
                     const yutResponse = JSON.parse(response.body)
 
@@ -61,33 +54,38 @@
 
                 YUTNORI.stompClient.subscribe("/topic/yutnori/" + YUTNORI.roomId + "/playing", function (response) { //말 움직이기
                     const moveResultDtos = JSON.parse(response.body)
+                    YUTNORI.applyMoveResults(moveResultDtos.moverResultDtos)
 
-                    YUTNORI.moveYutCon.parentNode.removeChild(this.moveYutCon)
-
+                    YUTNORI.moveYutCon.parentNode.removeChild(YUTNORI.moveYutCon)
                     YUTNORI.moveYutCon = ""
                     YUTNORI.srcPoint = ""
-
-                    YUTNORI.applyMoveResults(moveResultDtos)
-
                 })
-
-                YUTNORI.stompClient.send('/topic/yutnori/' + YUTNORI.roomId)
             })
-
-            window.console.log("yutnori created()")
         },
 
         methods: {
-            getYutnoriUsers(gameStartResponseDtos) {
-                let yutnoriUsers = new Map();
+            initializeGame() {
+                const YUTNORI = this;
+                const stompClient = Stomp.over(new SockJS('/websocket'));
+                stompClient.connect({}, function () {
+                    stompClient.subscribe("/topic/yutnori/" + YUTNORI.roomId, function (response) {  //판 초기화
+                        const gameStartResponseDtos = JSON.parse(response.body)
+                        YUTNORI.loadYutnoriUsers(gameStartResponseDtos.gameStartResponseDtos)
+                        stompClient.disconnect()
+                    })
+
+                    stompClient.send('/app/yutnori/' + YUTNORI.roomId)
+                })
+            },
+            loadYutnoriUsers(gameStartResponseDtos) {
+                this.yutnoriUsers = new Map();
                 for (let i = 0; i < gameStartResponseDtos.length; i++) {
                     const gameStartResponseDto = gameStartResponseDtos[i];
-                    yutnoriUsers.set(gameStartResponseDto.color, {
+                    this.yutnoriUsers.set(gameStartResponseDto.color, {
                         name: gameStartResponseDto.userName,
                         standby: this.pointCount(gameStartResponseDto.pieceLocations, 'STANDBY')
                     })
                 }
-                return yutnoriUsers
             },
             pointCount(points, position) {
                 let cnt = 0;
@@ -103,93 +101,40 @@
             },
             chooseSrcPoint(pointName) {
                 this.srcPoint = pointName;
-                window.console.log("source point = " + this.srcPoint)
             },
             chooseYut(yutCon) {
                 this.moveYutCon = yutCon;
-                window.console.log("move yut = " + this.moveYutCon.innerText);
             },
             requestMove() {
-                if (this.moveYutCon == "") window.console.log("윷 선택 필요")
-                else if (this.srcPoint == "") window.console.log("말 선택 필요")
+                if (this.moveYutCon == "") alert("윷 선택 하세요")
+                else if (this.srcPoint == "") alert("말 선택 하세요")
                 else {
                     const moveRequest = {
-                        yut: this.moveYutCon.innerText,
-                        pointName: this.srcPoint
+                        pointName: this.srcPoint,
+                        yut: this.moveYutCon.innerText
                     };
-                    this.stompClient.send("/app/yutnori/" + this.roomId + "/playing", moveRequest);
+                    this.stompClient.send("/app/yutnori/" + this.roomId + "/move-piece", JSON.stringify(moveRequest));
 
-                    window.console.log("move yut : " + this.moveYutCon.innerText);
-                    window.console.log("src point : " + this.srcPoint);
-
-                    this.moveYutCon.parentNode.removeChild(this.moveYutCon)
-
-                    this.moveYutCon = ""
-                    this.srcPoint = ""
+                    alert(this.moveYutCon.innerText + " ,  " + this.srcPoint)
                 }
-
-            },
-            testApplyRoute() {
-                const movingResults = [
-                    [
-                        {
-                            color: 'red',
-                            route: ['STANDBY', 'DO', 'GAE']
-                        },
-                        {
-                            color: 'black',
-                            route: ['STANDBY', 'DO']
-                        }
-                    ],
-
-                    [
-                        {
-                            color: 'red',
-                            route: ['STANDBY', 'DO', 'GAE']
-                        },
-                        {
-                            color: 'black',
-                            route: ['DO', 'GAE', 'GUL']
-                        }
-                    ],
-                    [
-                        {
-                            color: 'red',
-                            route: ['GAE', 'STANDBY']
-                        },
-                        {
-                            color: 'black',
-                            route: ['GUL', 'STANDBY']
-                        }
-                    ]
-                ];
-
-                this.movingResultsIndex++;
-                if (this.movingResultsIndex == movingResults.length) this.movingResultsIndex = 0;
-                this.applyMoveResults(movingResults[this.movingResultsIndex]);
             },
             applyMoveResults(moveResultDtos) {
-                window.console.log("yutnori.applyMoveResults")
-                window.console.log(moveResultDtos)
-
-                let movingResultTest = [];
+                let movingResults = [];
                 const YUTNORI = this;
-                moveResultDtos.forEach(function (moveResultDto) {
+                moveResultDtos.forEach((moveResultDto) => {
                     const color = moveResultDto.color;
                     const route = moveResultDto.route;
                     const srcPoint = route[0];
                     const destPoint = route[route.length - 1];
 
-                    movingResultTest.push({
+                    movingResults.push({
                         color: color, srcPoint: srcPoint, destPoint: destPoint
                     })
 
                     if (srcPoint == 'STANDBY') YUTNORI.yutnoriUsers.get(color).standby--;
                     if (destPoint == 'STANDBY') YUTNORI.yutnoriUsers.get(color).standby++;
                 })
-                this.movingResults = movingResultTest;
-                window.console.log('movingResultTest')
-                window.console.log(this.movingResults)
+                this.movingResults = movingResults;
             }
         }
     }

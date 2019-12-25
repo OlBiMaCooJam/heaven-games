@@ -1,9 +1,7 @@
 <template>
     <div id="board">
-        <Point :inc="val.inc" :key="key"
-               :left="val.left" :pieceColor="val.pieceColor" :pointName="key"
-               :top="val.top" @chooseSrcPoint="chooseSrcPoint"
-               v-for='[key, val] in pointsWithMovingResult'/>
+        <Point v-for='[key, val] in pointsWithMovingResult' :key="key" @chooseSrcPoint="chooseSrcPoint"
+               :pointName="key" :left="val.left" :top="val.top" :pieceColor="val.pieceColor" :inc="val.inc"/>
     </div>
 </template>
 
@@ -31,8 +29,6 @@
                         if (movingResult.srcPoint != 'STANDBY') points.get(movingResult.srcPoint).inc--;
                     })
                 }
-                window.console.log("points with movingresult")
-                window.console.log(points)
                 return points;
             }
         },

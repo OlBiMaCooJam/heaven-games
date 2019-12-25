@@ -10,25 +10,22 @@ const routes = [
     component: () => import('../views/Home.vue')
   },
   {
-    path: '/games/:id',
-    name: 'game',
-    component: () => import('../views/Game.vue')
+    path: '/rooms/:gameKind',
+    name: 'rooms',
+    component: () => import('../views/RoomList.vue'),
+    props: true
   },
   {
-    path: '/rooms',
-    name: 'RoomList',
-    component: () => import('../views/RoomList.vue')
-  },
-  {
-    path: '/rooms/:id/yutnori',
-    name: 'Yutnori',
+    path: '/yutnori/:id',
+    name: 'yutnori',
     component: () => import('../views/Yutnori.vue')
   },
-  // {
-  //   path: '/rooms/:id',
-  //   name: 'game',
-  //   component: () => import('../views/Game.vue')
-  // },
+  {
+    path: '/rooms/:id/:gameKind',
+    name: 'game',
+    component: () => import('../views/Game.vue'),
+    props: true
+  },
   {
     path: '/login',
     name: 'login',

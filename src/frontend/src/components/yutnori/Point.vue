@@ -18,9 +18,7 @@
         },
         computed: {
             pieceCnt: function () {
-                window.console.log("count = " + this.count);
-                window.console.log("inc = " + this.inc);
-                return this.count + this.inc;
+                return this.computePieceCnt(this.inc)
             }
         },
         props: {
@@ -44,6 +42,10 @@
         methods: {
             pieceClick() {
                 this.$emit('chooseSrcPoint', this.pointName)
+            },
+            computePieceCnt(inc) {
+                this.count = this.count + inc
+                return this.count
             }
         },
         created() {

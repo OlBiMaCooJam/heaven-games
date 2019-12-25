@@ -1,7 +1,6 @@
 package com.olbimacoojam.heaven.yutnori;
 
 import com.olbimacoojam.heaven.domain.User;
-import com.olbimacoojam.heaven.dto.GameStartResponseDto;
 import com.olbimacoojam.heaven.dto.GameStartResponseDtos;
 import com.olbimacoojam.heaven.dto.MoveResultDtos;
 import com.olbimacoojam.heaven.game.Game;
@@ -15,7 +14,6 @@ import com.olbimacoojam.heaven.yutnori.yut.Yut;
 import com.olbimacoojam.heaven.yutnori.yut.YutThrowStrategy;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class YutnoriGame implements Game {
 
@@ -66,9 +64,6 @@ public class YutnoriGame implements Game {
     }
 
     public GameStartResponseDtos getStartingStatus() {
-        List<GameStartResponseDto> gameStartResponseDtos = yutnoriParticipants.stream()
-                .map(yutnoriParticipant -> yutnoriParticipant.getGameStartResponseDto())
-                .collect(Collectors.toList());
-        return new GameStartResponseDtos(gameStartResponseDtos);
+        return yutnoriParticipants.getDto();
     }
 }

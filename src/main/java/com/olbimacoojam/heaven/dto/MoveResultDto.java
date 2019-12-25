@@ -3,6 +3,7 @@ package com.olbimacoojam.heaven.dto;
 import com.olbimacoojam.heaven.yutnori.Color;
 import com.olbimacoojam.heaven.yutnori.piece.moveresult.Route;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import java.util.List;
@@ -10,9 +11,11 @@ import java.util.stream.Collectors;
 
 @Getter
 @ToString
+@NoArgsConstructor
 public class MoveResultDto {
-    private final String color;
-    private final List<String> route;
+
+    private String color;
+    private List<String> route;
 
     public MoveResultDto(Color color, Route route) {
         this.color = color.name();

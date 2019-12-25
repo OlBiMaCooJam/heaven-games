@@ -8,7 +8,6 @@ import com.olbimacoojam.heaven.dto.YutResponse;
 import com.olbimacoojam.heaven.service.RoomService;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.stereotype.Controller;
@@ -27,7 +26,7 @@ public class YutnoriGameController {
 
     @MessageMapping("/yutnori/{roomId}/move-piece")
     @SendTo("/topic/yutnori/{roomId}/playing")
-    public MoveResultDtos movePiece(@DestinationVariable int roomId, @Payload MoveRequestDto moveRequestDto, SimpMessageHeaderAccessor simpMessageHeaderAccessor) {
+    public MoveResultDtos movePiece(@DestinationVariable int roomId, MoveRequestDto moveRequestDto, SimpMessageHeaderAccessor simpMessageHeaderAccessor) {
         System.out.println("==movePiece====");
         System.out.println(moveRequestDto);
 
@@ -52,6 +51,9 @@ public class YutnoriGameController {
     @MessageMapping("/yutnori/{roomId}")
     @SendTo("/topic/yutnori/{roomId}")
     public GameStartResponseDtos initiateGame(@DestinationVariable int roomId) {
-        return roomService.initiateGame(roomId);
+        GameStartResponseDtos dto = roomService.initiateGame(roomId);
+        System.out.println("===initiate game =====");
+        System.out.println(dto);
+        return dto;
     }
 }

@@ -2,12 +2,15 @@ package com.olbimacoojam.heaven.dto;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.util.List;
 
 @Getter
 @NoArgsConstructor
+@ToString
 public class GameStartResponseDtos {
+
     private String startingMessage;
     private List<GameStartResponseDto> gameStartResponseDtos;
 
