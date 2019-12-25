@@ -27,4 +27,12 @@ public class GameStartResponseDtos {
         return gameStartResponseDtos.stream()
                 .anyMatch(gameStartResponseDto -> gameStartResponseDto.isName(userName));
     }
+
+    public Long getFirstId() {
+        return gameStartResponseDtos.get(0).getId();
+    }
+
+    public Long getSecondId() {
+        return gameStartResponseDtos.get(1).getId();
+    }
 }

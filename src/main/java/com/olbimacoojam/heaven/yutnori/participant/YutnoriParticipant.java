@@ -33,6 +33,6 @@ public class YutnoriParticipant {
     }
 
     public GameStartResponseDto getGameStartResponseDto() {
-        return new GameStartResponseDto(participant.getName(), color.name());
+        return new GameStartResponseDto(participant.getId(), participant.getName(), color.name());
     }
 }

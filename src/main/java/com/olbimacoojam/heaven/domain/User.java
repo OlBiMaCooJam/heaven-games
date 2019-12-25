@@ -30,6 +30,13 @@ public class User extends BaseEntity {
     @Column
     private String refreshToken;
 
+    public User(Long id, Long kakaoId, String name, String refreshToken) {
+        this.id = id;
+        this.kakaoId = kakaoId;
+        this.name = name;
+        this.refreshToken = refreshToken;
+    }
+
     public User(Long kakaoId, String name, String refreshToken) {
         this.kakaoId = kakaoId;
         this.name = name;

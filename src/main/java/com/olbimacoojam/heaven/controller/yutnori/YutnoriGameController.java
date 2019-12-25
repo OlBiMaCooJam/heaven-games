@@ -6,6 +6,7 @@ import com.olbimacoojam.heaven.dto.MoveRequestDto;
 import com.olbimacoojam.heaven.dto.MoveResultDtos;
 import com.olbimacoojam.heaven.dto.YutResponse;
 import com.olbimacoojam.heaven.service.RoomService;
+import com.olbimacoojam.heaven.service.YutnoriGameService;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
@@ -18,9 +19,11 @@ import static com.olbimacoojam.heaven.HttpHandshakeInterceptor.HTTP_SESSION;
 
 @Controller
 public class YutnoriGameController {
+    private YutnoriGameService yutnoriGameService;
     private RoomService roomService;
 
-    public YutnoriGameController(RoomService roomService) {
+    public YutnoriGameController(YutnoriGameService yutnoriGameService, RoomService roomService) {
+        this.yutnoriGameService = yutnoriGameService;
         this.roomService = roomService;
     }
 
@@ -33,10 +36,7 @@ public class YutnoriGameController {
         HttpSession httpSession = (HttpSession) (simpMessageHeaderAccessor.getSessionAttributes().get(HTTP_SESSION));
         UserSession userSession = (UserSession) httpSession.getAttribute(UserSession.USER_SESSION);
         Long userId = userSession.getId();
-        MoveResultDtos moveResultDtos = roomService.movePiece(roomId, userId, moveRequestDto);
-        System.out.println(moveResultDtos);
-        System.out.println("===============");
-        return moveResultDtos;
+        return yutnoriGameService.movePiece(roomId, userId, moveRequestDto);
     }
 
     @MessageMapping("/yutnori/{roomId}/yut-throw")
@@ -45,7 +45,7 @@ public class YutnoriGameController {
         HttpSession httpSession = (HttpSession) (simpMessageHeaderAccessor.getSessionAttributes().get(HTTP_SESSION));
         UserSession userSession = (UserSession) httpSession.getAttribute(UserSession.USER_SESSION);
         Long userId = userSession.getId();
-        return roomService.throwYut(roomId, userId);
+        return yutnoriGameService.throwYut(roomId, userId);
     }
 
     @MessageMapping("/yutnori/{roomId}")

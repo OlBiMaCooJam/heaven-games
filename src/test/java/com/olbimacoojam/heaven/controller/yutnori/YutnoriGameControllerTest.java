@@ -22,6 +22,7 @@ import org.springframework.web.socket.messaging.WebSocketStompClient;
 import org.springframework.web.socket.sockjs.client.SockJsClient;
 import org.springframework.web.socket.sockjs.client.Transport;
 import org.springframework.web.socket.sockjs.client.WebSocketTransport;
+import reactor.core.publisher.Mono;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -50,20 +51,38 @@ class YutnoriGameControllerTest {
 
     @Autowired
     private WebTestClient webTestClient;
-    private List<Client> clients;
-    private List<RoomResponseDto> list;
     private Client firstClient;
     private Client secondClient;
-
 
     @Test
     @DisplayName("게임시작요청 Test")
     void start_game() throws InterruptedException, ExecutionException, TimeoutException {
+        startGame(1L, 2L);
+        Thread.sleep(2000);
+    }
 
+    @Test
+    @DisplayName("윷던지기요청 Test")
+    void throw_yut() throws InterruptedException, ExecutionException, TimeoutException {
+        int roomId = startGame(3L, 4L);
+        throwYut(roomId);
+        Thread.sleep(2000);
+    }
+
+
+    @Test
+    @DisplayName("말 움직이기 Test")
+    void move_piece() throws InterruptedException, ExecutionException, TimeoutException {
+        int roomId = startGame(5L, 6L);
+        throwYut(roomId);
+        movePiece(roomId);
+        Thread.sleep(2000);
+    }
+
+    private int startGame(Long userId1, Long userId2) throws InterruptedException, ExecutionException, TimeoutException {
         //두 명의 클라이언트 로그인
-        list = new ArrayList<>();
-        Client firstClient = createClient();
-        Client secondClient = createClient();
+        firstClient = createClient(userId1);
+        secondClient = createClient(userId2);
 
         //한 클라이언트가 방을 만든다
         int roomId = createRoom();
@@ -71,8 +90,8 @@ class YutnoriGameControllerTest {
         // 두명의 클라이언트가 방에 입장
         CompletableFuture<RoomResponseDto> completableFutureForFirstClient = new CompletableFuture<>();
         CompletableFuture<RoomResponseDto> completableFutureForSecondClient = new CompletableFuture<>();
-        firstClient.getStompSession().subscribe(SUBSCRIBE_ROOM_ENDPOINT + roomId, getStompFrameHandlerRoomResponseDto(completableFutureForFirstClient, list));
-        secondClient.getStompSession().subscribe(SUBSCRIBE_ROOM_ENDPOINT + roomId, getStompFrameHandlerRoomResponseDto(completableFutureForSecondClient, list));
+        firstClient.getStompSession().subscribe(SUBSCRIBE_ROOM_ENDPOINT + roomId, getStompFrameHandlerRoomResponseDto(completableFutureForFirstClient));
+        secondClient.getStompSession().subscribe(SUBSCRIBE_ROOM_ENDPOINT + roomId, getStompFrameHandlerRoomResponseDto(completableFutureForSecondClient));
 
         firstClient.getStompSession().send(SEND_ROOM_ENDPOINT + roomId, null);
         secondClient.getStompSession().send(SEND_ROOM_ENDPOINT + roomId, null);
@@ -92,49 +111,12 @@ class YutnoriGameControllerTest {
 
         GameStartResponseDtos gameStartResponseDtos = completableFutureForFirstClientGameStartResponseDtos.get(100, SECONDS);
         assertThat(gameStartResponseDtos.size()).isEqualTo(2);
-        assertThat(gameStartResponseDtos.containsUser("mockUser0")).isTrue();
-        assertThat(gameStartResponseDtos.containsUser("mockUser1")).isTrue();
+        assertThat(gameStartResponseDtos.getFirstId()).isEqualTo(userId1);
+        assertThat(gameStartResponseDtos.getSecondId()).isEqualTo(userId2);
+        return roomId;
     }
 
-    @Test
-    @DisplayName("윷던지기요청 Test")
-    void throw_yut() throws InterruptedException, ExecutionException, TimeoutException {
-
-        //두 명의 클라이언트 로그인
-        list = new ArrayList<>();
-        Client firstClient = createClient();
-        Client secondClient = createClient();
-
-        //한 클라이언트가 방을 만든다
-        int roomId = createRoom();
-
-        // 두명의 클라이언트가 방에 입장
-        CompletableFuture<RoomResponseDto> completableFutureForFirstClient = new CompletableFuture<>();
-        CompletableFuture<RoomResponseDto> completableFutureForSecondClient = new CompletableFuture<>();
-        firstClient.getStompSession().subscribe(SUBSCRIBE_ROOM_ENDPOINT + roomId, getStompFrameHandlerRoomResponseDto(completableFutureForFirstClient, list));
-        secondClient.getStompSession().subscribe(SUBSCRIBE_ROOM_ENDPOINT + roomId, getStompFrameHandlerRoomResponseDto(completableFutureForSecondClient, list));
-        firstClient.getStompSession().send(SEND_ROOM_ENDPOINT + roomId, null);
-        secondClient.getStompSession().send(SEND_ROOM_ENDPOINT + roomId, null);
-
-        RoomResponseDto roomResponseDto = completableFutureForFirstClient.get(200, SECONDS);
-        assertThat(roomResponseDto.getId()).isEqualTo(roomId);
-        assertThat(roomResponseDto.getPlayers()).hasSize(2);
-
-
-        //한 클라이언트가 게임을 시작함
-        CompletableFuture<GameStartResponseDtos> completableFutureForFirstClientGameStartResponseDtos = new CompletableFuture<>();
-        CompletableFuture<GameStartResponseDtos> completableFutureForSecondClientGameStartResponseDtos = new CompletableFuture<>();
-        firstClient.getStompSession().subscribe("/topic/yutnori/" + roomId, getStompFrameHandlerGameStartResponse(completableFutureForFirstClientGameStartResponseDtos));
-        secondClient.getStompSession().subscribe("/topic/yutnori/" + roomId, getStompFrameHandlerGameStartResponse(completableFutureForSecondClientGameStartResponseDtos));
-
-        firstClient.getStompSession().send("/app/yutnori/" + roomId, null);
-
-        GameStartResponseDtos gameStartResponseDtos = completableFutureForFirstClientGameStartResponseDtos.get(100, SECONDS);
-        assertThat(gameStartResponseDtos.size()).isEqualTo(2);
-        assertThat(gameStartResponseDtos.containsUser("mockUser0")).isTrue();
-        assertThat(gameStartResponseDtos.containsUser("mockUser1")).isTrue();
-
-        //윷던지기
+    private void throwYut(int roomId) throws InterruptedException, ExecutionException, TimeoutException {
         CompletableFuture<YutResponse> completableFutureForFirstClientYutResponse = new CompletableFuture<>();
         CompletableFuture<YutResponse> completableFutureForSecondClientYutResponse = new CompletableFuture<>();
         firstClient.getStompSession().subscribe("/topic/yutnori/" + roomId + "/yut-throw", getStompFrameHandlerYutResponse(completableFutureForFirstClientYutResponse));
@@ -149,55 +131,7 @@ class YutnoriGameControllerTest {
         assertThat(yutNames).contains(yutResponse.getYut());
     }
 
-    @Test
-    @DisplayName("말 움직이기 Test")
-    void move_piece() throws InterruptedException, ExecutionException, TimeoutException {
-
-        //두 명의 클라이언트 로그인
-        list = new ArrayList<>();
-        Client firstClient = createClient();
-        Client secondClient = createClient();
-
-        //한 클라이언트가 방을 만든다
-        int roomId = createRoom();
-
-        // 두명의 클라이언트가 방에 입장
-        CompletableFuture<RoomResponseDto> completableFutureForFirstClient = new CompletableFuture<>();
-        CompletableFuture<RoomResponseDto> completableFutureForSecondClient = new CompletableFuture<>();
-        firstClient.getStompSession().subscribe(SUBSCRIBE_ROOM_ENDPOINT + roomId, getStompFrameHandlerRoomResponseDto(completableFutureForFirstClient, list));
-        secondClient.getStompSession().subscribe(SUBSCRIBE_ROOM_ENDPOINT + roomId, getStompFrameHandlerRoomResponseDto(completableFutureForSecondClient, list));
-        firstClient.getStompSession().send(SEND_ROOM_ENDPOINT + roomId, null);
-        secondClient.getStompSession().send(SEND_ROOM_ENDPOINT + roomId, null);
-
-        RoomResponseDto roomResponseDto = completableFutureForFirstClient.get(1, SECONDS);
-        assertThat(roomResponseDto.getId()).isEqualTo(roomId);
-        assertThat(roomResponseDto.getPlayers()).hasSize(2);
-
-
-        //한 클라이언트가 게임을 시작함
-        CompletableFuture<GameStartResponseDtos> completableFutureForFirstClientGameStartResponseDtos = new CompletableFuture<>();
-        CompletableFuture<GameStartResponseDtos> completableFutureForSecondClientGameStartResponseDtos = new CompletableFuture<>();
-        firstClient.getStompSession().subscribe("/topic/yutnori/" + roomId, getStompFrameHandlerGameStartResponse(completableFutureForFirstClientGameStartResponseDtos));
-        secondClient.getStompSession().subscribe("/topic/yutnori/" + roomId, getStompFrameHandlerGameStartResponse(completableFutureForSecondClientGameStartResponseDtos));
-
-        firstClient.getStompSession().send("/app/yutnori/" + roomId, null);
-
-        GameStartResponseDtos gameStartResponseDtos = completableFutureForFirstClientGameStartResponseDtos.get(1, SECONDS);
-        assertThat(gameStartResponseDtos.size()).isEqualTo(2);
-        assertThat(gameStartResponseDtos.containsUser("mockUser0")).isTrue();
-        assertThat(gameStartResponseDtos.containsUser("mockUser1")).isTrue();
-
-        //윷던지기
-        CompletableFuture<YutResponse> completableFutureForFirstClientYutResponse = new CompletableFuture<>();
-        CompletableFuture<YutResponse> completableFutureForSecondClientYutResponse = new CompletableFuture<>();
-        firstClient.getStompSession().subscribe("/topic/yutnori/" + roomId + "/yut-throw", getStompFrameHandlerYutResponse(completableFutureForFirstClientYutResponse));
-        secondClient.getStompSession().subscribe("/topic/yutnori" + roomId + "/yut-throw", getStompFrameHandlerYutResponse(completableFutureForSecondClientYutResponse));
-
-        firstClient.getStompSession().send("/app/yutnori/" + roomId + "/yut-throw", null);
-
-        YutResponse yutResponse = completableFutureForFirstClientYutResponse.get(10, SECONDS);
-
-        //말 움직이기
+    private void movePiece(int roomId) throws InterruptedException, ExecutionException, TimeoutException {
         CompletableFuture<MoveResultDtos> completableFutureForFirstClientMoveResults = new CompletableFuture<>();
         CompletableFuture<MoveResultDtos> completableFutureForFSecondClientMoveResults = new CompletableFuture<>();
 
@@ -207,7 +141,8 @@ class YutnoriGameControllerTest {
         MoveRequestDto moveRequestDto = new MoveRequestDto("STANDBY", "DO");
         firstClient.getStompSession().send("/app/yutnori/" + roomId + "/move-piece", moveRequestDto);
 
-        MoveResultDtos moveResultDtos = completableFutureForFirstClientMoveResults.get(100, SECONDS);
+        MoveResultDtos moveResultDtos = completableFutureForFirstClientMoveResults.get(1, SECONDS);
+        System.out.println(moveResultDtos);
     }
 
     private StompFrameHandler getStompFramHandlerMoveResults(CompletableFuture<MoveResultDtos> completableFutureForFirstClientMoveResults) {
@@ -252,7 +187,7 @@ class YutnoriGameControllerTest {
         };
     }
 
-    private StompFrameHandler getStompFrameHandlerRoomResponseDto(CompletableFuture<RoomResponseDto> completableFuture, List<RoomResponseDto> list) {
+    private StompFrameHandler getStompFrameHandlerRoomResponseDto(CompletableFuture<RoomResponseDto> completableFuture) {
         return new StompFrameHandler() {
             @Override
             public Type getPayloadType(StompHeaders headers) {
@@ -261,7 +196,6 @@ class YutnoriGameControllerTest {
 
             @Override
             public void handleFrame(StompHeaders headers, Object payload) {
-                list.add((RoomResponseDto) payload);
                 completableFuture.complete((RoomResponseDto) payload);
             }
         };
@@ -279,11 +213,11 @@ class YutnoriGameControllerTest {
         return Integer.parseInt(location.substring(ROOMS_URL.length()));
     }
 
-    private Client createClient() throws InterruptedException, ExecutionException, TimeoutException {
+    private Client createClient(Long userId) throws InterruptedException, ExecutionException, TimeoutException {
         WebSocketStompClient webSocketStompClient = new WebSocketStompClient(new SockJsClient(createTransportClient()));
         webSocketStompClient.setMessageConverter(new MappingJackson2MessageConverter());
 
-        String mockJsessionId = mockLogin();
+        String mockJsessionId = mockLogin(userId);
 
         WebSocketHttpHeaders webSocketHttpHeaders = new WebSocketHttpHeaders();
         webSocketHttpHeaders.set(HttpHeaders.COOKIE, JSESSIONID + " = " + mockJsessionId);
@@ -294,9 +228,10 @@ class YutnoriGameControllerTest {
         return new Client(stompSession, mockJsessionId);
     }
 
-    private String mockLogin() {
-        return webTestClient.get()
+    private String mockLogin(Long userId) {
+        return webTestClient.post()
                 .uri("/mock/login")
+                .body(Mono.just(userId), Long.class)
                 .exchange()
                 .returnResult(String.class)
                 .getResponseCookies()

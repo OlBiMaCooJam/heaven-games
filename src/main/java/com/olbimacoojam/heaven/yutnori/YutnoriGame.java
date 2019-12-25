@@ -2,7 +2,6 @@ package com.olbimacoojam.heaven.yutnori;
 
 import com.olbimacoojam.heaven.domain.User;
 import com.olbimacoojam.heaven.dto.GameStartResponseDtos;
-import com.olbimacoojam.heaven.dto.MoveResultDtos;
 import com.olbimacoojam.heaven.game.Game;
 import com.olbimacoojam.heaven.yutnori.board.Board;
 import com.olbimacoojam.heaven.yutnori.board.BoardCreateStrategy;
@@ -39,7 +38,7 @@ public class YutnoriGame implements Game {
         return yut;
     }
 
-    public MoveResultDtos move(User user, PointName pointName, Yut yut) {
+    public MoveResults move(User user, PointName pointName, Yut yut) {
         checkTurn(user, yut);
 
         Color teamColor = turn.getTeamColor();
@@ -54,7 +53,7 @@ public class YutnoriGame implements Game {
 
         turn = turn.next(moveResults, yutnoriParticipants);
 
-        return new MoveResultDtos(moveResults);
+        return moveResults;
     }
 
     private void checkTurn(User user, Yut yut) {
