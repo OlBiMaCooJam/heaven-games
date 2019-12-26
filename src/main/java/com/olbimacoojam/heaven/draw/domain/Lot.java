@@ -1,4 +1,14 @@
 package com.olbimacoojam.heaven.draw.domain;
 
-public interface Lot {
+import lombok.Getter;
+
+@Getter
+public enum Lot {
+    PASS("통과"), WHACK("꽝");
+
+    private String lot;
+
+    Lot(String lot) {
+        this.lot = lot;
+    }
 }

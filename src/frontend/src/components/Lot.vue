@@ -31,11 +31,11 @@
         methods: {
             click() {
                 if (this.lot.lots != null) {
-                    if (this.lot.lots.lots[this.count - 1].lot == '꽝') {
+                    if (this.lot.lots.lots[this.count - 1] === 'WHACK') {
                         this.src = require('../assets/whack.png');
                         this.result = this.count + '.꽝';
                     }
-                    if (this.lot.lots.lots[this.count - 1].lot == '통과') {
+                    if (this.lot.lots.lots[this.count - 1] === 'PASS') {
                         this.src = require('../assets/pass.png');
                         this.result = this.count + '.통과';
                     }

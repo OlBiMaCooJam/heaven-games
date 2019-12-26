@@ -21,10 +21,10 @@ public class Lots {
     public static Lots of(int personCount, int whackCount) {
         List<Lot> lots = new ArrayList<>();
         for (int i = 0; i < personCount - whackCount; i++) {
-            lots.add(new Pass());
+            lots.add(Lot.PASS);
         }
         for (int i = 0; i < whackCount; i++) {
-            lots.add(new Whack());
+            lots.add(Lot.WHACK);
         }
         Collections.shuffle(lots);
         return new Lots(lots);
@@ -32,10 +32,10 @@ public class Lots {
 
     public void initialize() {
         List<Lot> lots = new ArrayList<>();
-        lots.add(new Pass());
-        lots.add(new Pass());
-        lots.add(new Pass());
-        lots.add(new Whack());
+        lots.add(Lot.PASS);
+        lots.add(Lot.PASS);
+        lots.add(Lot.PASS);
+        lots.add(Lot.WHACK);
 
         Collections.shuffle(lots);
         this.lots = lots;
