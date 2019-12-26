@@ -21,23 +21,24 @@ public class DrawService {
     }
 
     public DrawResponse updateGame(long userId, long roomId, DrawCreateRequest drawCreateRequest) {
-        Room room = roomService.findById(roomId);
-        Draw draw = (Draw) room.getGame();
-        User user = userService.findById(userId);
-
-        draw.initialize(Collections.singletonList(user));
+        Draw draw = getDraw(userId, roomId);
         draw.startGame(drawCreateRequest.getPersonCount(), drawCreateRequest.getWhackCount());
 
         return new DrawResponse(draw.getLots());
     }
 
     public DrawResponse initGame(long userId, long roomId) {
+        Draw draw = getDraw(userId, roomId);
+
+        return new DrawResponse(draw.getLots());
+    }
+
+    private Draw getDraw(long userId, long roomId) {
         Room room = roomService.findById(roomId);
         Draw draw = (Draw) room.getGame();
         User user = userService.findById(userId);
 
         draw.initialize(Collections.singletonList(user));
-
-        return new DrawResponse(draw.getLots());
+        return draw;
     }
 }

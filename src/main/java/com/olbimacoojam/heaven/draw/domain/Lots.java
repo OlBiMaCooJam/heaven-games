@@ -14,7 +14,7 @@ public class Lots {
         this.lots = Collections.emptyList();
     }
 
-    public Lots(List<Lot> lots) {
+    private Lots(List<Lot> lots) {
         this.lots = lots;
     }
 

@@ -9,6 +9,8 @@ import java.util.List;
 
 @Getter
 public class Draw implements Game {
+    private static final int DRAW_PLAYER_NUMBER = 1;
+
     private Lots lots;
 
     public Draw() {
@@ -22,7 +24,7 @@ public class Draw implements Game {
     }
 
     private void checkNumberOfPlayers(List<User> players) {
-        if (players.size() != 1) {
+        if (players.size() != DRAW_PLAYER_NUMBER) {
             throw new InvalidNumberOfUsersException(1, players.size());
         }
     }
