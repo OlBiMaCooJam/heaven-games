@@ -9,7 +9,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.IntStream;
 
-public class MafiaMinimumInitializer implements MafiaInitializer {
+public class    MafiaMinimumInitializer implements MafiaInitializer {
     private static final int MINIMAL_NUMBER = 2;
     private static final int MAXIMAL_NUMBER = 5;
 

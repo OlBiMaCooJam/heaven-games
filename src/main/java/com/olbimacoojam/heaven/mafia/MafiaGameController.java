@@ -35,7 +35,7 @@ public class MafiaGameController {
 
     @MessageMapping("/rooms/{roomId}/mafia")
     @SendToUser("/queue/rooms/{roomId}/mafia/occupation")
-    public MafiaOccupationMessage notifyOccupation(@DestinationVariable Long roomId, SimpMessageHeaderAccessor simpMessageHeaderAccessor) {
+    public MafiaOccupationMessage notifyOccupation(@DestinationVariable Integer roomId, SimpMessageHeaderAccessor simpMessageHeaderAccessor) {
         HttpSession httpSession = (HttpSession) (simpMessageHeaderAccessor.getSessionAttributes().get(HTTP_SESSION));
         UserSession userSession = (UserSession) httpSession.getAttribute(UserSession.USER_SESSION);
         Long userId = userSession.getId();
@@ -47,7 +47,7 @@ public class MafiaGameController {
     //TODO: 의사가 군인을 선택했을 경우
     @MessageMapping("/rooms/{roomId}/mafia/chat")
     @SendTo("/topic/rooms/{roomId}/mafia/chat")
-    public MafiaChatMessage chat(@DestinationVariable Long roomId, SimpMessageHeaderAccessor simpMessageHeaderAccessor, String message) {
+    public MafiaChatMessage chat(@DestinationVariable Integer roomId, SimpMessageHeaderAccessor simpMessageHeaderAccessor, String message) {
         HttpSession httpSession = (HttpSession) (simpMessageHeaderAccessor.getSessionAttributes().get(HTTP_SESSION));
         UserSession userSession = (UserSession) httpSession.getAttribute(UserSession.USER_SESSION);
 
@@ -64,7 +64,7 @@ public class MafiaGameController {
 
     @MessageMapping("/rooms/{roomId}/mafia/chat/mafiaOnly")
     @SendTo("/topic/rooms/{roomId}/mafia/chat/mafiaOnly")
-    public MafiaChatMessage chatMafiaOnly(@DestinationVariable Long roomId, SimpMessageHeaderAccessor simpMessageHeaderAccessor, String message) {
+    public MafiaChatMessage chatMafiaOnly(@DestinationVariable Integer roomId, SimpMessageHeaderAccessor simpMessageHeaderAccessor, String message) {
         HttpSession httpSession = (HttpSession) (simpMessageHeaderAccessor.getSessionAttributes().get(HTTP_SESSION));
         UserSession userSession = (UserSession) httpSession.getAttribute(UserSession.USER_SESSION);
 
@@ -82,7 +82,7 @@ public class MafiaGameController {
 
     @MessageMapping("/rooms/{roomId}/vote")
     @SendToUser("/queue/rooms/{roomId}/vote")
-    public List<MafiaParticipantName> vote(@DestinationVariable Long roomId, SimpMessageHeaderAccessor simpMessageHeaderAccessor) {
+    public List<MafiaParticipantName> vote(@DestinationVariable Integer roomId, SimpMessageHeaderAccessor simpMessageHeaderAccessor) {
         HttpSession httpSession = (HttpSession) (simpMessageHeaderAccessor.getSessionAttributes().get(HTTP_SESSION));
         UserSession userSession = (UserSession) httpSession.getAttribute(UserSession.USER_SESSION);
 
@@ -102,7 +102,7 @@ public class MafiaGameController {
 
     @MessageMapping("/rooms/{roomId}/select")
     @SendTo("/topic/rooms/{roomId}/dayResult")
-    public String daySelect(@DestinationVariable Long roomId, MafiaParticipantName mafiaParticipantName) {
+    public String daySelect(@DestinationVariable Integer roomId, MafiaParticipantName mafiaParticipantName) {
         MafiaGame game = (MafiaGame) roomService.findById(roomId).getGame();
 
         List<MafiaParticipant> mafiaParticipants = game.findAliveMafiaParticipants();
@@ -119,7 +119,7 @@ public class MafiaGameController {
     }
 
     @MessageMapping("/rooms/{roomId}/MAFIA")
-    public void mafiaPerform(@DestinationVariable Long roomId, MafiaParticipantName mafiaParticipantName, SimpMessageHeaderAccessor simpMessageHeaderAccessor) {
+    public void mafiaPerform(@DestinationVariable Integer roomId, MafiaParticipantName mafiaParticipantName, SimpMessageHeaderAccessor simpMessageHeaderAccessor) {
         HttpSession httpSession = (HttpSession) (simpMessageHeaderAccessor.getSessionAttributes().get(HTTP_SESSION));
         UserSession userSession = (UserSession) httpSession.getAttribute(UserSession.USER_SESSION);
 
@@ -136,7 +136,7 @@ public class MafiaGameController {
     }
 
     @MessageMapping("/rooms/{roomId}/DOCTOR")
-    public void doctorPerform(@DestinationVariable Long roomId, MafiaParticipantName mafiaParticipantName, SimpMessageHeaderAccessor simpMessageHeaderAccessor) {
+    public void doctorPerform(@DestinationVariable Integer roomId, MafiaParticipantName mafiaParticipantName, SimpMessageHeaderAccessor simpMessageHeaderAccessor) {
         HttpSession httpSession = (HttpSession) (simpMessageHeaderAccessor.getSessionAttributes().get(HTTP_SESSION));
         UserSession userSession = (UserSession) httpSession.getAttribute(UserSession.USER_SESSION);
 
@@ -154,7 +154,7 @@ public class MafiaGameController {
 
     @MessageMapping("/rooms/{roomId}/POLICE")
     @SendToUser("/queue/rooms/{roomId}/POLICE")
-    public String policePerform(@DestinationVariable Long roomId, MafiaParticipantName mafiaParticipantName, SimpMessageHeaderAccessor simpMessageHeaderAccessor) {
+    public String policePerform(@DestinationVariable Integer roomId, MafiaParticipantName mafiaParticipantName, SimpMessageHeaderAccessor simpMessageHeaderAccessor) {
         HttpSession httpSession = (HttpSession) (simpMessageHeaderAccessor.getSessionAttributes().get(HTTP_SESSION));
         UserSession userSession = (UserSession) httpSession.getAttribute(UserSession.USER_SESSION);
 
@@ -173,7 +173,7 @@ public class MafiaGameController {
 
     @MessageMapping("/rooms/{roomId}/DETECTIVE")
     @SendToUser("/queue/rooms/{roomId}/DETECTIVE")
-    public String detectivePerform(@DestinationVariable Long roomId, MafiaParticipantName mafiaParticipantName) {
+    public String detectivePerform(@DestinationVariable Integer roomId, MafiaParticipantName mafiaParticipantName) {
         MafiaGame game = (MafiaGame) roomService.findById(roomId).getGame();
 
         if (game.isAllPerform()) {
@@ -185,14 +185,14 @@ public class MafiaGameController {
 
     @MessageMapping("/rooms/{roomId}/nightResult")
     @SendTo("/topic/rooms/{roomId}/nightResult")
-    public String nightResult(@DestinationVariable Long roomId, MafiaParticipantName mafiaParticipantName) {
+    public String nightResult(@DestinationVariable Integer roomId, MafiaParticipantName mafiaParticipantName) {
         MafiaGame game = (MafiaGame) roomService.findById(roomId).getGame();
         return game.showNightResult();
     }
 
     @MessageMapping("/rooms/{roomId}/list")
     @SendTo("/topic/rooms/{roomId}/list")
-    public List<MafiaParticipantInfo> list(@DestinationVariable Long roomId) {
+    public List<MafiaParticipantInfo> list(@DestinationVariable Integer roomId) {
         LOGGER.info("asd");
         MafiaGame game = (MafiaGame) roomService.findById(roomId).getGame();
         return game.getMafiaParticipants().stream()

@@ -1,6 +1,7 @@
 package com.olbimacoojam.heaven.domain;
 
 import com.olbimacoojam.heaven.game.Game;
+import com.olbimacoojam.heaven.game.GameKind2;
 import lombok.Getter;
 import lombok.ToString;
 import org.slf4j.Logger;
