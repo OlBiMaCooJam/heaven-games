@@ -9,4 +9,9 @@ import lombok.NoArgsConstructor;
 public class DrawCreateRequest {
     private Integer personCount;
     private Integer whackCount;
+
+    public DrawCreateRequest(Integer personCount, Integer whackCount) {
+        this.personCount = personCount;
+        this.whackCount = whackCount;
+    }
 }

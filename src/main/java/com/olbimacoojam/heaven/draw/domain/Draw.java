@@ -1,6 +1,7 @@
 package com.olbimacoojam.heaven.draw.domain;
 
 import com.olbimacoojam.heaven.domain.User;
+import com.olbimacoojam.heaven.draw.domain.exception.InvalidWhackCountException;
 import com.olbimacoojam.heaven.game.Game;
 import com.olbimacoojam.heaven.minesweeper.domain.exception.InvalidNumberOfUsersException;
 import lombok.Getter;
@@ -30,6 +31,9 @@ public class Draw implements Game {
     }
 
     public void startGame(int personCount, int whackCount) {
+        if (personCount < whackCount) {
+            throw new InvalidWhackCountException(personCount, whackCount);
+        }
         this.lots = Lots.of(personCount, whackCount);
     }
 }
