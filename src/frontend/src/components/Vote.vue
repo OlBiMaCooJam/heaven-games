@@ -24,7 +24,7 @@
     export default {
         name: "Vote",
         props: {
-            roomId: Number,
+            roomId: String,
             vote_msg: String,
             client: {},
             dialog: Boolean,

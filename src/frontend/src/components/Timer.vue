@@ -19,7 +19,7 @@
         },
         props: {
             date: Number,
-            roomId: Number,
+            roomId: String,
             client: {},
             day: Boolean,
             occupation: String,

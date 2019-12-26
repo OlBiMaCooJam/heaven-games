@@ -1,5 +1,5 @@
 <template>
-    <v-container id="mafia-app" fluid>
+    <v-container class="mafia-app" fluid>
         <v-row>
             <v-col cols="5">
                 <v-row align='center' justify='center'>
@@ -15,10 +15,10 @@
             </v-col>
             <v-col cols="1">
                 <v-row align='center' justify='center'>
-                    <Timer :date="date" :roomId=$route.params.roomId :client="client" :day="day" :occupation="occupation" :dialog="dialog"></Timer>
+                    <Timer :date="date" :roomId=roomId :client="client" :day="day" :occupation="occupation" :dialog="dialog"></Timer>
                 </v-row>
                 <v-row>
-                    <Vote :selected="selected" :dialog="dialog" :citizens="citizens" :vote_msg="vote_message" :client="client" :roomId= $route.params.roomId :day="day" :occupation="occupation"></Vote>
+                    <Vote :selected="selected" :dialog="dialog" :citizens="citizens" :vote_msg="vote_message" :client="client" :roomId=roomId :day="day" :occupation="occupation"></Vote>
                 </v-row>
             </v-col>
         </v-row>
@@ -91,7 +91,7 @@
                 dialog: false,
                 date: 20, // 테스트 데이터
                 vote_message: "선택해주세요",
-                roomId: Number,
+                roomId: this.$route.params.id,
                 client: {},
                 userId: '',
                 selected: '',
@@ -103,7 +103,7 @@
             }
         },
         created() {
-            this.roomId = this.$route.params.roomId
+            // this.roomId = this.$route.params.id;
             this.client = Stomp.over(new SockJS('/websocket'));
             const game = this;
             game.client.connect({}, function() {
@@ -257,7 +257,7 @@
         border-radius: 15px;
     }
 
-    #mafia-app {
+    .mafia-app {
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
         text-align: center;
