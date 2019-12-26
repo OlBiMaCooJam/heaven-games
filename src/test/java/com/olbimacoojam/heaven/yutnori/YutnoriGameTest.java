@@ -211,13 +211,7 @@ class YutnoriGameTest extends YutnoriBaseTest {
         yutnoriGame.initialize(Arrays.asList(user1, user2));
 
         yutnoriGame.throwYut(user1, () -> Yut.BACKDO);
-        MoveResults moveResults = yutnoriGame.move(user1, PointName.STANDBY, Yut.BACKDO);
-
-        MoveResults expectedMoveResults = new MoveResults(Arrays.asList(
-                new MoveResult(piece, createRoute(PointName.STANDBY, PointName.STANDBY))
-        ));
-
-        assertThat(moveResults).isEqualTo(expectedMoveResults);
+        assertThrows(MoveImpossibleException.class, () -> yutnoriGame.move(user1, PointName.STANDBY, Yut.BACKDO));
     }
 
     @Test
@@ -278,5 +272,16 @@ class YutnoriGameTest extends YutnoriBaseTest {
         MoveResults moveResults = yutnoriGame.move(user1, PointName.STANDBY, Yut.DO);
 
         assertThat(yutnoriGame.isGameOver().getWinners()).isEqualTo(Collections.emptyList());
+    }
+
+    @Test
+    @DisplayName("StandBy에 있는 점 Backdo로 움직이려 할 때")
+    void throw_yut_test15() {
+        Piece piece = Piece.of(Color.BLACK, PointName.STANDBY);
+        YutnoriGame yutnoriGame = new YutnoriGame(yutnoriParticipants -> new Board(Arrays.asList(piece)));
+        yutnoriGame.initialize(Arrays.asList(user1, user2));
+
+        yutnoriGame.throwYut(user1, () -> Yut.BACKDO);
+        assertThrows(MoveImpossibleException.class, () -> yutnoriGame.move(user1, PointName.STANDBY, Yut.BACKDO));
     }
 }

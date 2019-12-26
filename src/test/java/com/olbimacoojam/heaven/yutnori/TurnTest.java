@@ -6,6 +6,7 @@ import com.olbimacoojam.heaven.yutnori.piece.Piece;
 import com.olbimacoojam.heaven.yutnori.piece.moveresult.MoveResult;
 import com.olbimacoojam.heaven.yutnori.piece.moveresult.MoveResults;
 import com.olbimacoojam.heaven.yutnori.piece.moveresult.Route;
+import com.olbimacoojam.heaven.yutnori.point.Point;
 import com.olbimacoojam.heaven.yutnori.point.PointName;
 import com.olbimacoojam.heaven.yutnori.turn.Turn;
 import com.olbimacoojam.heaven.yutnori.turn.exception.NotHaveYutException;
@@ -50,29 +51,34 @@ class TurnTest extends YutnoriBaseTest {
     @Test
     void can_move_test1() {
         turn = turn.saveOneThrow(turnUser, Yut.DO);
+        PointName pointName = PointName.STANDBY;
 
-        assertDoesNotThrow(() -> turn.checkMove(turnUser, Yut.DO));
+        assertDoesNotThrow(() -> turn.checkMove(turnUser, pointName, Yut.DO));
     }
 
     @Test
     void can_move_test2() {
         turn = turn.saveOneThrow(turnUser, Yut.DO);
+        PointName pointName = PointName.STANDBY;
 
-        assertThrows(NotHaveYutException.class, () -> turn.checkMove(turnUser, Yut.GAE));
+        assertThrows(NotHaveYutException.class, () -> turn.checkMove(turnUser, pointName, Yut.GAE));
     }
 
     @Test
     void can_move_test3() {
         turn = turn.saveOneThrow(turnUser, Yut.DO);
+        PointName pointName = PointName.STANDBY;
 
-        assertThrows(WrongUserTurnException.class, () -> turn.checkMove(other, Yut.DO));
+        assertThrows(WrongUserTurnException.class, () -> turn.checkMove(other, pointName, Yut.DO));
     }
 
     @Test
     void can_move_test4() {
         turn = turn.saveOneThrow(turnUser, Yut.MO);
+        PointName pointName = PointName.STANDBY;
 
-        assertThrows(WrongUserTurnException.class, () -> turn.checkMove(other, Yut.MO));
+
+        assertThrows(WrongUserTurnException.class, () -> turn.checkMove(other, pointName, Yut.MO));
     }
 
     @Test
@@ -80,8 +86,10 @@ class TurnTest extends YutnoriBaseTest {
         turn = turn.saveOneThrow(turnUser, Yut.MO);
         turn = turn.saveOneThrow(turnUser, Yut.YUT);
         turn = turn.saveOneThrow(turnUser, Yut.DO);
+        PointName pointName = PointName.STANDBY;
 
-        assertDoesNotThrow(() -> turn.checkMove(turnUser, Yut.YUT));
+
+        assertDoesNotThrow(() -> turn.checkMove(turnUser, pointName, Yut.YUT));
     }
 
     @Test

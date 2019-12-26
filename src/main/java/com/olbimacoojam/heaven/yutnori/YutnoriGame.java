@@ -41,7 +41,7 @@ public class YutnoriGame implements Game {
     }
 
     public MoveResults move(User user, PointName pointName, Yut yut) {
-        turn.checkMove(user, yut);
+        turn.checkMove(user, pointName, yut);
 
         Color teamColor = turn.getTeamColor();
 

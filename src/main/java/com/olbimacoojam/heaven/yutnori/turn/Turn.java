@@ -5,6 +5,7 @@ import com.olbimacoojam.heaven.yutnori.Color;
 import com.olbimacoojam.heaven.yutnori.participant.YutnoriParticipant;
 import com.olbimacoojam.heaven.yutnori.participant.YutnoriParticipants;
 import com.olbimacoojam.heaven.yutnori.piece.moveresult.MoveResults;
+import com.olbimacoojam.heaven.yutnori.point.PointName;
 import com.olbimacoojam.heaven.yutnori.turn.exception.MoveImpossibleException;
 import com.olbimacoojam.heaven.yutnori.turn.exception.NotHaveYutException;
 import com.olbimacoojam.heaven.yutnori.turn.exception.ThrowImpossibleException;
@@ -52,13 +53,24 @@ public class Turn {
         }
     }
 
-    public void checkMove(User user, Yut yut) {
+    public void checkMove(User user, PointName pointName, Yut yut) {
         checkUser(user);
-        checkCanMove();
+        checkCanMove(pointName, yut);
         checkHaveYut(yut);
     }
 
-    private void checkCanMove() {
+    private void checkBackDoMovement(PointName pointName, Yut yut) {
+        if (isMoveStandByPointWithBackDo(pointName, yut)) {
+            throw new MoveImpossibleException();
+        }
+    }
+
+    private boolean isMoveStandByPointWithBackDo(PointName pointName, Yut yut) {
+        return yut == Yut.BACKDO && pointName == PointName.STANDBY;
+    }
+
+    private void checkCanMove(PointName pointName, Yut yut) {
+        checkBackDoMovement(pointName, yut);
         if (canThrow) {
             throw new MoveImpossibleException();
         }
