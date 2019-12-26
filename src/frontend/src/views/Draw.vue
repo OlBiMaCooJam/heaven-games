@@ -59,7 +59,7 @@
                     </v-card-text>
                 </v-card>
                 <v-btn @click="update">섞기</v-btn>
-                <v-btn @click="refresh">다시하기</v-btn>
+                <v-btn @click="update">다시하기</v-btn>
             </v-col>
             <v-col cols="8">
                 <v-row align='center' justify='center' v-if="renderComponent">
