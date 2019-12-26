@@ -36,6 +36,5 @@ out/
 
 ### static files ###
 /src/main/resources/static/**
-/src/frontend/node_modules/
 /src/frontend/npm-v6.12.1/
 /package-lock.json
