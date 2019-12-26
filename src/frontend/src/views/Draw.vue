@@ -96,6 +96,7 @@
                 if (this.currentWhack > maxWhack) {
                     this.currentWhack = maxWhack;
                 }
+                this.refresh();
             },
             async update() {
                 try {
@@ -109,7 +110,8 @@
 
                     window.setTimeout(() => {
                         game.dialog = false
-                    }, 1000)
+                    }, 1000);
+                    this.refresh();
                 } catch (e) {
                     alert(e);
                 }

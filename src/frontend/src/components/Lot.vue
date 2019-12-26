@@ -25,7 +25,7 @@
         data() {
             return {
                 src: require('../assets/note.png'),
-                result: '',
+                result: this.count,
             }
         },
         methods: {
