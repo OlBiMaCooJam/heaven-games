@@ -1,32 +1,25 @@
 <template>
     <v-app>
-        <v-card
-                width="800"
-                style="margin: 0 auto"
-        >
-            <v-toolbar
-                    color="#4682B4"
-                    dark
-            >
+        <v-card width="800" style="margin: 0 auto">
+            <v-toolbar color="#4682B4" dark>
                 <v-row align="center" justify="start" class="ma-3">
-                    <v-btn icon @click="refresh">
+                    <v-btn @click="refresh" icon>
                         <v-icon>mdi-refresh</v-icon>
                     </v-btn>
                 </v-row>
                 <v-row align="center" justify="center">
-                    <v-toolbar-title>게임 {{$route.params.id}}</v-toolbar-title>
+                    <v-toolbar-title>{{gameKind}}</v-toolbar-title>
                 </v-row>
                 <v-row align="center" justify="end" class="ma-5">
-                    <v-btn icon @click="createRoom">
+                    <v-btn @click="createRoom" icon>
                         방 만들기
                     </v-btn>
                 </v-row>
 
             </v-toolbar>
             <v-list>
-                <RoomPreview class="bottom-line" v-for='room in rooms' :key="room.id" :game-title="gameTitle"
-                             :room="room"
-                             :game-logo="gameLogo"/>
+                <RoomPreview v-for='room in rooms' :key="room.id" class="bottom-line"
+                             :room="room" :game-logo="gameLogo" :gameKind="gameKind"/>
             </v-list>
         </v-card>
     </v-app>
@@ -34,27 +27,31 @@
 
 <script>
     import RoomPreview from "../components/RoomPreview";
+    import axios from "axios";
+    import 'url-search-params-polyfill';
 
     export default {
         components: {RoomPreview},
         props: {
-            gameTitle: String,
+            gameKind: String
         },
         data() {
             return {
                 rooms: [],
-                gameLogo: require('../assets/Logo.jpg'),
+                gameLogo: require('../assets/Logo.jpg')
             }
         },
+
         created() {
-            this.$axios.get('/rooms')
-                .then(response => {
-                    this.rooms = response.data;
-                })
+            this.refresh();
         },
+
         methods: {
-            createRoom: function () {
-                this.$axios.post('/rooms')
+            createRoom() {
+                let params = new URLSearchParams();
+                params.append('gameKind', this.gameKind)
+
+                axios.post('/rooms', params)
                     .then((response) => {
                         return response.headers;
                     })
@@ -63,14 +60,19 @@
                         this.$router.push(url);
                     });
             },
-            refresh: function () {
-                this.$axios.get('/rooms')
+            refresh() {
+                axios.get('/rooms', {
+                    params: {
+                        gameKind: this.gameKind
+                    }
+                })
                     .then(response => {
                         this.rooms = response.data;
                     })
             }
-        },
+        }
     }
+
 </script>
 
 <style>

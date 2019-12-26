@@ -26,7 +26,7 @@ public class DrawApiController {
     }
 
     @PostMapping
-    public ResponseEntity<DrawResponse> initGame(HttpSession httpSession, @PathVariable Long roomId) {
+    public ResponseEntity<DrawResponse> initGame(HttpSession httpSession, @PathVariable Integer roomId) {
         UserSession userSession = (UserSession) httpSession.getAttribute(UserSession.USER_SESSION);
 
         return ResponseEntity.ok()
@@ -34,7 +34,7 @@ public class DrawApiController {
     }
 
     @PutMapping
-    public ResponseEntity<DrawResponse> updateGame(HttpSession httpSession, @PathVariable Long roomId, @RequestBody DrawCreateRequest drawCreateRequest) {
+    public ResponseEntity<DrawResponse> updateGame(HttpSession httpSession, @PathVariable Integer roomId, @RequestBody DrawCreateRequest drawCreateRequest) {
         UserSession userSession = (UserSession) httpSession.getAttribute(UserSession.USER_SESSION);
 
         return ResponseEntity.ok()

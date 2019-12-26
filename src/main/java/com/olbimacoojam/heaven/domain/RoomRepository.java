@@ -12,8 +12,8 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @Repository
 public class RoomRepository {
-    private static Logger LOGGER = LoggerFactory.getLogger(RoomRepository.class);
-    private final Map<Long, Room> rooms;
+
+    private final Map<Integer, Room> rooms;
 
     public RoomRepository() {
         rooms = new ConcurrentHashMap<>();
@@ -35,7 +35,7 @@ public class RoomRepository {
         return Collections.unmodifiableList(new ArrayList<>(rooms.values()));
     }
 
-    public Room findById(Long roomId) {
+    public Room findById(Integer roomId) {
         return rooms.get(roomId);
     }
 }

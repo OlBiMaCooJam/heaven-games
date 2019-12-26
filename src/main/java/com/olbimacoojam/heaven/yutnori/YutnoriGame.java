@@ -2,15 +2,22 @@ package com.olbimacoojam.heaven.yutnori;
 
 import com.olbimacoojam.heaven.domain.User;
 import com.olbimacoojam.heaven.game.Game;
-import com.olbimacoojam.heaven.yutnori.exception.IllegalTurnException;
+import com.olbimacoojam.heaven.yutnori.board.Board;
+import com.olbimacoojam.heaven.yutnori.board.BoardCreateStrategy;
+import com.olbimacoojam.heaven.yutnori.participant.YutnoriParticipant;
+import com.olbimacoojam.heaven.yutnori.participant.YutnoriParticipants;
 import com.olbimacoojam.heaven.yutnori.piece.moveresult.MoveResults;
 import com.olbimacoojam.heaven.yutnori.point.PointName;
+import com.olbimacoojam.heaven.yutnori.turn.Turn;
 import com.olbimacoojam.heaven.yutnori.yut.Yut;
 import com.olbimacoojam.heaven.yutnori.yut.YutThrowStrategy;
+import lombok.Getter;
 
 import java.util.List;
 
+@Getter
 public class YutnoriGame implements Game {
+
     private final BoardCreateStrategy boardCreateStrategy;
     private YutnoriParticipants yutnoriParticipants;
     private Board board;
@@ -22,18 +29,19 @@ public class YutnoriGame implements Game {
 
     @Override
     public void initialize(List<User> players) {
-        yutnoriParticipants = new YutnoriParticipants(players);
+        yutnoriParticipants = YutnoriParticipants.of(players);
         turn = new Turn(yutnoriParticipants.getFirst());
         board = boardCreateStrategy.createBoard(yutnoriParticipants);
     }
 
     public Yut throwYut(User thrower, YutThrowStrategy yutThrowStrategy) {
         Yut yut = yutThrowStrategy.throwYut();
-        return turn.saveOneThrow(thrower, yut);
+        turn = turn.saveOneThrow(thrower, yut);
+        return yut;
     }
 
     public MoveResults move(User user, PointName pointName, Yut yut) {
-        checkTurn(user, yut);
+        turn.checkMove(user, yut);
 
         Color teamColor = turn.getTeamColor();
 
@@ -50,10 +58,18 @@ public class YutnoriGame implements Game {
         return moveResults;
     }
 
-    private void checkTurn(User user, Yut yut) {
-        if (turn.canMove(user, yut)) {
-            return;
+    public List<YutnoriParticipant> getYutnoriParticipants() {
+        return yutnoriParticipants.getYutnoriParticipants();
+    }
+
+    public YutnoriGameResult isGameOver() {
+        if (yutnoriParticipants.isGameOver()) {
+            return new YutnoriGameResult("게임이 끝났습니다!", yutnoriParticipants.getWinners());
         }
-        throw new IllegalTurnException();
+        return new YutnoriGameResult("게임이 진행중입니다!", yutnoriParticipants.getWinners());
+    }
+
+    public Boolean isFinish(User user) {
+        return yutnoriParticipants.isFinish(user);
     }
 }

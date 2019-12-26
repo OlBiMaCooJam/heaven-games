@@ -1,16 +1,21 @@
 package com.olbimacoojam.heaven.yutnori;
 
 import com.olbimacoojam.heaven.domain.User;
-import com.olbimacoojam.heaven.yutnori.exception.IllegalTurnException;
+import com.olbimacoojam.heaven.yutnori.board.Board;
+import com.olbimacoojam.heaven.yutnori.board.OneOnOneStrategy;
 import com.olbimacoojam.heaven.yutnori.piece.Piece;
 import com.olbimacoojam.heaven.yutnori.piece.moveresult.MoveResult;
 import com.olbimacoojam.heaven.yutnori.piece.moveresult.MoveResults;
 import com.olbimacoojam.heaven.yutnori.point.PointName;
+import com.olbimacoojam.heaven.yutnori.turn.exception.MoveImpossibleException;
+import com.olbimacoojam.heaven.yutnori.turn.exception.ThrowImpossibleException;
+import com.olbimacoojam.heaven.yutnori.turn.exception.WrongUserTurnException;
 import com.olbimacoojam.heaven.yutnori.yut.Yut;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
+import java.util.Collections;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -27,8 +32,8 @@ class YutnoriGameTest extends YutnoriBaseTest {
         yutnoriGame.initialize(Arrays.asList(user1, user2));
 
         assertThat(yutnoriGame.throwYut(user1, () -> Yut.DO)).isEqualTo(Yut.DO);
-        assertThrows(IllegalTurnException.class, () -> yutnoriGame.throwYut(user2, () -> Yut.DO));
-        assertThrows(IllegalTurnException.class, () -> yutnoriGame.throwYut(user1, () -> Yut.DO));
+        assertThrows(WrongUserTurnException.class, () -> yutnoriGame.throwYut(user2, () -> Yut.DO));
+        assertThrows(ThrowImpossibleException.class, () -> yutnoriGame.throwYut(user1, () -> Yut.DO));
     }
 
     @Test
@@ -36,7 +41,7 @@ class YutnoriGameTest extends YutnoriBaseTest {
         YutnoriGame yutnoriGame = new YutnoriGame(new OneOnOneStrategy());
         yutnoriGame.initialize(Arrays.asList(user1, user2));
 
-        assertThrows(IllegalTurnException.class, () -> yutnoriGame.throwYut(user2, () -> Yut.DO));
+        assertThrows(WrongUserTurnException.class, () -> yutnoriGame.throwYut(user2, () -> Yut.DO));
     }
 
     @Test
@@ -113,7 +118,7 @@ class YutnoriGameTest extends YutnoriBaseTest {
         yutnoriGame.throwYut(user1, () -> Yut.DO);
         yutnoriGame.move(user1, PointName.STANDBY, Yut.DO);
 
-        assertThrows(IllegalTurnException.class, () -> yutnoriGame.move(user1, PointName.DO, Yut.DO));
+        assertThrows(MoveImpossibleException.class, () -> yutnoriGame.move(user1, PointName.DO, Yut.DO));
     }
 
     @Test
@@ -129,7 +134,7 @@ class YutnoriGameTest extends YutnoriBaseTest {
         yutnoriGame.throwYut(user1, () -> Yut.DO);
         yutnoriGame.move(user1, PointName.STANDBY, Yut.DO);
 
-        assertThrows(IllegalTurnException.class, () -> yutnoriGame.move(user2, PointName.DO, Yut.DO));
+        assertThrows(WrongUserTurnException.class, () -> yutnoriGame.move(user2, PointName.DO, Yut.DO));
     }
 
     @Test
@@ -143,10 +148,10 @@ class YutnoriGameTest extends YutnoriBaseTest {
         yutnoriGame.initialize(Arrays.asList(user1, user2));
 
         yutnoriGame.throwYut(user1, () -> Yut.DO);
-        yutnoriGame.move(user1, PointName.STANDBY, Yut.DO);
+        yutnoriGame.move(user1, PointName.STANDBY, Yut.DO);   // user2의 말을 잡음
 
         assertDoesNotThrow(() -> yutnoriGame.throwYut(user1, () -> Yut.GAE));
-        assertDoesNotThrow(() -> yutnoriGame.move(user1, PointName.GAE, Yut.GAE));
+        assertDoesNotThrow(() -> yutnoriGame.move(user1, PointName.DO, Yut.GAE));
     }
 
     @Test
@@ -159,7 +164,7 @@ class YutnoriGameTest extends YutnoriBaseTest {
 
         yutnoriGame.throwYut(user1, () -> Yut.MO);
 
-        assertThrows(IllegalTurnException.class, () -> yutnoriGame.move(user1, PointName.STANDBY, Yut.MO));
+        assertThrows(MoveImpossibleException.class, () -> yutnoriGame.move(user1, PointName.STANDBY, Yut.MO));
     }
 
     @Test
@@ -191,7 +196,7 @@ class YutnoriGameTest extends YutnoriBaseTest {
         MoveResults moveResults = yutnoriGame.move(user1, PointName.DO, Yut.BACKDO);
 
         MoveResults expectedMoveResults = new MoveResults(Arrays.asList(
-                new MoveResult(piece, createRoute(PointName.DO, PointName.STANDBY))
+                new MoveResult(piece, createRoute(PointName.DO, PointName.CHAMMUGI))
         ));
 
         assertThat(moveResults).isEqualTo(expectedMoveResults);
@@ -225,7 +230,7 @@ class YutnoriGameTest extends YutnoriBaseTest {
 
         yutnoriGame.throwYut(user1, () -> Yut.BACKDO);
 
-        assertThrows(IllegalTurnException.class, () -> yutnoriGame.throwYut(user1, () -> Yut.MO));
+        assertThrows(ThrowImpossibleException.class, () -> yutnoriGame.throwYut(user1, () -> Yut.MO));
     }
 
     @Test
@@ -244,4 +249,34 @@ class YutnoriGameTest extends YutnoriBaseTest {
         assertDoesNotThrow(() -> yutnoriGame.throwYut(user2, () -> Yut.DO));
     }
 
+    @Test
+    @DisplayName("승리했을 때 테스트, 게임 오버 테스트")
+    void move_test13() {
+        Piece piece = Piece.of(Color.BLACK, PointName.CHAMMUGI);
+        Piece piece2 = Piece.of(Color.RED, PointName.DO);
+
+        YutnoriGame yutnoriGame = new YutnoriGame(yutnoriParticipants -> new Board(Arrays.asList(piece, piece2)));
+        yutnoriGame.initialize(Arrays.asList(user1, user2));
+
+        yutnoriGame.throwYut(user1, () -> Yut.MO);
+        yutnoriGame.throwYut(user1, () -> Yut.GAE);
+        yutnoriGame.move(user1, PointName.CHAMMUGI, Yut.GAE);
+
+        assertDoesNotThrow(() -> yutnoriGame.throwYut(user2, () -> Yut.DO));
+        assertThat(yutnoriGame.isGameOver().getWinners()).isEqualTo(Arrays.asList("user1"));
+    }
+
+    @Test
+    @DisplayName("승리하지 않았을 때 게임 오버 테스트")
+    void move_test14() {
+        Piece piece = Piece.of(Color.BLACK, PointName.STANDBY);
+
+        YutnoriGame yutnoriGame = new YutnoriGame(yutnoriParticipants -> new Board(Arrays.asList(piece)));
+        yutnoriGame.initialize(Arrays.asList(user1, user2));
+
+        yutnoriGame.throwYut(user1, () -> Yut.DO);
+        MoveResults moveResults = yutnoriGame.move(user1, PointName.STANDBY, Yut.DO);
+
+        assertThat(yutnoriGame.isGameOver().getWinners()).isEqualTo(Collections.emptyList());
+    }
 }

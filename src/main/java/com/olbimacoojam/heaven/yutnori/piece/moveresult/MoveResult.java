@@ -1,13 +1,17 @@
 package com.olbimacoojam.heaven.yutnori.piece.moveresult;
 
+import com.olbimacoojam.heaven.yutnori.Color;
 import com.olbimacoojam.heaven.yutnori.piece.Piece;
 import com.olbimacoojam.heaven.yutnori.point.PointName;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.ToString;
 
-import java.util.Objects;
-
 @ToString
+@EqualsAndHashCode
+@Getter
 public class MoveResult {
+
     private final Piece piece;
     private final Route route;
 
@@ -21,20 +25,10 @@ public class MoveResult {
     }
 
     public boolean areYouCaught() {
-        return route.isDestination(PointName.STANDBY);
+        return route.isCaught();
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        MoveResult that = (MoveResult) o;
-        return Objects.equals(piece, that.piece) &&
-                Objects.equals(route, that.route);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(piece, route);
+    public Color getColor() {
+        return piece.getColor();
     }
 }

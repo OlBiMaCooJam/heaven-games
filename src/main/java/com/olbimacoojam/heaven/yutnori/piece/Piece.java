@@ -11,6 +11,7 @@ import lombok.Getter;
 
 @Getter
 public class Piece {
+
     private final Color color;
     private Point point;
 
@@ -46,15 +47,15 @@ public class Piece {
         return this.color != piece.color && this.point == piece.point;
     }
 
-    public Point getPoint() {
-        return point;
-    }
-
     public boolean isColor(Color color) {
         return this.color == color;
     }
 
     public boolean isComplete() {
         return Points.isCompleted(this.point);
+    }
+
+    public boolean isPlaying() {
+        return !point.isName(PointName.COMPLETE);
     }
 }

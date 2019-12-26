@@ -1,17 +1,40 @@
 <template>
-    <v-card class="point" :id="pointName" color="#d3d3d3"
-            :style="{marginLeft: left + 'px', marginTop: top + 'px'}">
-        <v-card-text> </v-card-text>
-    </v-card>
+    <div :id="name" :style="{marginLeft: left + 'px', marginTop: top + 'px'}" class="point"
+         color="#f0f8ff">
+        <Piece :turnColor="turnColor" :count="piece.count" :color="piece.color" @pieceClick="pieceClick"
+               v-if="piece.count > 0" :selected="selected"></Piece>
+    </div>
 </template>
 
 <script>
+    import Piece from "./Piece";
+
     export default {
         name: 'Point',
+        components: {Piece},
         props: {
             pointName: String,
             left: Number,
-            top: Number
+            top: Number,
+            piece: {
+                type: Object,
+                default: () => {
+                    return {color: "", count: 0}
+                }
+            },
+            selected: Boolean,
+            turnColor: String
+        },
+        data() {
+            return {
+                name: this.pointName,
+            }
+        },
+
+        methods: {
+            pieceClick(canClick) {
+                this.$emit('chooseSrcPoint', this.name, canClick)
+            },
         },
     };
 </script>
@@ -22,5 +45,11 @@
         border-radius: 50px;
         width: 30px;
         height: 30px;
+        border-color: black;
+        background-color: cadetblue;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
 </style>

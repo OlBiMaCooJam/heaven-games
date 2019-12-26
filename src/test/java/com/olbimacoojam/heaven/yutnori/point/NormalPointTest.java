@@ -21,7 +21,7 @@ class NormalPointTest {
         Route route = new Route();
         origin.findRoute(route, Yut.DO);
 
-        Route expectedRoute = new Route(Arrays.asList(origin, destination));
+        Route expectedRoute = new Route(Arrays.asList(PointName.DO, PointName.GAE));
         assertThat(route).isEqualTo(expectedRoute);
     }
 
@@ -38,7 +38,7 @@ class NormalPointTest {
 
         Route route = new Route();
         origin.findRoute(route, Yut.BACKDO);
-        Route expectedRoute = new Route(Arrays.asList(origin, destination));
+        Route expectedRoute = new Route(Arrays.asList(PointName.GAE, PointName.DO));
         assertThat(route).isEqualTo(expectedRoute);
     }
 }

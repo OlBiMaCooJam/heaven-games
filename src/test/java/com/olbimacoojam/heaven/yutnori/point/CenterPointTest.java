@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 
+import static com.olbimacoojam.heaven.yutnori.point.PointName.BANGSUGI;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class CenterPointTest {
@@ -15,7 +16,7 @@ class CenterPointTest {
     @DisplayName("moving에 따른 다음 도착지 point 가져오기")
     void findNextPoint() {
         Point destination = new NormalPoint(PointName.SOKYUT);
-        Point noGoPoint = new NormalPoint(PointName.BANGSUGI);
+        Point noGoPoint = new NormalPoint(BANGSUGI);
         Point passingPoint = new CenterPoint(PointName.BANG);
         Point origin = new CenterRightDiagonalPoint(PointName.MOGAE);
 
@@ -26,7 +27,7 @@ class CenterPointTest {
         Route route = new Route();
         origin.findRoute(route, Yut.GAE);
 
-        Route expectedRoute = new Route(Arrays.asList(origin, passingPoint, destination));
+        Route expectedRoute = new Route(Arrays.asList(PointName.MOGAE, PointName.BANG, PointName.SOKYUT));
         assertThat(route).isEqualTo(expectedRoute);
     }
 
@@ -34,7 +35,7 @@ class CenterPointTest {
     @DisplayName("moving에 따른 다음 도착지 point 가져오기")
     void findNextPoint2() {
         Point noGoPoint = new NormalPoint(PointName.SOKYUT);
-        Point destination = new NormalPoint(PointName.BANGSUGI);
+        Point destination = new NormalPoint(BANGSUGI);
         Point passingPoint = new CenterPoint(PointName.BANG);
         Point origin = new NormalPoint(PointName.DUITMOGAE);
 
@@ -46,7 +47,7 @@ class CenterPointTest {
         Route route = new Route();
         origin.findRoute(route, Yut.GAE);
 
-        Route expectedRoute = new Route(Arrays.asList(origin, passingPoint, destination));
+        Route expectedRoute = new Route(Arrays.asList(PointName.DUITMOGAE, PointName.BANG, BANGSUGI));
         assertThat(route).isEqualTo(expectedRoute);
     }
 
@@ -55,7 +56,7 @@ class CenterPointTest {
     void findNextPoint3() {
         Point noGoPoint = new NormalPoint(PointName.SOKYUT);
         Point destination = new NormalPoint(PointName.ANZZI);
-        Point passingPoint = new NormalPoint(PointName.BANGSUGI);
+        Point passingPoint = new NormalPoint(BANGSUGI);
         Point origin = new CenterPoint(PointName.BANG);
 
         origin.makeConnection(null, passingPoint);
@@ -65,7 +66,7 @@ class CenterPointTest {
         Route route = new Route();
         origin.findRoute(route, Yut.GAE);
 
-        Route expectedRoute = new Route(Arrays.asList(origin, passingPoint, destination));
+        Route expectedRoute = new Route(Arrays.asList(PointName.BANG, PointName.BANGSUGI, PointName.ANZZI));
         assertThat(route).isEqualTo(expectedRoute);
     }
 }

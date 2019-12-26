@@ -10,27 +10,22 @@ const routes = [
         component: () => import('../views/Home.vue')
     },
     {
-        path: '/:gameTitle/rooms/:id',
-        name: 'game',
-        component: () => import('../views/Game.vue'),
-        props: true,
-    },
-    {
-        path: '/:gameTitle/rooms',
-        name: 'RoomList',
+        path: '/:gameKind/rooms',
+        name: 'rooms',
         component: () => import('../views/RoomList.vue'),
-        props: true,
+        props: true
     },
     {
-        path: '/rooms/:id/yutnori',
-        name: 'Yutnori',
+        path: '/yutnori/:id',
+        name: 'yutnori',
         component: () => import('../views/Yutnori.vue')
     },
-    // {
-    //   path: '/rooms/:id',
-    //   name: 'game',
-    //   component: () => import('../views/Game.vue')
-    // },
+    {
+        path: '/:gameKind/rooms/:id',
+        name: 'game',
+        component: () => import('../views/Game.vue'),
+        props: true
+    },
     {
         path: '/login',
         name: 'login',
@@ -42,7 +37,7 @@ const routes = [
         component: () => import('../views/Minesweeper.vue')
     },
     {
-        path: '/MAFIA/rooms/:id/start',
+        path: '/MAFIA/:id',
         name: 'mafia',
         component: () => import('../views/Mafia.vue'),
         props: true,
@@ -52,12 +47,12 @@ const routes = [
         name: 'draw',
         component: () => import('../views/Draw.vue'),
     },
-];
+]
 
 const router = new VueRouter({
     mode: 'history',
     base: process.env.BASE_URL,
     routes
-});
+})
 
 export default router

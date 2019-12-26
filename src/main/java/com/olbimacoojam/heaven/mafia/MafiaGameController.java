@@ -28,7 +28,7 @@ public class MafiaGameController {
 
     @MessageMapping("/rooms/{roomId}/mafia")
     @SendToUser("/queue/rooms/{roomId}/mafia/occupation")
-    public MafiaOccupationMessage notifyOccupation(@DestinationVariable Long roomId, SimpMessageHeaderAccessor simpMessageHeaderAccessor) {
+    public MafiaOccupationMessage notifyOccupation(@DestinationVariable Integer roomId, SimpMessageHeaderAccessor simpMessageHeaderAccessor) {
         HttpSession httpSession = (HttpSession) (simpMessageHeaderAccessor.getSessionAttributes().get(HTTP_SESSION));
         UserSession userSession = (UserSession) httpSession.getAttribute(UserSession.USER_SESSION);
         Long userId = userSession.getId();

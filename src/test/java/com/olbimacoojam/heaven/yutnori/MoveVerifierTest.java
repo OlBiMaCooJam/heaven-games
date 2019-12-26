@@ -1,5 +1,6 @@
 package com.olbimacoojam.heaven.yutnori;
 
+import com.olbimacoojam.heaven.yutnori.exception.NoAvailablePieceException;
 import com.olbimacoojam.heaven.yutnori.piece.Piece;
 import com.olbimacoojam.heaven.yutnori.point.Points;
 import org.junit.jupiter.api.DisplayName;
@@ -10,6 +11,7 @@ import java.util.List;
 
 import static com.olbimacoojam.heaven.yutnori.point.PointName.*;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class MoveVerifierTest {
     @Test
@@ -37,7 +39,7 @@ class MoveVerifierTest {
         List<Piece> pieces = Arrays.asList(piece1, piece2, piece3, piece4, piece5);
         MoveVerifier moveVerifier = new MoveVerifier(Color.BLACK, Points.get(MO));
 
-        assertThat(moveVerifier.findMovablePieces(pieces)).isEmpty();
+        assertThrows(NoAvailablePieceException.class, () -> moveVerifier.findMovablePieces(pieces));
     }
 
     @Test
