@@ -98,7 +98,13 @@ task setUp(type: NpmTask) {
     outputs.files file('node_modules')
 }
 
-task axios(type: NpmTask, dependsOn: setUp) {
+task url(type: NpmTask, dependsOn: setUp) {
+    description = "Install url-search-params-polyfill packages"
+    args = ['install', 'url-search-params-polyfill', '--save']
+    outputs.files file('node_modules')
+}
+
+task axios(type: NpmTask, dependsOn: url) {
     description = "Install Axios packages"
     args = ['install', 'axios', '--save']
     outputs.files file('node_modules')
