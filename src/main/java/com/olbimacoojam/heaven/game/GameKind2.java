@@ -1,5 +1,6 @@
 package com.olbimacoojam.heaven.game;
 
+import com.olbimacoojam.heaven.draw.domain.Draw;
 import com.olbimacoojam.heaven.mafia.MafiaGame;
 import com.olbimacoojam.heaven.minesweeper.domain.Minesweeper;
 import com.olbimacoojam.heaven.yutnori.YutnoriGame;
@@ -12,7 +13,8 @@ public enum GameKind2 {
 
     YUTNORI(YutnoriGame.class),
     MINE(Minesweeper.class),
-    MAFIA(MafiaGame.class);
+    MAFIA(MafiaGame.class),
+    DRAW(Draw.class);
 
     private Class<? extends Game> concreteGame;
 

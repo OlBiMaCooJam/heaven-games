@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface Game {
     void initialize(List<User> players);
+
+    boolean isStart();
 }

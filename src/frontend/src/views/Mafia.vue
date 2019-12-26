@@ -15,7 +15,7 @@
             </v-col>
             <v-col cols="1">
                 <v-row align='center' justify='center'>
-                    <Timer :date="date" :roomId=roomId :client="client" :day="day" :occupation="occupation" :dialog="dialog"></Timer>
+                    <Timer v-if="renderComponent" :date="date" :roomId=roomId :client="client" :day="day" :occupation="occupation" :dialog="dialog"></Timer>
                 </v-row>
                 <v-row>
                     <Vote :selected="selected" :dialog="dialog" :citizens="citizens" :vote_msg="vote_message" :client="client" :roomId=roomId :day="day" :occupation="occupation"></Vote>
@@ -42,7 +42,12 @@
             Timer
         },
         methods: {
-
+            refresh() {
+                this.renderComponent = false;
+                this.$nextTick(() => {
+                    this.renderComponent = true;
+                });
+            },
             alerts(message) {
                 return `<div id="message" style="text-align: center; color: red">
                             <span>${message}</span>
@@ -89,7 +94,7 @@
         data() {
             return {
                 dialog: false,
-                date: 20, // 테스트 데이터
+                date: 120, // 테스트 데이터
                 vote_message: "선택해주세요",
                 roomId: this.$route.params.id,
                 client: {},
@@ -100,10 +105,10 @@
                 flag: '',
                 citizens: [],
                 names: [],
+                renderComponent: true
             }
         },
         created() {
-            // this.roomId = this.$route.params.id;
             this.client = Stomp.over(new SockJS('/websocket'));
             const game = this;
             game.client.connect({}, function() {
@@ -114,8 +119,10 @@
                     game.userId = mafiaOccupationMessage.userId;
                     game.occupation = mafiaOccupationMessage.occupation;
 
+                    game.date = 120;
+                    game.refresh();
                     game.alertMessage('당신은 ' + game.occupation + ' 입니다.');
-                    game.alertMessage('마피아를 찾아보세요.\n15초 후에 투표합니다.');
+                    game.alertMessage('마피아를 찾아보세요.\n' + game.date + '초 후에 투표합니다.');
 
                     if(game.occupation === 'MAFIA') {
                         game.client.subscribe('/topic/rooms/' + game.roomId + '/mafia/chat/mafiaOnly', function (response) {
@@ -145,18 +152,16 @@
                     const resultMessage = response.body;
                     game.alertMessage(resultMessage);
 
-
-
-                    window.console.log(resultMessage.includes("종료"));
                     if(resultMessage.includes("종료")) {
                         alert(resultMessage);
-                        game.$router.push("/games/" + game.roomId + "/rooms/" + game.roomId);
+                        game.$router.push("/");
                         return;
                     }
                     game.day = false;
 
-
-                    game.alertMessage('15초 후에 각 직업의 능력이 발동합니다.\n마피아만 채팅을 할 수 있습니다.');//
+                    game.date = 30;
+                    game.refresh();
+                    game.alertMessage(game.date + '초 후에 각 직업의 능력이 발동합니다.\n마피아만 채팅을 할 수 있습니다.');//
                 });
                 game.client.subscribe('/topic/rooms/' + game.roomId + '/nightResult', function (response) {
                     eventBus.$emit('initTime');
@@ -167,12 +172,14 @@
 
                     if(resultMessage.includes("종료")) {
                         alert(resultMessage);
-                        game.$router.push("/games/" + game.roomId + "/rooms/" + game.roomId);
+                        game.$router.push("/");
                         return;
                     }
                     game.day = true;
 
-                    game.alertMessage('마피아를 찾아보세요.\n15초 후에 투표합니다.');
+                    game.date = 120;
+                    game.refresh();
+                    game.alertMessage('마피아를 찾아보세요.\n' + game.date  +'초 후에 투표합니다.');
                 });
                 game.client.subscribe('/topic/rooms/' + game.roomId + '/list', function (response) {
                     const mafiaParticipantInfos = JSON.parse(response.body);

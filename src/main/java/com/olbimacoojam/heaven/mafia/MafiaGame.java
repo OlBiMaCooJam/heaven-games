@@ -21,6 +21,7 @@ public class MafiaGame implements Game {
     private Map<MafiaParticipant, MafiaParticipant> selectData;
 
     private boolean day;
+    private boolean isStart;
 
     public MafiaGame() {
         MAFIA_INITIALIZER_REGISTRY.addMafiaInitializer(new MafiaMinimumInitializer());
@@ -29,6 +30,7 @@ public class MafiaGame implements Game {
         voteResult = new HashMap<>();
         selectData = new HashMap<>();
         day = true;
+        isStart = false;
     }
 
     /**
@@ -38,6 +40,12 @@ public class MafiaGame implements Game {
     public void initialize(List<User> players) {
         mafiaParticipants = MAFIA_INITIALIZER_REGISTRY.getMafiaInitializer(players.size()).initialize(players);
         voteResultInitialize();
+        isStart = true;
+    }
+
+    @Override
+    public boolean isStart() {
+        return isStart;
     }
 
     private void voteResultInitialize() {
@@ -129,10 +137,12 @@ public class MafiaGame implements Game {
         voteResultInitialize();
 
         if (numberOfMafia >= findAliveMafiaParticipants().size() - numberOfMafia) {
+            isStart = false;
             return ("게임이 종료되었습니다.\n마피아팀의 승리입니다.");
         }
 
         if (numberOfMafia == 0) {
+            isStart = false;
             return ("게임이 종료되었습니다.\n시민팀의 승리입니다.");
         }
 

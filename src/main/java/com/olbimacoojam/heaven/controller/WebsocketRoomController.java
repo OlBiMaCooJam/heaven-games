@@ -32,7 +32,7 @@ public class WebsocketRoomController {
         return roomService.subscribe(roomId, userId);
     }
 
-    @MessageMapping("/rooms/{roomId}/leave")
+    @MessageMapping("/rooms/{roomId}/leave/{userId}")
     @SendTo("/topic/rooms/{roomId}/leave")
     public RoomResponseDto leaveRoom(@DestinationVariable int roomId, SimpMessageHeaderAccessor simpMessageHeaderAccessor) {
         HttpSession httpSession = (HttpSession) (simpMessageHeaderAccessor.getSessionAttributes().get(HTTP_SESSION));

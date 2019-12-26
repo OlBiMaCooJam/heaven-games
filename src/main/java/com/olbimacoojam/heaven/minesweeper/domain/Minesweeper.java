@@ -15,15 +15,23 @@ public class Minesweeper implements Game {
     private MinesweeperStatus minesweeperStatus;
     private Board board;
     private User user;
+    private boolean isStart;
 
     public Minesweeper() {
         this.minesweeperStatus = MinesweeperStatus.PLAYING;
+        this.isStart = false;
     }
 
     @Override
     public void initialize(final List<User> players) {
         checkNumberOfPlayers(players);
         this.user = players.get(0);
+        isStart = true;
+    }
+
+    @Override
+    public boolean isStart() {
+        return isStart;
     }
 
     public void registerBoard(Board board) {

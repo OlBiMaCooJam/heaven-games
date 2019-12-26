@@ -1,8 +1,5 @@
 <template>
     <v-dialog v-model="dialog" persistent max-width="290">
-        <template v-slot:activator="{ on }">
-            <v-btn color="primary" dark v-on="on">투표</v-btn>
-        </template>
         <v-card>
             <v-card-title class="headline">{{vote_msg}}</v-card-title>
             <v-select
