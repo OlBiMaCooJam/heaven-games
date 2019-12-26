@@ -20,12 +20,12 @@
     },
     data() {
       return {
-        games: [{title: '마피아게임', src: 'https://cdn.vuetifyjs.com/images/cards/docks.jpg', id: '1'},
-          {title: '윷놀이', src: 'https://cdn.vuetifyjs.com/images/cards/docks.jpg', id: '2'},
-          {title: '지뢰찾기', src: 'https://cdn.vuetifyjs.com/images/cards/docks.jpg', id: '3'},
-          {title: '노래맞추기', src: 'https://cdn.vuetifyjs.com/images/cards/docks.jpg', id: '4'},
-          {title: '맞고', src: 'https://cdn.vuetifyjs.com/images/cards/docks.jpg', id: '5'},
-          {title: '사다리타기', src: 'https://cdn.vuetifyjs.com/images/cards/docks.jpg', id: '6'}] //데이터 예시
+        games: [{title: '마피아게임', src: require('../assets/mafia_thumbnail.jpg'), gameKind: 'MAFIA'},
+          {title: '윷놀이', src: require('../assets/yutnori_thumbnail.jpeg'), gameKind: 'YUTNORI'},
+          {title: '지뢰찾기', src: require('../assets/minesweeper_thumbnail.jpeg'), gameKind: 'MINE'},
+          {title: '제비뽑기', src: require('../assets/draw_thumbnail.png'), gameKind: 'DRAW'},
+          {title: '사다리타기', src: require('../assets/ladder_thumbnail.png'), gameKind: 'LADDER'},
+          {title: '노래맞추기', src: 'https://cdn.vuetifyjs.com/images/cards/docks.jpg', gameKind: 'SONG'}],
       }
     }
   }

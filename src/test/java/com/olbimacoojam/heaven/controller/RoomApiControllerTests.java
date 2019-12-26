@@ -1,5 +1,6 @@
 package com.olbimacoojam.heaven.controller;
 
+import com.olbimacoojam.heaven.game.GameKind2;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -23,17 +24,17 @@ import static org.springframework.restdocs.webtestclient.WebTestClientRestDocume
 @ExtendWith({RestDocumentationExtension.class, SpringExtension.class})
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class RoomApiControllerTests {
+
     public static final String ROOMS_URL = "/rooms";
-
-    private WebTestClient webTestClient;
-
-    @LocalServerPort
-    private String port;
 
     private final FieldDescriptor[] roomResponseFields = {
             fieldWithPath("id").description("room 고유 식별자"),
             fieldWithPath("players").description("room에 참여하고 있는 user 목록")
     };
+
+    @LocalServerPort
+    private String port;
+    private WebTestClient webTestClient;
 
     @BeforeEach
     void setUp(RestDocumentationContextProvider restDocumentation) {
@@ -48,7 +49,7 @@ public class RoomApiControllerTests {
     @DirtiesContext
     void create_room_test() {
         webTestClient.post()
-                .uri(ROOMS_URL)
+                .uri(ROOMS_URL + getGameKindQueryString(GameKind2.YUTNORI))
                 .exchange()
                 .expectStatus().isCreated()
                 .expectHeader()
@@ -62,32 +63,37 @@ public class RoomApiControllerTests {
 
     @Test
     void list_room_test() {
-        int roomId1 = createRoom();
-        int roomId2 = createRoom();
+        int roomId1 = createRoom(GameKind2.MAFIA);
+        int roomId2 = createRoom(GameKind2.YUTNORI);
+        int roomId3 = createRoom(GameKind2.MAFIA);
 
         webTestClient.get()
-                .uri(ROOMS_URL)
+                .uri(ROOMS_URL + getGameKindQueryString(GameKind2.MAFIA))
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody()
                 .jsonPath("$.length()").isEqualTo(2)
                 .jsonPath("$[0].id").isEqualTo(roomId1)
-                .jsonPath("$[1].id").isEqualTo(roomId2)
+                .jsonPath("$[1].id").isEqualTo(roomId3)
                 .consumeWith(document("room-api/list-room",
                         responseFields(fieldWithPath("[]").description("room 목록"))
                                 .andWithPrefix("[].", roomResponseFields)
                 ));
     }
 
-    private int createRoom() {
+    private int createRoom(GameKind2 gameKind) {
         String location = webTestClient.post()
-                .uri(ROOMS_URL)
+                .uri(ROOMS_URL + getGameKindQueryString(gameKind))
                 .exchange()
                 .expectStatus().isCreated()
                 .expectBody()
                 .returnResult()
                 .getResponseHeaders()
                 .get("location").get(0);
-        return Integer.parseInt(location.substring(ROOMS_URL.length()));
+        return Integer.parseInt(location.substring(ROOMS_URL.length() + 1));
+    }
+
+    private String getGameKindQueryString(GameKind2 gameKind) {
+        return String.format("?gameKind=%s", gameKind);
     }
 }

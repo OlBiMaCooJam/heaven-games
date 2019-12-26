@@ -1,9 +1,7 @@
 package com.olbimacoojam.heaven.domain;
 
-import com.olbimacoojam.heaven.mafia.MafiaGame;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -14,12 +12,11 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @Repository
 public class RoomRepository {
-    private static Logger LOGGER = LoggerFactory.getLogger(RoomRepository.class);
-    private final Map<Long, Room> rooms;
+
+    private final Map<Integer, Room> rooms;
 
     public RoomRepository() {
         rooms = new ConcurrentHashMap<>();
-        rooms.put(1L, new Room(1L, new MafiaGame()));
     }
 
     public Room save(Room room) {
@@ -38,7 +35,7 @@ public class RoomRepository {
         return Collections.unmodifiableList(new ArrayList<>(rooms.values()));
     }
 
-    public Room findById(Long roomId) {
+    public Room findById(Integer roomId) {
         return rooms.get(roomId);
     }
 }

@@ -1,6 +1,5 @@
 package com.olbimacoojam.heaven.interceptor;
 
-import com.olbimacoojam.heaven.domain.UserSession;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.http.server.ServletServerHttpRequest;
@@ -18,7 +17,7 @@ public class HttpHandshakeInterceptor implements HandshakeInterceptor, HandlerIn
 
     @Override
     public boolean beforeHandshake(ServerHttpRequest request, ServerHttpResponse response, WebSocketHandler wsHandler, Map<String, Object> attributes) throws Exception {
-        if(request instanceof ServletServerHttpRequest){
+        if (request instanceof ServletServerHttpRequest) {
             ServletServerHttpRequest servletServerHttpRequest = (ServletServerHttpRequest) request;
             HttpSession session = servletServerHttpRequest.getServletRequest().getSession();
             attributes.put(HTTP_SESSION, session);

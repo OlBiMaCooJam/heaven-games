@@ -3,7 +3,7 @@
     <v-row id="nav">
       <v-col cols="1" id="home">
         <router-link to="/">
-          <img id="btn-home" src="./assets/Logo.jpg">
+          <img id="btn-home" src="./assets/Logo.jpg" alt="Logo">
         </router-link>
       </v-col>
       <v-col cols="11">
@@ -15,6 +15,9 @@
         </router-link>
         <router-link to="/minesweeper">
           <v-btn>gg</v-btn>
+        </router-link>
+        <router-link to="/draw">
+          <v-btn>Draw</v-btn>
         </router-link>
       </v-col>
     </v-row>
@@ -64,7 +67,6 @@
     line-height: 1;
     display: inline-block;
     margin-left: 100px;
-
   }
 
   #mafia-app {
