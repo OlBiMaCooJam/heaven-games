@@ -10,7 +10,7 @@ const routes = [
     component: () => import('../views/Home.vue')
   },
   {
-    path: '/rooms/:gameKind',
+    path: '/:gameKind/rooms',
     name: 'rooms',
     component: () => import('../views/RoomList.vue'),
     props: true
@@ -21,7 +21,7 @@ const routes = [
     component: () => import('../views/Yutnori.vue')
   },
   {
-    path: '/rooms/:id/:gameKind',
+    path: '/:gameKind/rooms/:id',
     name: 'game',
     component: () => import('../views/Game.vue'),
     props: true
