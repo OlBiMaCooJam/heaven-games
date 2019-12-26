@@ -57,7 +57,7 @@
                     })
                     .then((headers) => {
                         const url = headers.location;
-                        this.$router.push(url);
+                        this.$router.push(`/${this.gameKind + url}`);
                     });
             },
             refresh() {

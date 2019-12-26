@@ -11,6 +11,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class BlockTest {
     private Block mineBlock = Block.of(BlockStatus.MINE, 0, true);
+    private Block unclickedMine = Block.of(BlockStatus.UNCLICKED, 0, true);
     private Block blankBlock = Block.of(BlockStatus.CLICKED, 0, false);
     private Block clickedBlockWithAround1 = Block.of(BlockStatus.CLICKED, 1, false);
 
@@ -30,6 +31,14 @@ class BlockTest {
 
         assertThat(flag).isEqualTo(Block.of(BlockStatus.FLAG, 0, false));
         assertThat(questionMark).isEqualTo(Block.of(BlockStatus.QUESTION_MARK, 0, false));
+    }
+
+    @Test
+    void isUnclickedMine() {
+        assertThat(unclickedMine.isUnclickedMine()).isTrue();
+        assertThat(mineBlock.isUnclickedMine()).isFalse();
+        assertThat(blankBlock.isUnclickedMine()).isFalse();
+        assertThat(clickedBlockWithAround1.isUnclickedMine()).isFalse();
     }
 
     @Test

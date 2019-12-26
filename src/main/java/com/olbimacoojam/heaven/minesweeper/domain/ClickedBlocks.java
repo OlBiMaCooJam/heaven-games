@@ -1,11 +1,13 @@
 package com.olbimacoojam.heaven.minesweeper.domain;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 import java.util.HashMap;
 import java.util.Map;
 
 @Getter
+@EqualsAndHashCode
 public class ClickedBlocks {
     private final Map<Position, Block> clickedBlocks;
 

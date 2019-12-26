@@ -32,6 +32,10 @@ public class Block {
         return blockStatus.isMine();
     }
 
+    public boolean isUnclickedMine() {
+        return isMine && !blockStatus.isMine();
+    }
+
     public boolean isBlankBlock() {
         return !isMine && numberOfAroundMines == BLANK && isClicked();
     }
