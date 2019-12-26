@@ -38,3 +38,4 @@ out/
 /src/main/resources/static/**
 /src/frontend/npm-v6.12.1/
 /package-lock.json
+/src/frontend/node_modules/
