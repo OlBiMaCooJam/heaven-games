@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class YutnoriParticipants {
+    private final static int WINNING_CONDITION = 1;
 
     private final List<YutnoriParticipant> allYutnoriParticipants;
     private final List<YutnoriParticipant> finishedYutnoriParticipants;
@@ -94,7 +95,7 @@ public class YutnoriParticipants {
     }
 
     public boolean isGameOver() {
-        return allYutnoriParticipants.size() == finishedYutnoriParticipants.size() + 1;
+        return allYutnoriParticipants.size() == finishedYutnoriParticipants.size() + WINNING_CONDITION;
     }
 
     public List<String> getWinners() {

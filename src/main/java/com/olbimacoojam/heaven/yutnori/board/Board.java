@@ -52,4 +52,10 @@ public class Board {
                 .filter(piece -> piece.isColor(color))
                 .allMatch(Piece::isComplete);
     }
+
+    public boolean isAllInStandBy(Color color) {
+        return pieces.stream()
+                .filter(piece -> piece.isColor(color))
+                .allMatch(piece -> piece.isAtStandBy());
+    }
 }

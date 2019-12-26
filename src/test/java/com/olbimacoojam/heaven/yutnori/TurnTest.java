@@ -1,6 +1,7 @@
 package com.olbimacoojam.heaven.yutnori;
 
 import com.olbimacoojam.heaven.domain.User;
+import com.olbimacoojam.heaven.yutnori.board.Board;
 import com.olbimacoojam.heaven.yutnori.participant.YutnoriParticipants;
 import com.olbimacoojam.heaven.yutnori.piece.Piece;
 import com.olbimacoojam.heaven.yutnori.piece.moveresult.MoveResult;
@@ -17,6 +18,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
+import java.util.Collections;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -52,33 +54,37 @@ class TurnTest extends YutnoriBaseTest {
     void can_move_test1() {
         turn = turn.saveOneThrow(turnUser, Yut.DO);
         PointName pointName = PointName.STANDBY;
+        Board board = new Board(Collections.emptyList());
 
-        assertDoesNotThrow(() -> turn.checkMove(turnUser, pointName, Yut.DO));
+        assertDoesNotThrow(() -> turn.checkMove(turnUser, pointName, Yut.DO, board));
     }
 
     @Test
     void can_move_test2() {
         turn = turn.saveOneThrow(turnUser, Yut.DO);
         PointName pointName = PointName.STANDBY;
+        Board board = new Board(Collections.emptyList());
 
-        assertThrows(NotHaveYutException.class, () -> turn.checkMove(turnUser, pointName, Yut.GAE));
+        assertThrows(NotHaveYutException.class, () -> turn.checkMove(turnUser, pointName, Yut.GAE, board));
     }
 
     @Test
     void can_move_test3() {
         turn = turn.saveOneThrow(turnUser, Yut.DO);
         PointName pointName = PointName.STANDBY;
+        Board board = new Board(Collections.emptyList());
 
-        assertThrows(WrongUserTurnException.class, () -> turn.checkMove(other, pointName, Yut.DO));
+        assertThrows(WrongUserTurnException.class, () -> turn.checkMove(other, pointName, Yut.DO, board));
     }
 
     @Test
     void can_move_test4() {
         turn = turn.saveOneThrow(turnUser, Yut.MO);
         PointName pointName = PointName.STANDBY;
+        Board board = new Board(Collections.emptyList());
 
 
-        assertThrows(WrongUserTurnException.class, () -> turn.checkMove(other, pointName, Yut.MO));
+        assertThrows(WrongUserTurnException.class, () -> turn.checkMove(other, pointName, Yut.MO, board));
     }
 
     @Test
@@ -87,9 +93,10 @@ class TurnTest extends YutnoriBaseTest {
         turn = turn.saveOneThrow(turnUser, Yut.YUT);
         turn = turn.saveOneThrow(turnUser, Yut.DO);
         PointName pointName = PointName.STANDBY;
+        Board board = new Board(Collections.emptyList());
 
 
-        assertDoesNotThrow(() -> turn.checkMove(turnUser, pointName, Yut.YUT));
+        assertDoesNotThrow(() -> turn.checkMove(turnUser, pointName, Yut.YUT, board));
     }
 
     @Test

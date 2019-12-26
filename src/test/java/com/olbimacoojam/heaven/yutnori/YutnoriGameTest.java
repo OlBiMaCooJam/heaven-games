@@ -211,7 +211,7 @@ class YutnoriGameTest extends YutnoriBaseTest {
         yutnoriGame.initialize(Arrays.asList(user1, user2));
 
         yutnoriGame.throwYut(user1, () -> Yut.BACKDO);
-        assertThrows(MoveImpossibleException.class, () -> yutnoriGame.move(user1, PointName.STANDBY, Yut.BACKDO));
+        assertDoesNotThrow(() -> yutnoriGame.move(user1, PointName.STANDBY, Yut.BACKDO));
     }
 
     @Test
@@ -279,6 +279,30 @@ class YutnoriGameTest extends YutnoriBaseTest {
     void throw_yut_test15() {
         Piece piece = Piece.of(Color.BLACK, PointName.STANDBY);
         YutnoriGame yutnoriGame = new YutnoriGame(yutnoriParticipants -> new Board(Arrays.asList(piece)));
+        yutnoriGame.initialize(Arrays.asList(user1, user2));
+
+        yutnoriGame.throwYut(user1, () -> Yut.BACKDO);
+        assertDoesNotThrow(() -> yutnoriGame.move(user1, PointName.STANDBY, Yut.BACKDO));
+    }
+
+    @Test
+    @DisplayName("StandBy에 모든 점이 있을 때 Backdo로 움직임")
+    void throw_yut_test16() {
+        Piece piece = Piece.of(Color.BLACK, PointName.STANDBY);
+        YutnoriGame yutnoriGame = new YutnoriGame(new OneOnOneStrategy());
+        yutnoriGame.initialize(Arrays.asList(user1, user2));
+
+        yutnoriGame.throwYut(user1, () -> Yut.BACKDO);
+        assertDoesNotThrow(() -> yutnoriGame.move(user1, PointName.STANDBY, Yut.BACKDO));
+    }
+
+    @Test
+    @DisplayName("모든 점이 StandBy에 없을 때 BackDo StandBy 움직임 예외처리")
+    void throw_yut_test17() {
+        Piece piece1 = Piece.of(Color.BLACK, PointName.STANDBY);
+        Piece piece2 = Piece.of(Color.BLACK, PointName.GAE);
+        Piece piece3 = Piece.of(Color.RED, PointName.STANDBY);
+        YutnoriGame yutnoriGame = new YutnoriGame(yutnoriParticipants -> new Board(Arrays.asList(piece1, piece2, piece3)));
         yutnoriGame.initialize(Arrays.asList(user1, user2));
 
         yutnoriGame.throwYut(user1, () -> Yut.BACKDO);

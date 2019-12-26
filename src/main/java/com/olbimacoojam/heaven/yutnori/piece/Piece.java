@@ -54,4 +54,12 @@ public class Piece {
     public boolean isComplete() {
         return Points.isCompleted(this.point);
     }
+
+    public boolean isNotAtStandBy() {
+        return !(this.point.isStandByPoint());
+    }
+
+    public boolean isAtStandBy() {
+        return (this.point.isStandByPoint());
+    }
 }
