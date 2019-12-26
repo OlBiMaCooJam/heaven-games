@@ -21,12 +21,13 @@
         blocks: [],
         dialog: true,
         gameCreated: false,
+        roomId: this.$route.params.id,
       }
     },
     methods: {
       async createGame(boardSpec) {
         try {
-          const response = await axios.post('/rooms/1/minesweeper', {
+          const response = await axios.post(`/rooms/${this.roomId}/minesweeper`, {
             columns: boardSpec.columns,
             rows: boardSpec.rows,
             mines: boardSpec.mines
