@@ -148,10 +148,10 @@ class YutnoriGameTest extends YutnoriBaseTest {
         yutnoriGame.initialize(Arrays.asList(user1, user2));
 
         yutnoriGame.throwYut(user1, () -> Yut.DO);
-        yutnoriGame.move(user1, PointName.STANDBY, Yut.DO);
+        yutnoriGame.move(user1, PointName.STANDBY, Yut.DO);   // user2의 말을 잡음
 
         assertDoesNotThrow(() -> yutnoriGame.throwYut(user1, () -> Yut.GAE));
-        assertDoesNotThrow(() -> yutnoriGame.move(user1, PointName.GAE, Yut.GAE));
+        assertDoesNotThrow(() -> yutnoriGame.move(user1, PointName.DO, Yut.GAE));
     }
 
     @Test

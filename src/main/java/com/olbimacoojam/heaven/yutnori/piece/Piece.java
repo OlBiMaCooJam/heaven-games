@@ -54,4 +54,8 @@ public class Piece {
     public boolean isComplete() {
         return Points.isCompleted(this.point);
     }
+
+    public boolean isPlaying() {
+        return !point.isName(PointName.COMPLETE);
+    }
 }
