@@ -22,20 +22,20 @@ public class DrawService {
         this.userService = userService;
     }
 
-    public DrawResponse updateGame(long userId, long roomId, DrawCreateRequest drawCreateRequest) {
+    public DrawResponse updateGame(long userId, int roomId, DrawCreateRequest drawCreateRequest) {
         Draw draw = getDraw(userId, roomId);
         draw.startGame(drawCreateRequest.getPersonCount(), drawCreateRequest.getWhackCount());
 
         return new DrawResponse(draw.getLots());
     }
 
-    public DrawResponse initGame(long userId, long roomId) {
+    public DrawResponse initGame(long userId, int roomId) {
         Draw draw = getDraw(userId, roomId);
 
         return new DrawResponse(draw.getLots());
     }
 
-    private Draw getDraw(long userId, long roomId) {
+    private Draw getDraw(long userId, int roomId) {
         Room room = roomService.findById(roomId);
         Draw draw = (Draw) room.getGame();
         User user = userService.findById(userId);

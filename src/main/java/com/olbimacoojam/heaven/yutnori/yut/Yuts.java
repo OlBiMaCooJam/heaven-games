@@ -3,10 +3,13 @@ package com.olbimacoojam.heaven.yutnori.yut;
 import lombok.EqualsAndHashCode;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @EqualsAndHashCode
 public class Yuts {
+
     private final List<Yut> yuts;
 
     public Yuts() {
@@ -26,19 +29,29 @@ public class Yuts {
         return lastYut.equals(Yut.YUT) || lastYut.equals(Yut.MO);
     }
 
-    public void add(Yut yut) {
+    public Yuts add(Yut yut) {
+        List<Yut> yuts = this.yuts.stream()
+                .collect(Collectors.toList());
         yuts.add(yut);
+        return new Yuts(yuts);
     }
 
-    public boolean contains(Yut yut) {
-        return yuts.contains(yut);
+    public boolean notHave(Yut yut) {
+        return !yuts.contains(yut);
     }
 
-    public boolean remove(Yut yut) {
-        return yuts.remove(yut);
+    public Yuts remove(Yut yut) {
+        List<Yut> yuts = this.yuts.stream()
+                .collect(Collectors.toList());
+        yuts.remove(yut);
+        return new Yuts(yuts);
     }
 
     public boolean isRemaining() {
         return !yuts.isEmpty();
+    }
+
+    public List<Yut> getYuts() {
+        return Collections.unmodifiableList(yuts);
     }
 }

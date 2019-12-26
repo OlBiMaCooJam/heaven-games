@@ -8,6 +8,7 @@ import lombok.Getter;
 @EqualsAndHashCode
 @Getter
 public class CenterPoint implements Point {
+
     private final PointName pointName;
     private Point leftNextPoint;
     private Point rightNextPoint;

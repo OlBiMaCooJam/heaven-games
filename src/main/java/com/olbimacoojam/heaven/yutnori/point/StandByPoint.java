@@ -6,6 +6,7 @@ import lombok.Getter;
 
 @Getter
 public class StandByPoint implements Point {
+
     private final PointName pointName;
     private Point nextPoint;
 

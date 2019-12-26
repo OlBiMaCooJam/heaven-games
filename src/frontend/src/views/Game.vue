@@ -5,11 +5,9 @@
           <Player v-for='player in players' :key="player.name" :player="player"></Player>
       </v-list>
       <v-row align="center" justify="end" class="ma-5">
-          <router-link :to="'/' + gameTitle + '/rooms/' + roomId + '/start'">
               <v-btn icon @click="start">
                   게임 시작
               </v-btn>
-          </router-link>
       </v-row>
   </v-container>
 </template>
@@ -24,7 +22,7 @@
     name: "Game",
         components: {Player},
         props: {
-            gameTitle: String,
+            gameKind: String,
         },
         data() {
       return {
@@ -58,8 +56,15 @@
             join = false;
           }
         });
-        game.client.subscribe('/topic/rooms/' + game.roomId + '/start', function(){
-            router.push('/' + game.gameTitle + '/rooms/' + game.roomId);
+        game.client.subscribe('/topic/rooms/' + game.roomId + '/start', function(response){
+            const gameStartResponseDto = JSON.parse(response.body);
+
+            if (gameStartResponseDto.isGameStart) {
+                router.push('/' + gameStartResponseDto.gameKind + '/' + game.roomId);
+            }
+            else {
+                alert("게임 시작 불가")
+            }
         });
       });
     },

@@ -1,6 +1,6 @@
 <template>
     <v-container class="pa-0">
-        <router-link :to="'/' + gameTitle + '/rooms/' + room.id" :gameTitle="gameTitle">
+        <router-link :to="{name: 'game', params: {id:room.id, gameKind: gameKind}}">
             <v-list-item class="room">
                 <v-list-item-avatar class="game-logo">
                     <v-img :src="gameLogo"/>
@@ -28,7 +28,7 @@
                 players: Array
             },
             gameLogo: String,
-            gameTitle: String,
+            gameKind: String,
         }
     };
 </script>

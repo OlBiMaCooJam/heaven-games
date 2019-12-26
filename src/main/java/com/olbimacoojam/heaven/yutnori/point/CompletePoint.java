@@ -7,6 +7,7 @@ import lombok.Getter;
 
 @Getter
 public class CompletePoint implements Point {
+
     private final PointName pointName;
 
     CompletePoint(PointName pointName) {

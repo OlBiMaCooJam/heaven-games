@@ -1,11 +1,14 @@
-package com.olbimacoojam.heaven.yutnori;
+package com.olbimacoojam.heaven.yutnori.participant;
 
 import com.olbimacoojam.heaven.domain.User;
+import com.olbimacoojam.heaven.yutnori.Color;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.ToString;
 
 @Getter
 @EqualsAndHashCode
+@ToString
 public class YutnoriParticipant {
 
     private final User participant;
@@ -16,8 +19,8 @@ public class YutnoriParticipant {
         this.color = color;
     }
 
-    public boolean isRightThrower(User thrower) {
-        return participant.equals(thrower);
+    public boolean is(User user) {
+        return participant.equals(user);
     }
 
     public String getName() {
@@ -28,11 +31,11 @@ public class YutnoriParticipant {
         return this.color.equals(color);
     }
 
-    @Override
-    public String toString() {
-        return "YutnoriParticipant{" +
-                "participant=" + participant +
-                ", color=" + color +
-                '}';
+    public Long getId() {
+        return participant.getId();
+    }
+
+    public String getColorName() {
+        return this.color.name();
     }
 }

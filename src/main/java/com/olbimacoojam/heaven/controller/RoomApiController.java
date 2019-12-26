@@ -1,13 +1,11 @@
 package com.olbimacoojam.heaven.controller;
 
 import com.olbimacoojam.heaven.dto.RoomResponseDto;
+import com.olbimacoojam.heaven.game.GameKind2;
 import com.olbimacoojam.heaven.service.RoomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.List;
@@ -15,6 +13,7 @@ import java.util.List;
 @RequestMapping("/rooms")
 @RestController
 public class RoomApiController {
+
     private final RoomService roomService;
 
     @Autowired
@@ -23,13 +22,13 @@ public class RoomApiController {
     }
 
     @PostMapping
-    public ResponseEntity save() {
-        RoomResponseDto roomResponseDto = roomService.createRoom();
-        return ResponseEntity.created(URI.create("rooms/" + roomResponseDto.getId())).build();
+    public ResponseEntity save(@RequestParam("gameKind") GameKind2 gameKind) {
+        RoomResponseDto roomResponseDto = roomService.createRoom(gameKind);
+        return ResponseEntity.created(URI.create("/rooms/" + roomResponseDto.getId())).build();
     }
 
     @GetMapping
-    public List<RoomResponseDto> list() {
-        return roomService.findAll();
+    public List<RoomResponseDto> listByGame(@RequestParam("gameKind") GameKind2 gameKind) {
+        return roomService.findByGameKind(gameKind);
     }
 }
