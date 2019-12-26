@@ -2,6 +2,9 @@ package com.olbimacoojam.heaven.yutnori.yut;
 
 import com.olbimacoojam.heaven.yutnori.piece.moveresult.Route;
 
+import java.util.Arrays;
+import java.util.List;
+
 public enum Yut {
 
     DO(1),
@@ -19,6 +22,10 @@ public enum Yut {
 
     public static Yut get(String pointName) {
         return valueOf(pointName);
+    }
+
+    public static List<Yut> getProbableYuts() {
+        return Arrays.asList(DO, DO, DO, DO, GAE, GAE, GAE, GAE, GAE, GAE, GUL, GUL, GUL, GUL, YUT, MO, BACKDO);
     }
 
     public boolean isBackDo() {
