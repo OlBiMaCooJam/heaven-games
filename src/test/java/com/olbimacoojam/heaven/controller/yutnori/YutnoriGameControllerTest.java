@@ -7,6 +7,8 @@ import com.olbimacoojam.heaven.yutnori.point.PointName;
 import com.olbimacoojam.heaven.yutnori.yut.Yut;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -42,6 +44,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @AutoConfigureWebTestClient
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class YutnoriGameControllerTest {
+    private static final Logger log = LoggerFactory.getLogger(YutnoriGameControllerTest.class);
 
     private static final String JSESSIONID = "JSESSIONID";
     private static final String ROOMS_URL = "/rooms";
@@ -107,16 +110,16 @@ class YutnoriGameControllerTest {
         Thread.sleep(2000);
     }
 
-//    @Test
-//    @DisplayName("말 움직이기 Test Twice")
-//    void move_piece2() throws InterruptedException, ExecutionException, TimeoutException {
-//        int roomId = startGame(5L, 6L);
-//        throwYut(roomId, 1);
-//        movePiece(roomId, 1);
-//        throwYut(roomId, 2);
-//        movePiece(roomId, 2);
-//        Thread.sleep(2000);
-//    }
+    @Test
+    @DisplayName("말 두번 움직이기 Test")
+    void move_piece2() throws InterruptedException, ExecutionException, TimeoutException {
+        int roomId = startGame(5L, 6L);
+        throwYut(roomId, 1);
+        movePiece(roomId, 1);
+        throwYut(roomId, 2);
+        movePiece(roomId, 2);
+        Thread.sleep(2000);
+    }
 
     private int startGame(Long userId1, Long userId2) throws InterruptedException, ExecutionException, TimeoutException {
         //두 명의 클라이언트 로그인
@@ -158,23 +161,23 @@ class YutnoriGameControllerTest {
     private void throwYut(int roomId, int turn) throws InterruptedException, ExecutionException, TimeoutException {
         CompletableFuture<YutResponse> completableFutureForFirstClientYutResponse = new CompletableFuture<>();
         CompletableFuture<YutResponse> completableFutureForSecondClientYutResponse = new CompletableFuture<>();
-        firstClient.getStompSession().subscribe("/topic/yutnori/" + roomId + "/yut-throw", getStompFrameHandlerYutResponse(completableFutureForFirstClientYutResponse));
-        secondClient.getStompSession().subscribe("/topic/yutnori" + roomId + "/yut-throw", getStompFrameHandlerYutResponse(completableFutureForSecondClientYutResponse));
+        firstClient.getStompSession().subscribe("/topic/yutnori/" + roomId + "/yut-throw", getStompFrameHandlerYutResponse(completableFutureForFirstClientYutResponse, turn));
+        secondClient.getStompSession().subscribe("/topic/yutnori" + roomId + "/yut-throw", getStompFrameHandlerYutResponse(completableFutureForSecondClientYutResponse, turn));
 
         YutResponse yutResponse;
         if (turn == 1) {
-            System.out.println("first turn");
+            System.out.println("=================>first turn");
             firstClient.getStompSession().send("/app/yutnori/" + roomId + "/yut-throw", null);
-
+            log.info("{} is sent", turn);
             yutResponse = completableFutureForFirstClientYutResponse.get(100, SECONDS);
             assertThat(Yut.values()).contains(yutResponse.getYut());
         }
 
         if (turn == 2) {
-            System.out.println("second turn");
+            System.out.println("=================>second turn");
             secondClient.getStompSession().send("/app/yutnori/" + roomId + "/yut-throw", null);
-
-            yutResponse = completableFutureForSecondClientYutResponse.get(100, SECONDS);
+            log.info("{} is sent", turn);
+            yutResponse = completableFutureForFirstClientYutResponse.get(100, SECONDS);
             assertThat(Yut.values()).contains(yutResponse.getYut());
         }
     }
@@ -187,17 +190,20 @@ class YutnoriGameControllerTest {
         secondClient.getStompSession().subscribe("/topic/yutnori/" + roomId + "/playing", getStompFramHandlerMoveResults(completableFutureForSecondClientMoveResults));
 
         MoveRequestDto moveRequestDto = new MoveRequestDto(PointName.STANDBY, Yut.DO);
+        MoveResponse moveResponse;
         if (turn == 1) {
             firstClient.getStompSession().send("/app/yutnori/" + roomId + "/move-piece", moveRequestDto);
-            MoveResponse moveResponse = completableFutureForFirstClientMoveResults.get(1, SECONDS);
-            System.out.println(moveResponse);
+            moveResponse = completableFutureForFirstClientMoveResults.get(1, SECONDS);
+            log.info("{}th {}", turn, moveResponse);
             assertThat(moveResponse.getFinish()).isFalse();
         }
         if (turn == 2) {
             secondClient.getStompSession().send("/app/yutnori/" + roomId + "/move-piece", moveRequestDto);
-            MoveResponse moveResponse = completableFutureForSecondClientMoveResults.get(1, SECONDS);
-            System.out.println(moveResponse);
+            moveResponse = completableFutureForFirstClientMoveResults.get(1, SECONDS);
+            log.info("{}th {}", turn, moveResponse);
+            assertThat(moveResponse.getMoveResultsDto().getMoveResults().size()).isEqualTo(2);
         }
+
     }
 
     private StompFrameHandler getStompFramHandlerMoveResults(CompletableFuture<MoveResponse> completableFutureForFirstClientMoveResults) {
@@ -214,7 +220,7 @@ class YutnoriGameControllerTest {
         };
     }
 
-    private StompFrameHandler getStompFrameHandlerYutResponse(CompletableFuture<YutResponse> completableFutureForFirstClientYutResponse) {
+    private StompFrameHandler getStompFrameHandlerYutResponse(CompletableFuture<YutResponse> completableFutureForFirstClientYutResponse, int turn) {
         return new StompFrameHandler() {
             @Override
             public Type getPayloadType(StompHeaders headers) {
@@ -224,6 +230,7 @@ class YutnoriGameControllerTest {
             @Override
             public void handleFrame(StompHeaders headers, Object payload) {
                 completableFutureForFirstClientYutResponse.complete((YutResponse) payload);
+                log.info("this is the {}th yutResponse = {}",turn, payload);
             }
         };
     }
