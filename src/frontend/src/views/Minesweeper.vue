@@ -47,7 +47,11 @@
         for (let i = 0; i < boardSpec.rows; i++) {
           this.blocks.push([]);
           for (let j = 0; j < boardSpec.columns; j++) {
-            this.blocks[i].push('');
+            const block = {
+              iconName: 'UNCLICKED',
+              numberOfAroundMines: 0
+            };
+            this.blocks[i].push(block);
           }
         }
       },

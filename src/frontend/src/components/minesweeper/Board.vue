@@ -4,16 +4,7 @@
       <v-row no-gutters :key="y" justify="center">
         <template v-for="x in blocks[0].length">
           <v-col :key="x" style="flex-grow: 0">
-            <v-btn
-                class="pa-0 ma-0"
-                style="height: 64px; background-color: lightgoldenrodyellow; border: 1px solid #E7B547"
-                outlined
-                tile
-                @click.left="clickBlock(x-1, y-1, clickLeft)"
-                @click.right="clickBlock(x-1, y-1, clickRight, $event)"
-            >
-              <v-icon>{{blocks[y-1][x-1]}}</v-icon>
-            </v-btn>
+            <Block @clickBlock="clickBlock" :x="x" :y="y" :block="blocks[y-1][x-1]"></Block>
           </v-col>
         </template>
       </v-row>
@@ -23,35 +14,33 @@
 
 <script>
   import axios from 'axios';
+  import Block from "./Block";
 
   export default {
     name: "Board",
+    components: {
+      Block
+    },
     props: {
       boardBlocks: Array,
     },
     data() {
       return {
         blocks: this.boardBlocks,
-        icons: {
-          UNCLICKED: '',
-          MINE: 'mdi-mine',
-          FLAG: 'mdi-flag-variant',
-          QUESTION_MARK: 'mdi-map-marker-question-outline',
-          CLICKED: ['mdi-numeric-0', 'mdi-numeric-1', 'mdi-numeric-2',
-            'mdi-numeric-3', 'mdi-numeric-4', 'mdi-numeric-5',
-            'mdi-numeric-6', 'mdi-numeric-7', 'mdi-numeric-8']
-        },
         minesweeperStatus: '',
       }
     },
     methods: {
-
-      clickBlock(x, y, clickCallback, event) {
+      clickBlock(x, y, clickType) {
         if (this.checkGameOver()) {
           return;
         }
 
-        clickCallback(x, y, event);
+        if ('LEFT' === clickType) {
+          this.clickLeft(x, y);
+          return;
+        }
+        this.clickRight(x, y);
       },
       async clickLeft(x, y) {
         const clickResponse = await this.click(x, y, "LEFT");
@@ -65,23 +54,19 @@
 
         this.checkGameOver();
       },
-      async clickRight(x, y, event) {
-        event.preventDefault();
+      async clickRight(x, y) {
         const clickResponse = await this.click(x, y, "RIGHT");
         const clickedBlocks = clickResponse.clickedBlocks;
         this.blocks = this.changeStatus(x, y, clickedBlocks[0].blockStatus, clickedBlocks[0].numberOfAroundMines);
       },
       changeStatus(x, y, blockStatus, numberOfAroundMines) {
-        const nextStatus = this.getNextStatus(blockStatus, numberOfAroundMines);
+        const nextStatus = {
+          iconName: blockStatus,
+          numberOfAroundMines: numberOfAroundMines
+        };
         let newBoard = [...this.blocks];
         newBoard[y].splice(x, 1, nextStatus);
         return newBoard;
-      },
-      getNextStatus(status, numberOfAroundMines) {
-        if (status === "CLICKED") {
-          return this.icons.CLICKED[numberOfAroundMines];
-        }
-        return this.icons[status]
       },
       async click(x, y, clickType) {
         try {
