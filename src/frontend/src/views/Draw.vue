@@ -59,9 +59,10 @@
                     </v-card-text>
                 </v-card>
                 <v-btn @click="update">섞기</v-btn>
+                <v-btn @click="refresh">다시하기</v-btn>
             </v-col>
             <v-col cols="8">
-                <v-row align='center' justify='center'>
+                <v-row align='center' justify='center' v-if="renderComponent">
                     <Lot :lot=lot :count="count" :key="count.id" v-for='count in personCount'/>
                 </v-row>
             </v-col>
@@ -85,6 +86,7 @@
                 maxWhack: 10,
                 minWhack: 1,
                 dialog: false,
+                renderComponent: true,
             };
         },
         methods: {
@@ -112,6 +114,13 @@
                     alert(e);
                 }
             },
+            refresh() {
+                this.renderComponent = false;
+
+                this.$nextTick(() => {
+                    this.renderComponent = true;
+                });
+            }
         },
         async created() {
             try {
