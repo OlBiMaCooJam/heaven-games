@@ -1,5 +1,5 @@
 <template>
-  <router-link :to="{name: 'rooms', params: {gameKind:game.gameKind}}">
+  <router-link :to="{name:'rooms', params:{gameKind: game.gameKind}}">
       <v-card
         class="mx-auto ma-3"
         max-width="400"
@@ -10,7 +10,7 @@
           class="white--text align-end"
           height="400px"
       >
-        <v-card-title>{{game.title}}</v-card-title>
+          <v-card-title class="yellow black--text">{{game.title}}</v-card-title>
       </v-img>
     </v-card>
   </router-link>

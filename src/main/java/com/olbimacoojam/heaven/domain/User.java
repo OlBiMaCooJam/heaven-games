@@ -17,10 +17,6 @@ import java.util.Objects;
 @ToString
 @NoArgsConstructor
 public class User extends BaseEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
     @Column(unique = true)
     private Long kakaoId;
 
@@ -29,13 +25,6 @@ public class User extends BaseEntity {
 
     @Column
     private String refreshToken;
-
-    public User(Long id, Long kakaoId, String name, String refreshToken) {
-        this.id = id;
-        this.kakaoId = kakaoId;
-        this.name = name;
-        this.refreshToken = refreshToken;
-    }
 
     public User(Long kakaoId, String name, String refreshToken) {
         this.kakaoId = kakaoId;

@@ -18,8 +18,8 @@ public class Room {
     private static final Logger log = LoggerFactory.getLogger(Room.class);
 
     private final int id;
+    private final List<User> players;
     private final Game game;
-    private List<User> players;
 
     public Room(int id, Game game) {
         this.players = new CopyOnWriteArrayList<>();

@@ -3,7 +3,7 @@
         <v-card width="800" style="margin: 0 auto">
             <v-toolbar color="#4682B4" dark>
                 <v-row align="center" justify="start" class="ma-3">
-                    <v-btn v-on:click="refresh" icon>
+                    <v-btn @click="refresh" icon>
                         <v-icon>mdi-refresh</v-icon>
                     </v-btn>
                 </v-row>
@@ -52,9 +52,13 @@
                 params.append('gameKind', this.gameKind)
 
                 axios.post('/rooms', params)
-                    .then(response => {
-                        window.console.log("new room : " + response.data)
+                    .then((response) => {
+                        return response.headers;
                     })
+                    .then((headers) => {
+                        const url = headers.location;
+                        this.$router.push(url);
+                    });
             },
             refresh() {
                 axios.get('/rooms', {
