@@ -14,22 +14,22 @@ class RoomRepositoryTests {
     @Test
     void save_test() {
         RoomRepository roomRepository = new RoomRepository();
-        assertDoesNotThrow(() -> roomRepository.save(new Room(1, createGame())));
+        assertDoesNotThrow(() -> roomRepository.save(new Room(1L, createGame())));
     }
 
     @Test
     void fail_save_test() {
         RoomRepository roomRepository = new RoomRepository();
-        roomRepository.save(new Room(1, createGame()));
-        assertThrows(RoomSaveFailException.class, () -> roomRepository.save(new Room(1, createGame())));
+        roomRepository.save(new Room(1L, createGame()));
+        assertThrows(RoomSaveFailException.class, () -> roomRepository.save(new Room(1L, createGame())));
     }
 
     @Test
     void list_test() {
         RoomRepository roomRepository = new RoomRepository();
-        roomRepository.save(new Room(1, createGame()));
-        roomRepository.save(new Room(2, createGame()));
-        roomRepository.save(new Room(3, createGame()));
+        roomRepository.save(new Room(1L, createGame()));
+        roomRepository.save(new Room(2L, createGame()));
+        roomRepository.save(new Room(3L, createGame()));
 
         assertThat(roomRepository.findAll().size()).isEqualTo(3);
     }

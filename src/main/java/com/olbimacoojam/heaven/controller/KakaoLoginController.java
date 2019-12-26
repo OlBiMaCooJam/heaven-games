@@ -3,6 +3,8 @@ package com.olbimacoojam.heaven.controller;
 import com.olbimacoojam.heaven.domain.User;
 import com.olbimacoojam.heaven.domain.UserSession;
 import com.olbimacoojam.heaven.service.KakaoApiService;
+import com.olbimacoojam.heaven.service.TokenInfo;
+import com.olbimacoojam.heaven.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
@@ -19,9 +21,12 @@ import javax.servlet.http.HttpSession;
 public class KakaoLoginController {
     private static final Logger LOGGER = LoggerFactory.getLogger(KakaoLoginController.class);
 
+    private final UserService userService;
     private final KakaoApiService kakaoApiService;
 
-    public KakaoLoginController(final KakaoApiService kakaoApiService) {
+    public KakaoLoginController(UserService userService, KakaoApiService kakaoApiService) {
+        LOGGER.info("kakaologin");
+        this.userService = userService;
         this.kakaoApiService = kakaoApiService;
     }
 
@@ -39,13 +44,13 @@ public class KakaoLoginController {
     public ResponseEntity oauth(HttpSession httpSession, @RequestParam("code") String code) {
         LOGGER.info("code: {}", code);
 
-        String accessToken = kakaoApiService.getAccessToken(code);
-        LOGGER.info("accessToken: {}", accessToken);
+        TokenInfo tokenInfo = kakaoApiService.getTokenInfo(code);
+        LOGGER.info("tokenInfo: {}", tokenInfo);
 
-        String refreshToken = kakaoApiService.getRefreshToken(code);
-        LOGGER.info("refreshToken: {}", refreshToken);
+        String accessToken = tokenInfo.getAccess_token();
+        String refreshToken = tokenInfo.getRefresh_token();
 
-        User user = kakaoApiService.getUser(accessToken, refreshToken);
+        User user = userService.save(kakaoApiService.getUser(accessToken, refreshToken));
         LOGGER.info("user: {}", user);
 
         UserSession userSession = new UserSession(user.getId(), user.getName(), accessToken);
@@ -54,5 +59,26 @@ public class KakaoLoginController {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Location", "/");
         return new ResponseEntity<String>(headers, HttpStatus.FOUND);
+    }
+
+    @GetMapping("/logout")
+    public ResponseEntity logout(HttpSession httpSession) {
+        httpSession.removeAttribute(UserSession.USER_SESSION);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Location", "/");
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/signout")
+    public ResponseEntity signout(HttpSession httpSession) {
+        UserSession userSession = (UserSession) httpSession.getAttribute(UserSession.USER_SESSION);
+        userService.deleteById(userSession.getId());
+
+        httpSession.removeAttribute(UserSession.USER_SESSION);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Location", "/");
+        return ResponseEntity.ok().build();
     }
 }

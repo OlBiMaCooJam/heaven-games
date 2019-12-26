@@ -38,4 +38,11 @@ public class MafiaGame implements Game {
     public List<MafiaParticipant> getMafiaParticipants() {
         return mafiaParticipants;
     }
+
+    public MafiaParticipant findMafiaParticipantByUserId(Long userId) {
+        return mafiaParticipants.stream()
+                .filter(mafiaParticipant -> mafiaParticipant.getPlayer().getId().equals(userId))
+                .findFirst()
+                .orElseThrow(IllegalArgumentException::new);
+    }
 }

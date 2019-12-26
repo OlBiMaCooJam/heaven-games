@@ -12,8 +12,6 @@ import org.springframework.web.reactive.function.client.WebClient;
 @Service
 public class KakaoApiService {
     private static final Logger LOGGER = LoggerFactory.getLogger(KakaoApiService.class);
-    private static final String ACCESS_TOKEN = "access_token";
-    private static final String REFRESH_TOKEN = "refresh_token";
 
     private final KakaoConfig kakaoConfig;
 
@@ -32,16 +30,8 @@ public class KakaoApiService {
         return sb.toString();
     }
 
-    public String getAccessToken(String code) {
-        return getToken(code, ACCESS_TOKEN);
-    }
-
-    public String getRefreshToken(String code) {
-        return getToken(code, REFRESH_TOKEN);
-    }
-
-    private String getToken(String code, String tokenType) {
-        String body = WebClient.create(kakaoConfig.getAuth().get("host"))
+    public TokenInfo getTokenInfo(String code) {
+        TokenInfo tokenInfo = WebClient.create(kakaoConfig.getAuth().get("host"))
                 .post()
                 .uri(uriBuilder -> uriBuilder
                         .path(kakaoConfig.getAuth().get("tokenPath"))
@@ -50,12 +40,12 @@ public class KakaoApiService {
                         .queryParam("redirect_uri", kakaoConfig.getAuth().get("redirectUri"))
                         .queryParam("code", code).build())
                 .retrieve()
-                .bodyToMono(String.class)
+                .bodyToMono(TokenInfo.class)
                 .block();
 
-        LOGGER.info(body);
+        LOGGER.info("tokenInfo: {}", tokenInfo);
 
-        return new JsonParser().parse(body).getAsJsonObject().get(tokenType).getAsString();
+        return tokenInfo;
     }
 
     public User getUser(String accessToken, String refreshToken) {

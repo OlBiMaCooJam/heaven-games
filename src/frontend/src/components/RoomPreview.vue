@@ -1,7 +1,6 @@
 <template>
     <v-container class="pa-0">
-        <router-link :to="'/rooms/' + room.id + '/yutnori'">
-<!--        <router-link :to="'/rooms/' + room.id">-->
+        <router-link :to="'/' + gameTitle + '/rooms/' + room.id" :gameTitle="gameTitle">
             <v-list-item class="room">
                 <v-list-item-avatar class="game-logo">
                     <v-img :src="gameLogo"/>
@@ -28,7 +27,8 @@
                 title: String,
                 players: Array
             },
-            gameLogo: String
+            gameLogo: String,
+            gameTitle: String,
         }
     };
 </script>
