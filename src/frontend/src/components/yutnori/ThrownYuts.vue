@@ -1,6 +1,7 @@
 <template>
     <div class="thrown-yuts">
-        <p :key="index" @click="chooseYut" v-for='(yut, index) in yuts'>{{yut}}</p>
+        <p :key="index" v-for='(yut, index) in yuts'
+           :style="{color: fontColor(index, chooseYutIndex)}" @click="chooseYut(yut, index)">{{yut}}</p>
     </div>
 </template>
 
@@ -8,11 +9,25 @@
     export default {
         name: 'ThrownYuts',
         props: {
-            yuts: Array
+            yuts: Array,
+            turn: Object,
+            chooseYutIndex: Number
+        },
+        computed: {
+            fontColor() {
+                return (index, selectedYutIndex) => {
+                    return selectedYutIndex == index ? "red" : "#2c3e50"
+                }
+            }
         },
         methods: {
-            chooseYut(event) {
-                this.$emit('chooseYut', event.target.innerText);
+            chooseYut(yut, index) {
+                if (this.canClick()) {
+                    this.$emit('chooseYut', yut, index, this.canClick());
+                }
+            },
+            canClick() {
+                return !this.turn.canThrow;
             }
         }
     }

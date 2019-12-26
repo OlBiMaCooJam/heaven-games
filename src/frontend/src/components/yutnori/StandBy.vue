@@ -12,16 +12,16 @@
         name: 'StandBy',
         components: {Piece},
         data() {
-          return {
-              name: 'STANDBY'
-          }
+            return {
+                name: 'STANDBY'
+            }
         },
         computed: {
-          isSelected() {
-              const STANDBY = this;
-              return (index) => {
-                  return index == 1 && STANDBY.selected;
-              }
+            isSelected() {
+                const STANDBY = this;
+                return (index) => {
+                    return index == 1 && STANDBY.selected && STANDBY.checkTurn();
+                }
             }
         },
         props: {
@@ -34,12 +34,11 @@
             turnColor: String
         },
         methods: {
-            pieceClick() {
-                window.console.log("here2  ++")
-
-                this.$emit('chooseSrcPoint', this.name)
-                window.console.log("here -----")
-
+            pieceClick(canClick) {
+                this.$emit('chooseSrcPoint', this.name, canClick)
+            },
+            checkTurn() {
+                return this.pieceColor == this.turnColor;
             }
         }
     }

@@ -27,9 +27,7 @@
         },
         methods: {
             pieceClick() {
-                if (this.checkTurn) {
-                    this.$emit('pieceClick')
-                }
+                this.$emit('pieceClick', this.checkTurn())
             },
             checkTurn() {
                 return this.turnColor == this.color;

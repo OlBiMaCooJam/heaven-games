@@ -29,8 +29,8 @@
           }
         },
         methods: {
-            chooseSrcPoint(pointName) {
-                this.$emit('chooseSrcPoint', pointName)
+            chooseSrcPoint(pointName, canClick) {
+                this.$emit('chooseSrcPoint', pointName, canClick)
             }
         }
     }

@@ -2,13 +2,15 @@
     <v-container>
         <div class="board-con">
             <YutnoriUser v-for='[key, val] in yutnoriUsers' :color="key" :key="key"
-                         :name="val.name" :standby="val.standby" :selectedPoint="moveRequest.sourcePoint"
+                         :name="val.name" :standby="val.standby" :selectedPoint="sourcePoint"
                          :turnColor="turnColor" @chooseSrcPoint="chooseSrcPoint"></YutnoriUser>
         </div>
         <div class="board-con right-margin-100">
-            <Board :turnColor="turnColor" :pieces="pieces" @chooseSrcPoint="chooseSrcPoint" :selectedPoint="moveRequest.sourcePoint"></Board>
-            <YutThrow :yut="yut" @throwYut="throwYut" :disabled="!turn.canThrow"></YutThrow>
-            <ThrownYuts :yuts="turn.thrownYuts.yuts" @chooseYut="chooseYut"></ThrownYuts>
+            <Board :turnColor="turnColor" :pieces="pieces" @chooseSrcPoint="chooseSrcPoint"
+                   :selectedPoint="sourcePoint"></Board>
+            <YutThrow :yut="recentYut" @throwYut="throwYut" :disabled="!turn.canThrow"></YutThrow>
+            <ThrownYuts :yuts="turn.thrownYuts.yuts" @chooseYut="chooseYut" :turn="turn"
+                        :chooseYutIndex="chooseYutIndex"></ThrownYuts>
         </div>
         <v-btn @click="requestMove" color="primary" :disabled="turn.canThrow" large>말 움직이기</v-btn>
         <div class="space"></div>
@@ -31,23 +33,19 @@
                 roomId: this.$route.params.id,
                 stompClient: Object,
                 yutnoriUsers: Map,
-                yut: "",
-
+                recentYut: "",
+                chooseYutIndex: -1,
                 turn: Object,
-                moveRequest: {
-                    sourcePoint: String,
-                    yut: String
-                },
+
+                sourcePoint: String,
 
                 pieces: {} //{pointName, count, color}
             }
         },
         computed: {
-          turnColor() {
-              window.console.log(this.turn)
-              window.console.log("turnColor : " + this.turn.yutnoriParticipant.color)
-              return this.turn.yutnoriParticipant.color
-          }
+            turnColor() {
+                return this.turn.yutnoriParticipant.color
+            }
         },
         created() {
             this.initializeGame();
@@ -57,8 +55,8 @@
                 YUTNORI.stompClient.subscribe("/topic/yutnori/" + YUTNORI.roomId + "/yut-throw", function (response) { //윷 던지기
                     const yutResponse = JSON.parse(response.body)
 
-                    YUTNORI.yut = yutResponse.yut;
-                    YUTNORI.moveRequest.yut = YUTNORI.yut;
+                    YUTNORI.recentYut = yutResponse.yut;
+                    YUTNORI.yut = YUTNORI.recentYut
                     YUTNORI.turn = yutResponse.turnResponse
                 })
 
@@ -69,9 +67,10 @@
                     if (moveResponse.finish) {
                         alert("성공!")
                     }
-                    YUTNORI.yut = "";
-                    YUTNORI.moveRequest.sourcePoint = ""
-                    YUTNORI.moveRequest.yut = ""
+                    YUTNORI.chooseYutIndex = -1;
+                    YUTNORI.recentYut = "";
+                    YUTNORI.sourcePoint = ""
+                    YUTNORI.yut = ""
                     YUTNORI.turn = moveResponse.turnResponse
                 })
             })
@@ -136,17 +135,28 @@
             throwYut() {
                 this.stompClient.send("/app/yutnori/" + this.roomId + "/yut-throw");
             },
-            chooseSrcPoint(pointName) {
-                this.moveRequest.sourcePoint = pointName;
+            chooseSrcPoint(pointName, canClick) {
+                if (canClick) {
+                    this.sourcePoint = pointName;
+                }
             },
-            chooseYut(yut) {
-                this.moveRequest.yut = yut;
+            chooseYut(yut, chooseYutIndex, canChoose) {
+
+                if (canChoose) {
+                    this.chooseYutIndex = chooseYutIndex;
+                    this.yut = yut;
+                }
             },
             requestMove() {
-                if (this.moveRequest.yut == "") alert("윷 선택 하세요")
-                else if (this.moveRequest.sourcePoint == "") alert("말 선택 하세요")
+                if (this.yut == "") alert("윷 선택 하세요")
+                else if (this.sourcePoint == "") alert("말 선택 하세요")
                 else {
-                    this.stompClient.send("/app/yutnori/" + this.roomId + "/move-piece", JSON.stringify(this.moveRequest));
+                    const moveRequest = {
+                        sourcePoint: this.sourcePoint,
+                        yut: this.yut
+                    }
+
+                    this.stompClient.send("/app/yutnori/" + this.roomId + "/move-piece", JSON.stringify(moveRequest));
                 }
             },
             applyMoveResults(moveResultsDto) {
@@ -169,8 +179,7 @@
                     } else {
                         if (!copyPieces.hasOwnProperty(destPoint)) {
                             copyPieces[destPoint] = {
-                                count: 0,
-                                color: ""
+                                count: 0, color: ""
                             };
                         }
                         copyPieces[destPoint].color = color;

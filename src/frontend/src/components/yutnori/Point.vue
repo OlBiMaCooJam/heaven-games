@@ -32,12 +32,8 @@
         },
 
         methods: {
-            pieceClick() {
-                window.console.log("here5")
-
-                this.$emit('chooseSrcPoint', this.name)
-                window.console.log("here6")
-
+            pieceClick(canClick) {
+                this.$emit('chooseSrcPoint', this.name, canClick)
             },
         },
     };
