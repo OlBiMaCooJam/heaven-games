@@ -4,10 +4,8 @@ import com.olbimacoojam.heaven.domain.User;
 import com.olbimacoojam.heaven.game.Game;
 import com.olbimacoojam.heaven.minesweeper.domain.exception.GameOverException;
 import com.olbimacoojam.heaven.minesweeper.domain.exception.InvalidNumberOfUsersException;
-import com.olbimacoojam.heaven.minesweeper.domain.exception.UserNotMatchException;
 import lombok.Getter;
 
-import java.util.Collections;
 import java.util.List;
 
 public class Minesweeper implements Game {
@@ -15,27 +13,21 @@ public class Minesweeper implements Game {
 
     @Getter
     private MinesweeperStatus minesweeperStatus;
-    private final Board board;
-    private final User user;
+    private Board board;
+    private User user;
 
-    private Minesweeper(final User user, final Board board) {
-        this.board = board;
-        this.user = user;
+    public Minesweeper() {
         this.minesweeperStatus = MinesweeperStatus.PLAYING;
-    }
-
-    public static Minesweeper newGame(final User user, final Board board) {
-        return new Minesweeper(user, board);
     }
 
     @Override
     public void initialize(final List<User> players) {
-        checkUser(players);
+        checkNumberOfPlayers(players);
+        this.user = players.get(0);
     }
 
-    private void checkUser(List<User> players) {
-        checkNumberOfPlayers(players);
-        checkSameUser(players);
+    public void registerBoard(Board board) {
+        this.board = board;
     }
 
     private void checkNumberOfPlayers(List<User> players) {
@@ -44,14 +36,7 @@ public class Minesweeper implements Game {
         }
     }
 
-    private void checkSameUser(List<User> players) {
-        if (!players.contains(user)) {
-            throw new UserNotMatchException();
-        }
-    }
-
-    public ClickedBlocks click(User user, Click click) {
-        checkUser(Collections.singletonList(user));
+    public ClickedBlocks click(Click click) {
         checkGameOver();
 
         ClickedBlocks clickedBlocks = clickInternal(click);

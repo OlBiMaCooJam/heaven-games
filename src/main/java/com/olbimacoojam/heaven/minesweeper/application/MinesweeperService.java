@@ -1,30 +1,29 @@
 package com.olbimacoojam.heaven.minesweeper.application;
 
-import com.olbimacoojam.heaven.domain.User;
 import com.olbimacoojam.heaven.minesweeper.domain.*;
 import com.olbimacoojam.heaven.service.RoomService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class MinesweeperService {
     private final RoomService roomService;
 
-    public Minesweeper createGame(final List<User> players, final User user, final MinesweeperCreateRequest request) {
+    public Minesweeper startGame(Integer roomId, final MinesweeperCreateRequest request) {
         BoardSpecification boardSpecification = BoardSpecification.of(request.getRows(), request.getColumns(), request.getMines());
         MinePositionGenerator minePositionGenerator = new RandomMinePositionGenerator();
         BoardGenerator boardGenerator = new BoardGenerator(boardSpecification, minePositionGenerator);
 
-        Minesweeper minesweeper = Minesweeper.newGame(user, boardGenerator.generate());
-        minesweeper.initialize(players);
+        Minesweeper minesweeper = (Minesweeper) roomService.findById(roomId).getGame();
+        minesweeper.registerBoard(boardGenerator.generate());
         return minesweeper;
     }
 
-    public ClickResponse click(User user, Integer roomId, Click click, Minesweeper minesweeper) {
-        ClickedBlocks clickedBlocks = minesweeper.click(user, click);
+    public ClickResponse click(Integer roomId, Click click) {
+        Minesweeper minesweeper = (Minesweeper) roomService.findById(roomId).getGame();
+
+        ClickedBlocks clickedBlocks = minesweeper.click(click);
         return new ClickResponse(clickedBlocks, minesweeper.getMinesweeperStatus());
     }
 }

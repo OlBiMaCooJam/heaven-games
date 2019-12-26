@@ -3,6 +3,7 @@ package com.olbimacoojam.heaven.domain;
 import com.olbimacoojam.heaven.game.Game;
 import com.olbimacoojam.heaven.game.GameKind2;
 import com.olbimacoojam.heaven.mafia.MafiaGame;
+import com.olbimacoojam.heaven.minesweeper.domain.Minesweeper;
 import com.olbimacoojam.heaven.yutnori.YutnoriGame;
 import com.olbimacoojam.heaven.yutnori.board.OneOnOneStrategy;
 import org.springframework.stereotype.Component;
@@ -22,7 +23,7 @@ public class RoomFactory {
     {
         gameMap.put(GameKind2.MAFIA, MafiaGame::new);
         gameMap.put(GameKind2.YUTNORI, () -> new YutnoriGame(new OneOnOneStrategy()));
-        gameMap.put(GameKind2.MINE, () -> new YutnoriGame(new OneOnOneStrategy()));
+        gameMap.put(GameKind2.MINE, Minesweeper::new);
     }
 
     public Room makeNextRoom(GameKind2 gameKind) {

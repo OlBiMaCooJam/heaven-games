@@ -3,7 +3,6 @@ package com.olbimacoojam.heaven.minesweeper.domain;
 import com.olbimacoojam.heaven.domain.User;
 import com.olbimacoojam.heaven.minesweeper.domain.exception.GameOverException;
 import com.olbimacoojam.heaven.minesweeper.domain.exception.InvalidNumberOfUsersException;
-import com.olbimacoojam.heaven.minesweeper.domain.exception.UserNotMatchException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -83,23 +82,18 @@ class MinesweeperTest {
     void initializeSameUser() {
         Board board = Board.of(new HashMap<>());
 
-        Minesweeper minesweeper = Minesweeper.newGame(user1, board);
+        Minesweeper minesweeper = new Minesweeper();
+        minesweeper.registerBoard(board);
         assertDoesNotThrow(() -> minesweeper.initialize(Collections.singletonList(user1)));
-    }
-
-    @Test
-    void initializeDifferentUser() {
-        Board board = Board.of(new HashMap<>());
-
-        Minesweeper minesweeper = Minesweeper.newGame(user1, board);
-        assertThrows(UserNotMatchException.class, () -> minesweeper.initialize(Collections.singletonList(user2)));
     }
 
     @Test
     void initializeInvalidUserSize() {
         Board board = Board.of(new HashMap<>());
 
-        Minesweeper minesweeper = Minesweeper.newGame(user1, board);
+        Minesweeper minesweeper = new Minesweeper();
+        minesweeper.initialize(Collections.singletonList(user1));
+        minesweeper.registerBoard(board);
         assertThrows(InvalidNumberOfUsersException.class, () -> minesweeper.initialize(Arrays.asList(user1, user2)));
     }
 
@@ -107,25 +101,27 @@ class MinesweeperTest {
     void clickPropagation() {
         Board board = Board.of(unclickedBlocks);
 
-        Minesweeper minesweeper = Minesweeper.newGame(user1, board);
+        Minesweeper minesweeper = new Minesweeper();
+        minesweeper.registerBoard(board);
 
         ClickedBlocks expected = clickedBlocks.entrySet().stream()
                 .map(entry -> ClickedBlocks.of(entry.getKey(), entry.getValue()))
                 .reduce(ClickedBlocks.newClickedBlocks(), ClickedBlocks::putAll);
 
-        assertThat(minesweeper.click(user1, Click.leftClickOn(Position.of(0, 0)))).isEqualTo(expected);
+        assertThat(minesweeper.click(Click.leftClickOn(Position.of(0, 0)))).isEqualTo(expected);
     }
 
     @Test
     void gameOver() {
         Board board = Board.of(unclickedBlocks);
 
-        Minesweeper minesweeper = Minesweeper.newGame(user1, board);
+        Minesweeper minesweeper = new Minesweeper();
+        minesweeper.registerBoard(board);
         assertThat(minesweeper.getMinesweeperStatus().isGameOver()).isFalse();
 
-        minesweeper.click(user1, Click.leftClickOn(Position.of(2, 2)));
+        minesweeper.click(Click.leftClickOn(Position.of(2, 2)));
         assertThat(minesweeper.getMinesweeperStatus().isGameOver()).isTrue();
 
-        assertThrows(GameOverException.class, () -> minesweeper.click(user1, Click.leftClickOn(Position.of(2, 2))));
+        assertThrows(GameOverException.class, () -> minesweeper.click(Click.leftClickOn(Position.of(2, 2))));
     }
 }
