@@ -7,6 +7,7 @@
 </template>
 
 <script>
+    import {eventBus} from "../main";
 
     export default {
         name: "Timer",
@@ -14,26 +15,42 @@
             window.setInterval(() => {
                 this.now = Math.trunc((new Date()).getTime() / 1000);
             }, 1000);
+            eventBus.$on(`initTime`, () => this.limit = Math.trunc((new Date().getTime() / 1000) + Number(this.date)));
         },
         props: {
             date: Number,
-            roomId: Number,
+            roomId: String,
             client: {},
+            day: Boolean,
+            occupation: String,
+            dialog: Boolean
         },
 
         data() {
             return {
                 now: Math.trunc((new Date()).getTime() / 1000),
-                limit: Math.trunc((new Date().getTime() / 1000) + Number(this.date)),
+                limit: Math.trunc((new Date().getTime() / 1000) + Number(this.date))
             }
         },
 
         computed: {
             seconds() {
                 const time = this.limit - this.now;
-                if (time < 0) {
-                    this.client.send('/app/mafia/' + this.roomId + '/vote');
+                if (this.day) {
+                    window.console.log('낮');
+                    if (time === 0) {
+                        this.client.send('/app/rooms/' + this.roomId + '/vote');
+                    }
+                } else {
+                    window.console.log('밤');
+                    window.console.log(this.dialog);
+                    window.console.log(`time:` + time + `occupation` + this.occupation);
+                    if (time === 0 && this.occupation !== 'SOLDIER' && this.occupation !== 'CITIZEN') {
+                        window.console.log('ㅁㄴㅇ');
+                        this.client.send('/app/rooms/' + this.roomId + '/vote');
+                    }
                 }
+
                 return time > 0 ? time : 0;
             },
         },

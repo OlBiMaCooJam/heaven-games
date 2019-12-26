@@ -87,6 +87,7 @@
                 minWhack: 1,
                 dialog: false,
                 renderComponent: true,
+                roomId: this.$route.params.id
             };
         },
         methods: {
@@ -100,7 +101,7 @@
             },
             async update() {
                 try {
-                    const response = await this.$axios.put('/rooms/0/draw', {
+                    const response = await this.$axios.put(`/rooms/${this.roomId}/draw`, {
                         personCount: this.personCount,
                         whackCount: this.currentWhack,
                     });
@@ -126,7 +127,7 @@
         },
         async created() {
             try {
-                const response = await this.$axios.post('/rooms/0/draw', {
+                const response = await this.$axios.post(`/rooms/${this.roomId}/draw`, {
                     personCount: this.personCount,
                     whackCount: this.currentWhack,
                 });

@@ -38,4 +38,8 @@ public class RoomRepository {
     public Room findById(Integer roomId) {
         return rooms.get(roomId);
     }
+
+    public void remove(Room room) {
+        rooms.remove(room.getId());
+    }
 }

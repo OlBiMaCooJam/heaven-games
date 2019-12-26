@@ -13,9 +13,6 @@
         <router-link to="/login">
           <v-btn text large>로그인</v-btn>
         </router-link>
-        <router-link to="/draw">
-          <v-btn>Draw</v-btn>
-        </router-link>
       </v-col>
     </v-row>
     <router-view/>

@@ -1,5 +1,6 @@
 package com.olbimacoojam.heaven.domain;
 
+import com.olbimacoojam.heaven.draw.domain.Draw;
 import com.olbimacoojam.heaven.game.Game;
 import com.olbimacoojam.heaven.game.GameKind2;
 import com.olbimacoojam.heaven.mafia.MafiaGame;
@@ -24,6 +25,7 @@ public class RoomFactory {
         gameMap.put(GameKind2.MAFIA, MafiaGame::new);
         gameMap.put(GameKind2.YUTNORI, () -> new YutnoriGame(new OneOnOneStrategy()));
         gameMap.put(GameKind2.MINE, Minesweeper::new);
+        gameMap.put(GameKind2.DRAW, Draw::new);
     }
 
     public Room makeNextRoom(GameKind2 gameKind) {

@@ -65,6 +65,10 @@
             alert("게임 시작 불가")
           }
         });
+        game.client.subscribe('/topic/rooms/' + game.roomId + '/leave', function (response) {
+          const roomResponse = JSON.parse(response.body);
+          game.players = roomResponse.players;
+        });
       });
     },
     destroyed() {
