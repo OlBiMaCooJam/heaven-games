@@ -7,6 +7,7 @@ import com.olbimacoojam.heaven.yutnori.piece.Piece;
 import com.olbimacoojam.heaven.yutnori.piece.moveresult.MoveResult;
 import com.olbimacoojam.heaven.yutnori.piece.moveresult.MoveResults;
 import com.olbimacoojam.heaven.yutnori.point.PointName;
+import com.olbimacoojam.heaven.yutnori.turn.exception.IllegalBackDoUseExeption;
 import com.olbimacoojam.heaven.yutnori.turn.exception.MoveImpossibleException;
 import com.olbimacoojam.heaven.yutnori.turn.exception.ThrowImpossibleException;
 import com.olbimacoojam.heaven.yutnori.turn.exception.WrongUserTurnException;
@@ -306,6 +307,6 @@ class YutnoriGameTest extends YutnoriBaseTest {
         yutnoriGame.initialize(Arrays.asList(user1, user2));
 
         yutnoriGame.throwYut(user1, () -> Yut.BACKDO);
-        assertThrows(MoveImpossibleException.class, () -> yutnoriGame.move(user1, PointName.STANDBY, Yut.BACKDO));
+        assertThrows(IllegalBackDoUseExeption.class, () -> yutnoriGame.move(user1, PointName.STANDBY, Yut.BACKDO));
     }
 }
