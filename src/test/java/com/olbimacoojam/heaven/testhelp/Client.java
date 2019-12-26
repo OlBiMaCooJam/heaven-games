@@ -1,7 +1,5 @@
 package com.olbimacoojam.heaven.testhelp;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.simp.stomp.StompFrameHandler;
 import org.springframework.messaging.simp.stomp.StompHeaders;
 import org.springframework.messaging.simp.stomp.StompSession;
@@ -14,8 +12,6 @@ import java.util.concurrent.TimeoutException;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
 
-@Getter
-@RequiredArgsConstructor
 public class Client {
 
     private final Long kakaoId;
@@ -63,5 +59,25 @@ public class Client {
 
     public <T> T getFromCompletableFuture() throws InterruptedException, ExecutionException, TimeoutException {
         return (T) completableFuture.get(10, SECONDS);
+    }
+
+    public Long getKakaoId() {
+        return kakaoId;
+    }
+
+    public StompSession getStompSession() {
+        return stompSession;
+    }
+
+    public WebSocketStompClient getWebSocketStompClient() {
+        return webSocketStompClient;
+    }
+
+    public String getJsessionId() {
+        return jsessionId;
+    }
+
+    public CompletableFuture getCompletableFuture() {
+        return completableFuture;
     }
 }
