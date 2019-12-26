@@ -1,5 +1,23 @@
 <template>
     <v-container class="draw-app" fluid>
+        <v-row justify="center">
+            <v-dialog v-model="dialog" persistent max-width="600">
+                <v-card>
+                    <v-card-title class="headline">섞는 중...</v-card-title>
+                    <v-card-text>
+                        <div>
+                            <v-progress-linear style="width: 550px; height: 30px;"
+                                               indeterminate
+                                               color="yellow darken-2"
+                            ></v-progress-linear>
+                        </div>
+                    </v-card-text>
+                    <v-card-actions>
+                        <v-spacer></v-spacer>
+                    </v-card-actions>
+                </v-card>
+            </v-dialog>
+        </v-row>
         <v-row>
             <v-col cols="4" class="white">
                 <v-card flat color="transparent">
@@ -66,6 +84,7 @@
                 max: 10,
                 maxWhack: 10,
                 minWhack: 1,
+                dialog: false,
             };
         },
         methods: {
@@ -83,6 +102,12 @@
                         whackCount: this.currentWhack,
                     });
                     this.lot = response.data;
+                    const game = this;
+                    this.dialog = true;
+
+                    window.setTimeout(() => {
+                        game.dialog = false
+                    }, 1000)
                 } catch (e) {
                     alert(e);
                 }
