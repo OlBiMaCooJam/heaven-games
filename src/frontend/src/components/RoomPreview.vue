@@ -25,6 +25,7 @@
             room: {
                 id: Number,
                 title: String,
+                players: Array
             },
             gameLogo: String,
             gameTitle: String,

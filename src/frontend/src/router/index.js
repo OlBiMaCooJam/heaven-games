@@ -18,9 +18,19 @@ const routes = [
   {
       path: '/:gameTitle/rooms',
     name: 'RoomList',
-      component: () => import('../views/RoomList.vue'),
+    component: () => import('../views/RoomList.vue')
       props: true,
   },
+  {
+    path: '/rooms/:id/yutnori',
+    name: 'Yutnori',
+    component: () => import('../views/Yutnori.vue')
+  },
+  // {
+  //   path: '/rooms/:id',
+  //   name: 'game',
+  //   component: () => import('../views/Game.vue')
+  // },
   {
     path: '/login',
     name: 'login',

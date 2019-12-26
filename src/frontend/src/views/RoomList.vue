@@ -14,7 +14,7 @@
                     </v-btn>
                 </v-row>
                 <v-row align="center" justify="center">
-                    <v-toolbar-title>게임 {{$route.params.gameId}}</v-toolbar-title>
+                    <v-toolbar-title>게임 {{$route.params.id}}</v-toolbar-title>
                 </v-row>
                 <v-row align="center" justify="end" class="ma-5">
                     <v-btn icon @click="createRoom">
@@ -43,7 +43,7 @@
         data() {
             return {
                 rooms: [],
-                gameLogo: 'https://cdn.vuetifyjs.com/images/lists/3.jpg',
+                gameLogo: require('../assets/Logo.jpg'),
             }
         },
         created() {
