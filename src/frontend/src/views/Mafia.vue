@@ -223,7 +223,7 @@
         font-family: monospace;
         border: groove white;
         overflow: scroll;
-        height: 75%;
+        height: 550px;
         width: 550px;
         background-color: black;
         opacity: 0.7;
