@@ -7,7 +7,7 @@ import com.olbimacoojam.heaven.domain.User;
 import com.olbimacoojam.heaven.dto.GameStartResponseDto;
 import com.olbimacoojam.heaven.dto.RoomResponseDto;
 import com.olbimacoojam.heaven.game.Game;
-import com.olbimacoojam.heaven.game.GameKind;
+import com.olbimacoojam.heaven.game.GameKind2;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,15 +31,16 @@ public class RoomService {
         this.modelMapper = modelMapper;
     }
 
-    public RoomResponseDto createRoom() {
-        Room room = roomFactory.makeNextRoom();
+    public RoomResponseDto createRoom(GameKind2 gameKind) {
+        Room room = roomFactory.makeNextRoom(gameKind);
         roomRepository.save(room);
         return modelMapper.map(room, RoomResponseDto.class);
     }
 
-    public List<RoomResponseDto> findAll() {
+    public List<RoomResponseDto> findByGameKind(GameKind2 gameKind) {
         List<Room> rooms = roomRepository.findAll();
         return rooms.stream()
+                .filter(room -> room.isGameKind2(gameKind))
                 .map(room -> modelMapper.map(room, RoomResponseDto.class))
                 .collect(Collectors.toList());
     }
@@ -76,6 +77,6 @@ public class RoomService {
         Room room = roomRepository.findById(roomId);
         boolean isGameStart = room.startGame();
 
-        return new GameStartResponseDto(isGameStart, room.countPlayers(), room.getGameKind());
+        return new GameStartResponseDto(isGameStart, room.countPlayers(), room.gameKind2());
     }
 }

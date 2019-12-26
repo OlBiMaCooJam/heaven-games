@@ -28,6 +28,7 @@
 <script>
     import RoomPreview from "../components/RoomPreview";
     import axios from "axios";
+    import 'url-search-params-polyfill';
 
     export default {
         components: {RoomPreview},
@@ -42,21 +43,25 @@
         },
 
         created() {
-            axios.get('/rooms')
-                .then(response => {
-                    this.rooms = response.data;
-                })
+            this.refresh();
         },
 
         methods: {
             createRoom() {
-                axios.post('/rooms')
+                let params = new URLSearchParams();
+                params.append('gameKind', this.gameKind)
+
+                axios.post('/rooms', params)
                     .then(response => {
                         window.console.log("new room : " + response.data)
                     })
             },
             refresh() {
-                axios.get('/rooms')
+                axios.get('/rooms', {
+                    params: {
+                        gameKind: this.gameKind
+                    }
+                })
                     .then(response => {
                         this.rooms = response.data;
                     })

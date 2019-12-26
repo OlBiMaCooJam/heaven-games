@@ -20,9 +20,9 @@
     },
     data() {
       return {
-        games: [{title: '마피아게임', src: 'https://cdn.vuetifyjs.com/images/cards/docks.jpg', id: '1', gameKind: 'mafia'},
-          {title: '윷놀이', src: 'https://cdn.vuetifyjs.com/images/cards/docks.jpg', id: '2', gameKind: 'yutnori'},
-          {title: '지뢰찾기', src: 'https://cdn.vuetifyjs.com/images/cards/docks.jpg', id: '3', gameKind: 'minesweeper'},
+        games: [{title: '마피아게임', src: 'https://cdn.vuetifyjs.com/images/cards/docks.jpg', id: '1', gameKind: 'MAFIA'},
+          {title: '윷놀이', src: 'https://cdn.vuetifyjs.com/images/cards/docks.jpg', id: '2', gameKind: 'YUTNORI'},
+          {title: '지뢰찾기', src: 'https://cdn.vuetifyjs.com/images/cards/docks.jpg', id: '3', gameKind: 'MINE'},
           {title: '노래맞추기', src: 'https://cdn.vuetifyjs.com/images/cards/docks.jpg', id: '4'},
           {title: '맞고', src: 'https://cdn.vuetifyjs.com/images/cards/docks.jpg', id: '5'},
           {title: '사다리타기', src: 'https://cdn.vuetifyjs.com/images/cards/docks.jpg', id: '6'}] //데이터 예시
