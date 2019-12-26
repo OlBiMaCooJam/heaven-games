@@ -9,7 +9,7 @@
                     dark
             >
                 <v-row align="center" justify="start" class="ma-3">
-                    <v-btn v-on:click="refresh" icon>
+                    <v-btn icon @click="refresh">
                         <v-icon>mdi-refresh</v-icon>
                     </v-btn>
                 </v-row>
@@ -17,14 +17,15 @@
                     <v-toolbar-title>게임 {{$route.params.id}}</v-toolbar-title>
                 </v-row>
                 <v-row align="center" justify="end" class="ma-5">
-                    <v-btn v-on:click="createRoom" icon>
+                    <v-btn icon @click="createRoom">
                         방 만들기
                     </v-btn>
                 </v-row>
 
             </v-toolbar>
             <v-list>
-                <RoomPreview class="bottom-line" v-for='room in rooms' :key="room.id" :room="room"
+                <RoomPreview class="bottom-line" v-for='room in rooms' :key="room.id" :game-title="gameTitle"
+                             :room="room"
                              :game-logo="gameLogo"/>
             </v-list>
         </v-card>
@@ -33,37 +34,43 @@
 
 <script>
     import RoomPreview from "../components/RoomPreview";
-    import axios from "axios";
 
     export default {
         components: {RoomPreview},
+        props: {
+            gameTitle: String,
+        },
         data() {
             return {
                 rooms: [],
-                gameLogo: require('../assets/Logo.jpg')
+                gameLogo: require('../assets/Logo.jpg'),
             }
         },
-
         created() {
-            axios.get('/rooms')
+            this.$axios.get('/rooms')
                 .then(response => {
                     this.rooms = response.data;
                 })
         },
-
         methods: {
-            createRoom() {
-                axios.post('/rooms')
-                    .then(response => {
-                        this.rooms.push(response.data)
+            createRoom: function () {
+                this.$axios.post('/rooms')
+                    .then((response) => {
+                        return response.headers;
                     })
+                    .then((headers) => {
+                        const url = headers.location;
+                        this.$router.push(url);
+                    });
             },
-            refresh() {
-
+            refresh: function () {
+                this.$axios.get('/rooms')
+                    .then(response => {
+                        this.rooms = response.data;
+                    })
             }
-        }
+        },
     }
-
 </script>
 
 <style>

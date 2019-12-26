@@ -13,13 +13,16 @@
     "request": "latest",
     "vue": "^2.6.10",
     "vue-router": "^3.1.3",
-    "vuetify": "^2.1.0"
+    "vuetify": "^2.1.0",
+    "webstomp-client": "^1.2.6",
+    "sockjs-client": "latest"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^4.1.0",
     "@vue/cli-plugin-eslint": "^4.1.0",
     "@vue/cli-plugin-router": "^4.1.1",
     "@vue/cli-service": "^4.1.0",
+    "axios": "^0.18.1",
     "babel-eslint": "^10.0.3",
     "eslint": "^5.16.0",
     "eslint-plugin-vue": "^5.0.0",

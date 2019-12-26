@@ -1,5 +1,7 @@
 package com.olbimacoojam.heaven.domain;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -10,10 +12,11 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @Repository
 public class RoomRepository {
-    private final Map<Integer, Room> rooms;
+    private static Logger LOGGER = LoggerFactory.getLogger(RoomRepository.class);
+    private final Map<Long, Room> rooms;
 
     public RoomRepository() {
-        this.rooms = new ConcurrentHashMap<>();
+        rooms = new ConcurrentHashMap<>();
     }
 
     public Room save(Room room) {
@@ -32,7 +35,7 @@ public class RoomRepository {
         return Collections.unmodifiableList(new ArrayList<>(rooms.values()));
     }
 
-    public Room findById(int roomId) {
+    public Room findById(Long roomId) {
         return rooms.get(roomId);
     }
 }

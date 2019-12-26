@@ -17,10 +17,6 @@ import java.util.Objects;
 @ToString
 @NoArgsConstructor
 public class User extends BaseEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
     @Column(unique = true)
     private Long kakaoId;
 

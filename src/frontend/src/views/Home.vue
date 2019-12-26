@@ -11,21 +11,21 @@
 </template>
 
 <script>
-  import GameThumbnail from "../components/GameThumbnail";
+    import GameThumbnail from "../components/GameThumbnail";
 
-  export default {
+    export default {
     name: 'home',
     components: {
       GameThumbnail
     },
     data() {
       return {
-        games: [{title: '마피아게임', url: "/rooms", src: 'https://cdn.vuetifyjs.com/images/cards/docks.jpg', id: '1'},
-          {title: '지뢰찾기', url: "/minesweeper", src: 'https://cdn.vuetifyjs.com/images/cards/docks.jpg', id: '3'},
-          {title: '윷놀이', url: "/rooms", src: 'https://cdn.vuetifyjs.com/images/cards/docks.jpg', id: '2'},
-          {title: '노래맞추기', url: "/rooms", src: 'https://cdn.vuetifyjs.com/images/cards/docks.jpg', id: '4'},
-          {title: '맞고', url: "/rooms", src: 'https://cdn.vuetifyjs.com/images/cards/docks.jpg', id: '5'},
-          {title: '사다리타기', url: "/rooms", src: 'https://cdn.vuetifyjs.com/images/cards/docks.jpg', id: '6'}] //데이터 예시
+        games: [{title: '마피아게임', src: require('../assets/mafia_thumbnail.jpg'), gameTitle: 'MAFIA'},
+          {title: '윷놀이', src: require('../assets/yutnori_thumbnail.jpeg'), gameTitle: 'YUTNORI'},
+          {title: '지뢰찾기', src: require('../assets/minesweeper_thumbnail.jpeg'), gameTitle: 'MINE'},
+          {title: '제비뽑기', src: require('../assets/draw_thumbnail.png'), gameTitle: 'DRAW'},
+          {title: '사다리타기', src: require('../assets/ladder_thumbnail.png'), gameTitle: 'LADDER'},
+          {title: '노래맞추기', src: 'https://cdn.vuetifyjs.com/images/cards/docks.jpg', gameTitle: 'SONG'}],
       }
     }
   }
