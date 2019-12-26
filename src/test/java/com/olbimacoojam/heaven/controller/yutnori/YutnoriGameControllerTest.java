@@ -68,7 +68,7 @@ class YutnoriGameControllerTest {
     @DisplayName("방 나가기 Test")
     void leave_room_test() throws InterruptedException, ExecutionException, TimeoutException {
         Client client = createClient(15L);
-        int roomId = createRoom();
+        int roomId = createRoom(client.getJsessionId());
         System.err.println("roomId =>" + roomId);
 
         client.subscribe(SUBSCRIBE_ENTER_ROOM_ENDPOINT + roomId, RoomResponseDto.class);
@@ -79,7 +79,7 @@ class YutnoriGameControllerTest {
         assertThat(roomResponseDto.getPlayers()).hasSize(1);
 
         client.subscribe(SUBSCRIBE_ENTER_ROOM_ENDPOINT + roomId + "/leave", RoomResponseDto.class);
-        client.send(SEND_ENTER_ROOM_ENDPOINT + roomId + "/leave", null);
+        client.send(SEND_ENTER_ROOM_ENDPOINT + roomId + "/leave/" + 1, null);
 
         RoomResponseDto roomResponseDto2 = client.getFromCompletableFuture();
         assertThat(roomResponseDto2.getId()).isEqualTo(roomId);
@@ -124,7 +124,7 @@ class YutnoriGameControllerTest {
         secondClient = createClient(kakaoId2);
 
         //한 클라이언트가 방을 만든다
-        int roomId = createRoom();
+        int roomId = createRoom(firstClient.getJsessionId());
         System.err.println("roomId =>" + roomId);
 
         // 두명의 클라이언트가 방에 입장
@@ -171,9 +171,10 @@ class YutnoriGameControllerTest {
         assertThat(moveResponse.getFinish()).isFalse();
     }
 
-    private int createRoom() {
+    private int createRoom(String jsessionId) {
         String location = webTestClient.post()
                 .uri(ROOMS_URL + getGameKindQueryString(GameKind2.YUTNORI))
+                .cookie(JSESSIONID, jsessionId)
                 .exchange()
                 .expectStatus().isCreated()
                 .expectBody()
@@ -194,7 +195,7 @@ class YutnoriGameControllerTest {
         String mockJsessionId = mockLogin(kakaoId);
         StompSession stompSession = getLoginedStompSession(webSocketStompClient, mockJsessionId);
 
-        return new Client(kakaoId, webSocketStompClient, stompSession);
+        return new Client(kakaoId, webSocketStompClient, stompSession, mockJsessionId);
     }
 
     private List<Transport> createTransportClient() {

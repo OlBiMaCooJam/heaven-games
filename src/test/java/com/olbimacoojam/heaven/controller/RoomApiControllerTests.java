@@ -13,6 +13,7 @@ import org.springframework.restdocs.payload.FieldDescriptor;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.reactive.server.WebTestClient;
+import reactor.core.publisher.Mono;
 
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.responseHeaders;
@@ -26,6 +27,7 @@ import static org.springframework.restdocs.webtestclient.WebTestClientRestDocume
 public class RoomApiControllerTests {
 
     public static final String ROOMS_URL = "/rooms";
+    private static final String JSESSIONID = "JSESSIONID";
 
     private final FieldDescriptor[] roomResponseFields = {
             fieldWithPath("id").description("room 고유 식별자"),
@@ -35,6 +37,7 @@ public class RoomApiControllerTests {
     @LocalServerPort
     private String port;
     private WebTestClient webTestClient;
+    private String jsessionid;
 
     @BeforeEach
     void setUp(RestDocumentationContextProvider restDocumentation) {
@@ -42,6 +45,8 @@ public class RoomApiControllerTests {
                 .baseUrl("http://localhost:" + port)
                 .filter(documentationConfiguration(restDocumentation))
                 .build();
+
+        jsessionid = mockLogin(111111L);
     }
 
     @Test
@@ -50,6 +55,7 @@ public class RoomApiControllerTests {
     void create_room_test() {
         webTestClient.post()
                 .uri(ROOMS_URL + getGameKindQueryString(GameKind2.YUTNORI))
+                .cookie(JSESSIONID, jsessionid)
                 .exchange()
                 .expectStatus().isCreated()
                 .expectHeader()
@@ -69,6 +75,7 @@ public class RoomApiControllerTests {
 
         webTestClient.get()
                 .uri(ROOMS_URL + getGameKindQueryString(GameKind2.MAFIA))
+                .cookie(JSESSIONID, jsessionid)
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody()
@@ -84,6 +91,7 @@ public class RoomApiControllerTests {
     private int createRoom(GameKind2 gameKind) {
         String location = webTestClient.post()
                 .uri(ROOMS_URL + getGameKindQueryString(gameKind))
+                .cookie(JSESSIONID, jsessionid)
                 .exchange()
                 .expectStatus().isCreated()
                 .expectBody()
@@ -95,5 +103,15 @@ public class RoomApiControllerTests {
 
     private String getGameKindQueryString(GameKind2 gameKind) {
         return String.format("?gameKind=%s", gameKind);
+    }
+
+    private String mockLogin(Long kakaoId) {
+        return webTestClient.post()
+                .uri("/mock/login")
+                .body(Mono.just(kakaoId), Long.class)
+                .exchange()
+                .returnResult(String.class)
+                .getResponseCookies()
+                .get(JSESSIONID).get(0).getValue();
     }
 }

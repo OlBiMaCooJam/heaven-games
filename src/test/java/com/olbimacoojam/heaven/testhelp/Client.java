@@ -1,7 +1,5 @@
 package com.olbimacoojam.heaven.testhelp;
 
-import com.olbimacoojam.heaven.dto.RoomResponseDto;
-import com.olbimacoojam.heaven.dto.YutnoriStateResponse;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.messaging.simp.stomp.StompFrameHandler;
@@ -12,7 +10,6 @@ import org.springframework.web.socket.messaging.WebSocketStompClient;
 import java.lang.reflect.Type;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
@@ -24,13 +21,16 @@ public class Client {
     private final Long kakaoId;
     private final StompSession stompSession;
     private final WebSocketStompClient webSocketStompClient;
+    private final String jsessionId;
 
     private CompletableFuture completableFuture;
 
-    public Client(Long kakaoId, WebSocketStompClient webSocketStompClient, StompSession stompSession) {
+    public Client(Long kakaoId, WebSocketStompClient webSocketStompClient, StompSession stompSession, String jsessionId) {
         this.kakaoId = kakaoId;
-        this.webSocketStompClient = webSocketStompClient;
         this.stompSession = stompSession;
+        this.webSocketStompClient = webSocketStompClient;
+        this.jsessionId = jsessionId;
+
     }
 
     public void disconnect() {
