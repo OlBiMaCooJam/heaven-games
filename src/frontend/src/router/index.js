@@ -32,7 +32,7 @@ const routes = [
         component: () => import('../views/Login.vue')
     },
     {
-        path: '/minesweeper',
+        path: '/MINE/:id',
         name: 'minesweeper',
         component: () => import('../views/Minesweeper.vue')
     },

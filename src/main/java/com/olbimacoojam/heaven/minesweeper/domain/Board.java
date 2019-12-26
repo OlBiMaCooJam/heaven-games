@@ -1,11 +1,11 @@
 package com.olbimacoojam.heaven.minesweeper.domain;
 
 import com.olbimacoojam.heaven.minesweeper.domain.exception.PositionOutOfBoardException;
-import lombok.Getter;
+import lombok.EqualsAndHashCode;
 
 import java.util.Map;
 
-@Getter
+@EqualsAndHashCode
 public class Board {
     private final Map<Position, Block> board;
 
@@ -29,11 +29,27 @@ public class Board {
         return block;
     }
 
-    public boolean isClicked(Position position) {
+    public boolean canClick(Position position) {
+        return board.containsKey(position) && !isClicked(position);
+    }
+
+    private boolean isClicked(Position position) {
         return board.get(position).isClicked();
     }
 
-    public boolean contains(Position position) {
-        return board.containsKey(position);
+    public MinesweeperStatus getCurrentStatus() {
+        MinesweeperStatus minesweeperStatus = MinesweeperStatus.WIN;
+
+        for (Block block : board.values()) {
+            if (block.isMine()) {
+                return MinesweeperStatus.LOSE;
+            }
+
+            if (!block.isClicked() && !block.isUnclickedMine()) {
+                minesweeperStatus = MinesweeperStatus.PLAYING;
+            }
+        }
+
+        return minesweeperStatus;
     }
 }
