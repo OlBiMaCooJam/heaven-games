@@ -7,6 +7,7 @@ import com.olbimacoojam.heaven.yutnori.TestYutThrowConfiguration;
 import com.olbimacoojam.heaven.yutnori.point.PointName;
 import com.olbimacoojam.heaven.yutnori.yut.Yut;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,6 +57,12 @@ class YutnoriGameControllerTest {
     private WebTestClient webTestClient;
     private Client firstClient;
     private Client secondClient;
+    private boolean isFirstClientTurn;
+
+    @BeforeEach
+    void setup() {
+        isFirstClientTurn = true;
+    }
 
     @Test
     @DisplayName("방 나가기 Test")
@@ -89,15 +96,26 @@ class YutnoriGameControllerTest {
     @DisplayName("윷던지기요청 Test")
     void throw_yut() throws InterruptedException, ExecutionException, TimeoutException {
         int roomId = startGame(3L, 4L);
-        throwYut(roomId, true);
+        throwYut(roomId, isFirstClientTurn);
     }
 
     @Test
     @DisplayName("말 움직이기 Test")
     void move_piece() throws InterruptedException, ExecutionException, TimeoutException {
         int roomId = startGame(5L, 6L);
-        throwYut(roomId, true);
-        movePiece(roomId, true);
+        throwYut(roomId, isFirstClientTurn);
+        movePiece(roomId, isFirstClientTurn);
+    }
+
+    @Test
+    @DisplayName("말 두번 움직이기 Test")
+    void move_piece2() throws InterruptedException, ExecutionException, TimeoutException {
+        int roomId = startGame(5L, 6L);
+        throwYut(roomId, isFirstClientTurn);
+        movePiece(roomId, isFirstClientTurn);
+        isFirstClientTurn = false;
+        throwYut(roomId, isFirstClientTurn);
+        movePiece(roomId, isFirstClientTurn);
     }
 
     private int startGame(Long kakaoId1, Long kakaoId2) throws InterruptedException, ExecutionException, TimeoutException {
