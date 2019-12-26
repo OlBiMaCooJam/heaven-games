@@ -3,12 +3,11 @@
         <v-row>
             <v-col cols="5">
                 <v-row align='center' justify='center'>
-                    <MafiaCitizen :key="citizen.name" v-for='citizen in citizens'/>
+                    <MafiaCitizen id="list" class="white" :name="name" :key="name.id" v-for="name in names"/>
                 </v-row>
             </v-col>
             <v-col cols="5">
-                <div id="message-area">
-                </div>
+                <div id="message-area"></div>
                 <div id="message-footer">
                     <input type="text" id="message-content">
                     <input type="submit" id="send-message" value="전송">
@@ -28,25 +27,31 @@
 
 
 <script>
-    import MafiaCitizen from "../components/MafiaCitizen";
     import SockJS from "sockjs-client";
     import Stomp from "webstomp-client";
     import Timer from "../components/Timer";
     import Vote from "../components/Vote";
     import {eventBus} from "../main";
+    import MafiaCitizen from "../components/MafiaCitizen";
 
     export default {
         name: 'Mafia',
         components: {
+            MafiaCitizen,
             Vote,
-            Timer,
-            MafiaCitizen
+            Timer
         },
         methods: {
+
+            alerts(message) {
+                return `<div id="message" style="text-align: center; color: red">
+                            <span>${message}</span>
+                    </div>`;
+            },
             messageTemplate(mafiaChatMessage) {
                 if(mafiaChatMessage.userId === this.userId){
                     return `<div id="message" style="text-align: right">
-                            <span">나: ${mafiaChatMessage.message}</span>
+                            <span>나: ${mafiaChatMessage.message}</span>
                     </div>`;
                 }
                 return `<div id="message" style="text-align: left";>
@@ -70,28 +75,33 @@
                 messageArea.insertAdjacentHTML("beforeend", this.messageTemplate(mafiaChatMessage));
                 messageArea.scrollTop = messageArea.scrollHeight;
               },
+            alertMessage: function(message) {
+                const messageArea = document.getElementById("message-area");
+                    messageArea.insertAdjacentHTML("beforeend", this.alerts(message));
+                    messageArea.scrollTop = messageArea.scrollHeight;
+            },
             newArray(i, name){
                 let newArray = [...this.citizens];
                 newArray.splice(i, 1, name);
                 return newArray;
-            }
-
+            },
         },
         data() {
             return {
-                citizens: [],
                 dialog: false,
-                date: 15, // 테스트 데이터
+                date: 20, // 테스트 데이터
                 vote_message: "선택해주세요",
-                roomId: '',
+                roomId: Number,
                 client: {},
                 userId: '',
                 selected: '',
                 day: true,
-                occupation: ''
+                occupation: '',
+                flag: '',
+                citizens: [],
+                names: [],
             }
         },
-        id: 1,
         created() {
             this.roomId = this.$route.params.roomId
             this.client = Stomp.over(new SockJS('/websocket'));
@@ -103,7 +113,9 @@
                     const mafiaOccupationMessage = JSON.parse(response.body);
                     game.userId = mafiaOccupationMessage.userId;
                     game.occupation = mafiaOccupationMessage.occupation;
-                    alert('당신은 ' + game.occupation + ' 입니다.');
+
+                    game.alertMessage('당신은 ' + game.occupation + ' 입니다.');
+                    game.alertMessage('마피아를 찾아보세요.\n15초 후에 투표합니다.');
 
                     if(game.occupation === 'MAFIA') {
                         game.client.subscribe('/topic/rooms/' + game.roomId + '/mafia/chat/mafiaOnly', function (response) {
@@ -113,8 +125,7 @@
                     }
                     if(game.occupation === 'POLICE' || game.occupation === 'DETECTIVE') {
                         game.client.subscribe('/user/queue/rooms/' + game.roomId + '/' + game.occupation, function (response) {
-                            const mafiaChatMessage = JSON.parse(response.body);
-                            game.addMessage(mafiaChatMessage);
+                            game.alertMessage(response.body);
                         });
                     }
                 });
@@ -132,32 +143,46 @@
                 game.client.subscribe('/topic/rooms/' + game.roomId + '/dayResult', function (response) {
                     eventBus.$emit('initTime');
                     const resultMessage = response.body;
-                    alert(resultMessage);
+                    game.alertMessage(resultMessage);
+
+
 
                     window.console.log(resultMessage.includes("종료"));
                     if(resultMessage.includes("종료")) {
+                        alert(resultMessage);
                         game.$router.push("/games/" + game.roomId + "/rooms/" + game.roomId);
                         return;
                     }
                     game.day = false;
 
 
-                    alert('15초 안에 각 직업의 능력이 발동합니다.');//
+                    game.alertMessage('15초 후에 각 직업의 능력이 발동합니다.\n마피아만 채팅을 할 수 있습니다.');//
                 });
                 game.client.subscribe('/topic/rooms/' + game.roomId + '/nightResult', function (response) {
                     eventBus.$emit('initTime');
                     const resultMessage = response.body;
-                    alert(resultMessage);
+                    game.alertMessage(resultMessage);
 
-                    window.console.log(resultMessage.includes("종료"));
+                    game.client.send('/app/rooms/' + game.roomId + '/list' );
+
                     if(resultMessage.includes("종료")) {
+                        alert(resultMessage);
                         game.$router.push("/games/" + game.roomId + "/rooms/" + game.roomId);
                         return;
                     }
                     game.day = true;
 
-                    alert('낮이 되었습니다. 15초 동안 떠들어보세요.');
+                    game.alertMessage('마피아를 찾아보세요.\n15초 후에 투표합니다.');
                 });
+                game.client.subscribe('/topic/rooms/' + game.roomId + '/list', function (response) {
+                    const mafiaParticipantInfos = JSON.parse(response.body);
+                    const arr = [];
+                    for (let i = 0; i < mafiaParticipantInfos.length; i++) {
+                        arr.push(mafiaParticipantInfos[i].name);
+                    }
+                    game.names = arr;
+                });
+                game.client.send('/app/rooms/' + game.roomId + '/list' );
             });
         },
 
@@ -191,7 +216,7 @@
         font-family: monospace;
         border: groove white;
         overflow: scroll;
-        height: 85%;
+        height: 75%;
         width: 550px;
         background-color: black;
         opacity: 0.7;

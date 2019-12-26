@@ -26,12 +26,10 @@ public class MafiaGameController {
     private static final Logger LOGGER = LoggerFactory.getLogger(MafiaGameController.class);
 
     private final RoomService roomService;
-    private final ModelMapper modelMapper;
     private final SimpMessagingTemplate simpMessagingTemplate;
 
-    public MafiaGameController(RoomService roomService, ModelMapper modelMapper, SimpMessagingTemplate simpMessagingTemplate) {
+    public MafiaGameController(RoomService roomService, SimpMessagingTemplate simpMessagingTemplate) {
         this.roomService = roomService;
-        this.modelMapper = modelMapper;
         this.simpMessagingTemplate = simpMessagingTemplate;
     }
 
@@ -192,6 +190,15 @@ public class MafiaGameController {
         return game.showNightResult();
     }
 
+    @MessageMapping("/rooms/{roomId}/list")
+    @SendTo("/topic/rooms/{roomId}/list")
+    public List<MafiaParticipantInfo> list(@DestinationVariable Long roomId) {
+        LOGGER.info("asd");
+        MafiaGame game = (MafiaGame) roomService.findById(roomId).getGame();
+        return game.getMafiaParticipants().stream()
+                .map(mafiaParticipant -> new MafiaParticipantInfo(mafiaParticipant.getPlayer().getName(), mafiaParticipant.isAlive()))
+                .collect(Collectors.toList());
+    }
 
     //TODO: 중복이름 처리
     private MafiaParticipant getSelectedParticipant(MafiaParticipant selector, MafiaGame game, MafiaParticipantName selectedName) {
