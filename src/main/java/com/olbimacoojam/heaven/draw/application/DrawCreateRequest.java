@@ -10,7 +10,7 @@ public class DrawCreateRequest {
     private Integer personCount;
     private Integer whackCount;
 
-    public DrawCreateRequest(Integer personCount, Integer whackCount) {
+    public DrawCreateRequest(int personCount, int whackCount) {
         this.personCount = personCount;
         this.whackCount = whackCount;
     }

@@ -52,7 +52,7 @@ class DrawTest {
     }
 
     @Test
-    @DisplayName("사람수 4, 폭탄수 5")
+    @DisplayName("폭탄 수가 사람 수보다 많은 경우")
     void invalidGameStart() {
         assertThrows(InvalidWhackCountException.class, () -> draw.startGame(4, 5));
     }

@@ -6,9 +6,11 @@ import com.olbimacoojam.heaven.draw.domain.Draw;
 import com.olbimacoojam.heaven.service.RoomService;
 import com.olbimacoojam.heaven.service.UserService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 
+@Transactional
 @Service
 public class DrawService {
 
