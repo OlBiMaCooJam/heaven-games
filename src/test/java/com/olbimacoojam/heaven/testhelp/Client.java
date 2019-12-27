@@ -26,7 +26,6 @@ public class Client {
         this.stompSession = stompSession;
         this.webSocketStompClient = webSocketStompClient;
         this.jsessionId = jsessionId;
-
     }
 
     public void disconnect() {
@@ -61,23 +60,7 @@ public class Client {
         return (T) completableFuture.get(10, SECONDS);
     }
 
-    public Long getKakaoId() {
-        return kakaoId;
-    }
-
-    public StompSession getStompSession() {
-        return stompSession;
-    }
-
-    public WebSocketStompClient getWebSocketStompClient() {
-        return webSocketStompClient;
-    }
-
     public String getJsessionId() {
         return jsessionId;
-    }
-
-    public CompletableFuture getCompletableFuture() {
-        return completableFuture;
     }
 }
