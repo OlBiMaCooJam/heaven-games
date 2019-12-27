@@ -44,6 +44,6 @@ public class WebsocketRoomController {
     @MessageMapping("/rooms/{roomId}/start")
     @SendTo("/topic/rooms/{roomId}/start")
     public GameStartResponseDto startGame(@DestinationVariable int roomId) {
-        return roomService.startGame2(roomId);
+        return roomService.startGame(roomId);
     }
 }
