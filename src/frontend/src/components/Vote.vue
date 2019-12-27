@@ -1,8 +1,5 @@
 <template>
     <v-dialog v-model="dialog" persistent max-width="290">
-        <template v-slot:activator="{ on }">
-            <v-btn color="primary" dark v-on="on">투표</v-btn>
-        </template>
         <v-card>
             <v-card-title class="headline">{{vote_msg}}</v-card-title>
             <v-select
@@ -19,26 +16,32 @@
 </template>
 
 <script>
+    import {eventBus} from "../main";
 
     export default {
         name: "Vote",
         props: {
-            citizens: Array,
+            roomId: String,
             vote_msg: String,
-        },
-        data() {
-            return {
-                dialog: false,
-                selected: '',
-            }
+            client: {},
+            dialog: Boolean,
+            citizens: Array,
+            selected: String,
+            day: Boolean,
+            occupation: String,
+            date: Number
         },
         methods: {
             select() {
-                this.dialog = false;
-                window.console.log(this.selected);
+                eventBus.$emit('closeModal');
+                if(this.day){
+                    this.client.send('/app/rooms/' + this.roomId + '/select', JSON.stringify({ "name" : this.selected}));
+                }else{
+                    this.client.send('/app/rooms/' + this.roomId + '/' + this.occupation, JSON.stringify({ "name" : this.selected}));
+                }
             }
         },
-    };
+    }
 </script>
 
 <style scoped>

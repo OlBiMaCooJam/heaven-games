@@ -1,5 +1,6 @@
 package com.olbimacoojam.heaven.controller;
 
+import com.olbimacoojam.heaven.domain.UserSession;
 import com.olbimacoojam.heaven.dto.RoomResponseDto;
 import com.olbimacoojam.heaven.game.GameKind2;
 import com.olbimacoojam.heaven.service.RoomService;
@@ -7,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import java.net.URI;
 import java.util.List;
 
@@ -22,7 +24,10 @@ public class RoomApiController {
     }
 
     @PostMapping
-    public ResponseEntity save(@RequestParam("gameKind") GameKind2 gameKind) {
+    public ResponseEntity save(@RequestParam("gameKind") GameKind2 gameKind, HttpSession httpSession) {
+        if(httpSession.getAttribute(UserSession.USER_SESSION) == null){
+            throw new IllegalArgumentException();
+        }
         RoomResponseDto roomResponseDto = roomService.createRoom(gameKind);
         return ResponseEntity.created(URI.create("/rooms/" + roomResponseDto.getId())).build();
     }

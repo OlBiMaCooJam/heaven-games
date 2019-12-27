@@ -4,14 +4,7 @@
             class="margin-right-200 margin-bottom-50 background-transparent"
             tile
     >
-        <v-img
-                :src='citizen.src'
-                class="black--text align-end"
-                height="100px"
-                width="100px"
-        >
-            <v-card-title>{{citizen.name}}</v-card-title>
-        </v-img>
+    <v-card-title>{{name}}</v-card-title>
     </v-card>
 </template>
 
@@ -19,11 +12,7 @@
     export default {
         name: 'MafiaCitizen',
         props: {
-            citizen: {
-                name: String,
-                occupation: String,
-                src: String
-            }
+            name: String,
         }
     }
 </script>

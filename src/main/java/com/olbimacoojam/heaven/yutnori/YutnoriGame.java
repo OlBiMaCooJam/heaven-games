@@ -22,9 +22,11 @@ public class YutnoriGame implements Game {
     private YutnoriParticipants yutnoriParticipants;
     private Board board;
     private Turn turn;
+    private boolean isStart;
 
     public YutnoriGame(BoardCreateStrategy boardCreateStrategy) {
         this.boardCreateStrategy = boardCreateStrategy;
+        this.isStart = false;
     }
 
     @Override
@@ -32,6 +34,12 @@ public class YutnoriGame implements Game {
         yutnoriParticipants = YutnoriParticipants.of(players);
         turn = new Turn(yutnoriParticipants.getFirst());
         board = boardCreateStrategy.createBoard(yutnoriParticipants);
+        this.isStart = true;
+    }
+
+    @Override
+    public boolean isStart() {
+        return isStart;
     }
 
     public Yut throwYut(User thrower, YutThrowStrategy yutThrowStrategy) {

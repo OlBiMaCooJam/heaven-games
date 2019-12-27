@@ -39,6 +39,11 @@ class RoomRepositoryTests {
             @Override
             public void initialize(List<User> players) {
             }
+
+            @Override
+            public boolean isStart() {
+                return false;
+            }
         };
     }
 }

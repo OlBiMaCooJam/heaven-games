@@ -13,15 +13,23 @@ public class Draw implements Game {
     private static final int DRAW_PLAYER_NUMBER = 1;
 
     private Lots lots;
+    private boolean isStart;
 
     public Draw() {
         this.lots = new Lots();
+        isStart = false;
     }
 
     @Override
     public void initialize(List<User> players) {
         checkNumberOfPlayers(players);
         lots.initialize();
+        isStart = true;
+    }
+
+    @Override
+    public boolean isStart() {
+        return isStart;
     }
 
     private void checkNumberOfPlayers(List<User> players) {

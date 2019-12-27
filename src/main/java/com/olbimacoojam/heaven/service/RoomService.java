@@ -56,6 +56,9 @@ public class RoomService {
         Room room = roomRepository.findById(roomId);
         User user = userService.findById(userId);
         room.leave(user);
+        if(room.getPlayers().size() == 0 && !room.getGame().isStart()) {
+            roomRepository.remove(room);
+        }
         return modelMapper.map(room, RoomResponseDto.class);
     }
 

@@ -43,7 +43,7 @@ const routes = [
         props: true,
     },
     {
-        path: '/draw',
+        path: '/draw/:id',
         name: 'draw',
         component: () => import('../views/Draw.vue'),
     },
