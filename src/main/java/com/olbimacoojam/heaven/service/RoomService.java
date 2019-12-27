@@ -66,17 +66,7 @@ public class RoomService {
         return roomRepository.findById(roomId);
     }
 
-    public int startGame(int roomId) {
-        Room room = roomRepository.findById(roomId);
-        room.startGame();
-        List<User> players = room.getPlayers();
-        Game game = room.getGame();
-        game.initialize(players);
-
-        return players.size();
-    }
-
-    public GameStartResponseDto startGame2(int roomId) {
+    public GameStartResponseDto startGame(int roomId) {
         Room room = roomRepository.findById(roomId);
         boolean isGameStart = room.startGame();
 

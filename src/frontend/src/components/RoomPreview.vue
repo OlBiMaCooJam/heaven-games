@@ -9,7 +9,9 @@
                 <v-list-item-avatar class="room-number">
                     <v-icon v-text="room.players.length+'/10'"></v-icon>
                 </v-list-item-avatar>
-
+                <v-list-item-content class="text-align-center">
+                    <v-list-item-title v-text="roomStateMessage"></v-list-item-title>
+                </v-list-item-content>
                 <v-list-item-content class="text-align-center">
                     <v-list-item-title v-text="room.id + '번 방'"></v-list-item-title>
                 </v-list-item-content>
@@ -25,10 +27,17 @@
             room: {
                 id: Number,
                 title: String,
+                roomState: String,
                 players: Array
             },
             gameLogo: String,
             gameKind: String,
+        },
+        computed: {
+            roomStateMessage() {
+                if (this.room.roomState == 'PLAYING') return "게임 중";
+                return "대기 중"
+            }
         }
     };
 </script>

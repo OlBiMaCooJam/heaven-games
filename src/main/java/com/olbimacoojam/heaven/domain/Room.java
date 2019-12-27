@@ -1,5 +1,6 @@
 package com.olbimacoojam.heaven.domain;
 
+import com.olbimacoojam.heaven.domain.exception.GamePlayingException;
 import com.olbimacoojam.heaven.game.Game;
 import com.olbimacoojam.heaven.game.GameKind2;
 import lombok.Getter;
@@ -21,10 +22,13 @@ public class Room {
     private final List<User> players;
     private final Game game;
 
+    private RoomState roomState;
+
     public Room(int id, Game game) {
         this.players = new CopyOnWriteArrayList<>();
         this.id = id;
         this.game = game;
+        this.roomState = RoomState.READY;
     }
 
     public void join(User player) {
@@ -39,11 +43,19 @@ public class Room {
 
     public boolean startGame() {
         try {
+            checkRoomReady();
             game.initialize(players);
+            this.roomState = RoomState.PLAYING;
             return true;
         } catch (RuntimeException e) {
             log.error("fail to start game", e);
             return false;
+        }
+    }
+
+    private void checkRoomReady() {
+        if (roomState.isPlaying()) {
+            throw new GamePlayingException();
         }
     }
 

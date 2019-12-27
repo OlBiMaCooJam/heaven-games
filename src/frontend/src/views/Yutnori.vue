@@ -75,7 +75,10 @@
                 })
             })
         },
-
+        destroyed() {
+            window.console.log("윷놀이 게임 종료");
+            this.stompClient.disconnect();
+        },
         methods: {
             initializeGame() {
                 const YUTNORI = this;

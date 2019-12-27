@@ -31,6 +31,7 @@ public class RoomApiControllerTests {
 
     private final FieldDescriptor[] roomResponseFields = {
             fieldWithPath("id").description("room 고유 식별자"),
+            fieldWithPath("roomState").description("room 상태 (게임 진행 중 여부)"),
             fieldWithPath("players").description("room에 참여하고 있는 user 목록")
     };
 
